@@ -1,5 +1,3 @@
-// バリテーション定義ファイル
-
 /**
  * URLのバリテーション
  * @param {String} textval

@@ -1,16 +1,13 @@
 import Vue from 'vue'
-// ルーティングの定義をインポートする
 import router from './router'
-import store from './store'
-// ルートコンポーネントをインポートする
+import store from './store' // ★　追加
 import App from './App.vue'
-
-// fromの後ろは恐らくclassかpassを指定される
 
 new Vue({
   el: '#app',
-  router, // ルーティングの定義を読み込む
-  store,
-  components: { App }, // ルートコンポーネントの使用を宣言する
-  template: '<App />' // ルートコンポーネントを描画する
+  router,
+  store, // ★　追加
+  components: { App },
+  template: '<App />'
 })
+

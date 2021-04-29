@@ -8,7 +8,9 @@
         <h2 class="signup-title">SignUp</h2>
         <div class="signup-commonMsgArea">
             <!-- 接続エラー等のメッセージをここに出力させる。 -->
-            <!--例外処理発生時に出力されるメッセージを出す処理-->
+            <span class="#">
+                <strong>{{ Validation.signUpCommonErrMsg }}</strong>
+            </span>
         </div>
 
         <!-- メールアドレス入力欄 -->
@@ -18,7 +20,7 @@
                 <!-- バリに引っかかった際にはerrクラスを付属させる。 -->
                 <!-- v-model・・・入力情報の紐付けと管理 -->
                 <!-- エラーメッセージが存在した場合,inputフォームにエラー時のスタイルが適用される様になる。 -->
-                <input class="signup-emailForm" :class="{ errInput: Validation.EmailErrMsg }" type="text" placeholder="Email" v-model="signUpForm.email">
+                <input class="signup-emailForm" :class="{ errInput: Validation.signUpEmailErrMsg }" type="text" placeholder="Email" v-model="signUpForm.email">
                 <div class="signup-areaMsg">
                     <!-- エラーメッセージの出力 -->
                     <span class="#">
@@ -32,7 +34,7 @@
         <div class="signup-passwardField">
           <label class="#">
               <!-- 後にphpでエラー時用のスタイルを付属させる様にする。 -->
-              <input class="signup-passwordForm" :class="{ errInput: Validation.PasswordErrMsg }" type="password" placeholder="Password" v-model="signUpForm.password">
+              <input class="signup-passwordForm" :class="{ errInput: Validation.signUpPasswordErrMsg }" type="password" placeholder="Password" v-model="signUpForm.password">
               <div class="signup-areaMsg">
                   <!-- エラーメッセージの出力 -->
                   <span class="#">
@@ -46,7 +48,7 @@
         <div class="signup-confirmationPasswardField">
           <!-- 後にphpでエラー時用のスタイルを付属させる様にする。 -->
           <label class="#">
-              <input class="signup-passwordConfirmationForm" type="password" placeholder="Confirmation Password" v-model="signUpForm.password_confirmation">
+              <input class="signup-passwordConfirmationForm" :class="{ errInput: Validation.signUpPasswordConfirmationErrMsg }" type="password" placeholder="Confirmation Password" v-model="signUpForm.password_confirmation">
           </label>
         </div>
 
@@ -59,7 +61,8 @@
 </template>
 
 <script>
-import validURL from '../utils/validate';
+// 外部のjsファイルの読み込みが上手くいかないのでマジックナンバーやメソッドの切り分けは一旦保留。
+// import SIGNUP_NUM from '.../utils/signUp'
 
 export default {
     data () {
@@ -72,9 +75,10 @@ export default {
         },
         // エラーメッセージを保持
         Validation:{
-            EmailErrMsg: "",
-            PasswordErrMsg: "",
-            PasswordConfirmationErrMsg: ""
+            signUpEmailErrMsg: "",
+            signUpPasswordErrMsg: "",
+            signUpPasswordConfirmationErrMsg: "",
+            signUpCommonErrMsg: ""
         },
         // 各バリテーションの総合的な結果情報の管理
         // (上のValidation内の各プロパティ内にmsgがあるかどうかで判定してもいいけど今後TS導入予定なのでもしかすると
@@ -88,47 +92,81 @@ export default {
       }
     },
     methods: {
+
       // :rulesがvuetify独自のタグかどうか調べる。
       // https://qiita.com/tekunikaruza_jp/items/0a68d86084d961d632ac
+      //バリ関数は後で纏める。
       signUp () {
         //Emailのバリデーション
         if (!this.signUpForm.email) {
-          // 空文字
-            this.Validation.EmailErrMsg = "ログインIDを入力してください"
-        } else if(!this.checkString(this.loginForm.loginId)){
-            this.Validation.EmailErrMsg = "半角英数で入力してください"
+          //空かどうかのバリテーション
+          console.log("(signUp)メールアドレスの入力がありません");
+          this.Validation.EmailErrMsg = "メールアドレスを入力してください"
+
+        } else if(this.signUpForm.loginId.match(/^[0-9a-zA-Z]*$/)){
+          //半角英数字のバリテーション
+          console.log("(signUp)メールアドレスを半角英数で入力してください");
+          this.Validation.EmailErrMsg = "半角英数で入力してください"
+
+        } else if(length(this.signUpForm.loginId) > 15){
+          //マジックナンバーになってる。
+          //最大文字数のバリテーション
+          console.log("(signUp)メールアドレスを15文字以内にしてください");
+          this.Validation.EmailErrMsg = "メールアドレスは15文字以内にしてください"
+        // } else if(){
+        //   //ここはさすがに外部ファイルに切り出せないと長くなりすぎるので一旦保留。
+        //   //重複確認のバリテーション
+        //   console.log("(signUp)メールアドレスが重複しています");
+        //   this.Validation.EmailErrMsg = "メールアドレスが重複しています"
         } else {
-            this.signUpFormResult.emailResult = true;
+          //バリテーションがOKな場合
+          console.log("(signUp)バリテーションOKです");
+          this.signUpFormResult.emailResult = true;
         }
 
         //パスワードのバリデーション
-        if (!this.signUpForm.email) {
-            this.Validation.PasswordErrMsg = "ログインIDを入力してください"
-        } else if(!this.checkString(this.loginForm.loginId)){
-            this.Validation.PasswordErrMsg = "半角英数で入力してください"
+        if (!this.signUpForm.password) {
+          //空文字チェック
+          console.log("(signUp)パスワードを入力してください");
+          this.Validation.PasswordErrMsg = "パスワードを入力してください"
+        } else if(this.loginForm.loginId.match(/^[0-9a-zA-Z]*$/)){
+          //半角英数字チェック
+          console.log("(signUp)パスワードは半角英数字で入力してください");
+          this.Validation.PasswordErrMsg = "パスワードは半角英数字で入力してください"
+        } else if(length(this.signUpForm.password) > 15){
+          //最大文字数チェック
+          console.log("(signUp)パスワードは15文字以内で入力してください");
+          this.Validation.PasswordErrMsg = "パスワードは15文字以内で入力してください"
+        } else if(length(this.signUpForm.password) < 5){
+          //最小文字数チェック
+          console.log("(signUp)パスワードは5文字以上で入力してください");
+          this.Validation.PasswordErrMsg = "パスワードは5文字以上入力してください"
+        } else if(this.signUpForm.password === this.signUpForm.password_confirmation){
+          //最小文字数チェック
+          console.log("(signUp)確認用パスワードと一致しません");
+          this.Validation.PasswordErrMsg = "確認用パスワードと一致しません"
         } else {
-            this.signUpFormResult.passwordResult = true;
+          //バリテーションOK
+          console.log("(signUp)バリテーションOKです");
+          this.signUpFormResult.passwordResult = true;
         }
 
-        //パスワード(再入力)のバリテーション
-        if (!this.signUpForm.password_confirmation) {
-            this.Validation.PasswordConfirmationErrMsg = "ログインIDを入力してください"
-        } else if(!this.checkString(this.loginForm.loginId)){
-            this.Validation.PasswordConfirmationErrMsg = "半角英数で入力してください"
-        } else {
-            this.signUpFormResult.password_confirmationResult = true;
-        }
 
-        if(this.signUpFormResult.emailResult === true && this.signUpFormResult.passwordResult === true && this.signUpFormResult.password_confirmationResult === true){
+        if(this.signUpFormResult.emailResult === true && this.signUpFormResult.passwordResult === true){
           console.log("ユーザ登録バリテーションOKです。");
           try {
             //動作確認待ち
             console.log("登録処理に入りました。");
             console.log(this.signUpForm);
-            return true;
+
+            // マイページへ飛ばすパスを書く。
+            // プロパティの保持期間がよくわからないので、画面遷移後
+            this.signUpFormResult.emailResult = false;
+            this.signUpFormResult.passwordResult = false;
           } catch (e) {
             console.log("登録処理中に例外的エラーが発生しました。");
-            return false;
+            this.signUpFormResult.emailResult = false;
+            this.signUpFormResult.passwordResult = false;
           }
         }
       }

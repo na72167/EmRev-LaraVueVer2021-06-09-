@@ -8,11 +8,11 @@ const state = {
 
 //getters・・・ステート内情報を関節的にフロント側へ伝える為のメソッド群。
 const getters = {
-  // !!は二重否定の論理演算子。条件が合う(ture)場合はfalse・合わない(false)場合はtrueが入る。
+  check: state => !! state.user,
+    // !!は二重否定の論理演算子。条件が合う(ture)場合はfalse・合わない(false)場合はtrueが入る。
   // check内の処理はuser内が定義されているかを確認するもの。
   // Javasciptで二重否定を使う意味、「関数名」と「関数名()」の違い
   // https://naoyashiga.hatenablog.com/entry/2013/11/19/184938
-  check: state => !! state.user,
   // user内が定義されているか確認。truの場合はuser内のnameプロパティをreturnする。
   // falseの場合は''を返す。
   username: state => state.user ? state.user.name : ''

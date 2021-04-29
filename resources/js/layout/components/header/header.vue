@@ -12,18 +12,17 @@
             <!-- ステート内にログイン履歴があるかどうかどうかを元に表示判定をする。 -->
             <!-- ture -->
             <nav class="header__nav" v-if="isLogin">
-                <li class="header__nav-list js-toggle-sp-menu">MENU</li>
-                <li class="header__nav-list"><a href="./reviewRegister-cList.php">REVIEW REGISTRATION</a></li>
-                <li class="header__nav-list" @click="logout">LOGOUT</li>
+              <li class="header__nav-list js-toggle-sp-menu">MENU</li>
+              <li class="header__nav-list"><a href="./reviewRegister-cList.php">REVIEW REGISTRATION</a></li>
+              <li class="header__nav-list" @click="logout">LOGOUT</li>
             </nav>
 
             <!-- false(正確にはそれ以外) -->
             <nav class="header__nav" v-else>
-                <!-- ここでプロパティの切り替えを行う。そのプロパティを親コンポーネントに伝えてログイン・サインアップのコンポーネントを切り替える。 -->
-                <li class="header__nav-list active-login-menu" @click="tswitching_auth = 'login'">LOGIN</li>
-                <li class="header__nav-list active-signup-menu" @click="switching_auth = 'signup'">SIGNUP</li>
+              <!-- ここでプロパティの切り替えを行う。そのプロパティを親コンポーネントに伝えてログイン・サインアップのコンポーネントを切り替える。 -->
+              <li class="header__nav-list active-login-menu" @click="tswitching_auth = 'login'">LOGIN</li>
+              <li class="header__nav-list active-signup-menu" @click="switching_auth = 'signup'">SIGNUP</li>
             </nav>
-
         </div>
     </header>
 </template>

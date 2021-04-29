@@ -14,10 +14,10 @@
             </div>
             <div class="hero__signup-loginWrap">
                 <span v-show="switching_auth === 'signup'">
-                    <SignUp/>
+                  <SignUp/>
                 </span>
                 <span v-show="switching_auth === 'login'">
-                    <Login/>
+                  <Login/>
                 </span>
             </div>
         </div>
@@ -25,8 +25,15 @@
 </template>
 
 <script>
-import SignUp from '../auth/signUp';
-import Login from '../auth/login';
+// Cannot find module 'モジュールファイル名'の原因
+// 1.タイポ
+// 2.対象ファイルに何かしらのエラーが出ており,呼び込み元のファイルからモジュールと認識されていない(?)
+// app.js:203 Uncaught ReferenceError:の原因
+// 1.エイリアス名とファイル名が違う(passが../auth/SignUp なのにエイリアス名がsignUp等)
+//あとvueのコンポーネント名は大文字が基本っぽい
+
+import SignUp from '../auth/SignUp';
+import Login from '../auth/Login';
 
 export default {
     components: {
