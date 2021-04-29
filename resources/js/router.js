@@ -1,9 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-// ページコンポーネントをインポートする
-import Home from './views/home.vue'
-
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
 Vue.use(VueRouter)
@@ -12,7 +9,9 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    component: Home
+    name: 'home',
+    component: () =>
+        import ('./views/home'),
   }
 ]
 

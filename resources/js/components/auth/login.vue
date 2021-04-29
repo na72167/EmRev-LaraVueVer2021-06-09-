@@ -7,7 +7,9 @@
             <h2 class="login-title">Login</h2>
             <div class="login-commonMsgArea">
                 <!-- 接続エラー等のメッセージをここに出力させる。 -->
-                <!--例外処理発生時に出力されるメッセージを出す処理-->
+                <span class="#">
+                    <strong>{{ Validation.loginCommonErrMsg }}</strong>
+                </span>
             </div>
 
             <!-- メールアドレス入力欄 -->
@@ -15,15 +17,12 @@
                 <!-- 後にphpでエラー時用のスタイルを付属させる様にする。 -->
                 <label class="#">
                     <!-- バリに引っかかった際にはerrクラスを付属させる。 -->
-                    <input class="login-emailForm @error('email') err @enderror" v-model="#">
+                    <input class="login-emailForm" :class="{ errInput: Validation.loginEmailErrMsg }" v-model="loginForm.email">
                     <div class="login-areaMsg">
-
-                        @error('password')
-                            <span class="" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-
+                        <!-- エラーメッセージの出力 -->
+                        <span class="#">
+                            <strong>{{ Validation.loginEmailErrMsg }}</strong>
+                        </span>
                     </div>
                 </label>
             </div>
@@ -32,15 +31,12 @@
             <div class="login-passwardField">
                 <label class="#">
                     <!-- 後にphpでエラー時用のスタイルを付属させる様にする。 -->
-                    <input class="login-passwordForm @error('password') err @enderror" v-model="#">
+                    <input class="login-passwordForm" :class="{ errInput: Validation.loginPasswordErrMsg }" v-model="loginForm.password">
                     <div class="login-areaMsg">
-
-                        @error('password')
-                            <span class="" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-
+                      <!-- エラーメッセージの出力 -->
+                        <span class="#">
+                            <strong>{{ Validation.loginPasswordErrMsg }}</strong>
+                        </span>
                     </div>
                 </label>
             </div>
@@ -56,22 +52,118 @@
 
 <script>
 export default {
-  components: {
-    SignUp,
-    Login
-  },
   data () {
-    return {
+      return {
+        // 入力情報を保持
         loginForm: {
           email: '',
           password: ''
+        },
+        // エラーメッセージを保持
+        Validation:{
+            loginEmailErrMsg: "",
+            loginPasswordErrMsg: "",
+            loginCommonErrMsg: ""
+        },
+        // 各バリテーションの総合的な結果情報の管理
+        // (上のValidation内の各プロパティ内にmsg内があるかどうかで判定してもいいけど今後TS導入予定なのでもしかすると
+        //「扱う情報の型数を狭めて管理するプロパティの数を増やした方が型制御の恩恵を受けやすいのかな？」
+        // と思ったので一旦この形で)
+        loginFormResult: {
+          emailResult: false,
+          passwordResult: false
         }
-    }
-  },
+      }
+    },
   methods: {
     login () {
-      console.log(this.loginForm)
-    }
+      // そのうちこれを参考に書き直す
+      // JavaScriptでconsole.log()を使うのはやめよう
+      // https://qiita.com/baby-degu/items/1046763163bc794870ea
+      // ぶっちゃけログインのバリテーションっているのかな〜？
+
+        //Emailのバリデーション
+        if (!this.signUpForm.email) {
+          // 空かどうかのバリテーション
+          console.log("(login)メールアドレスの入力がありません");
+          this.Validation.loginEmailErrMsg = "メールアドレスの入力がありません"
+        } else if(this.loginForm.loginEmail.match(/^[0-9a-zA-Z]*$/)){
+          //半角英数字のバリテーション
+          console.log("(login)メールアドレスを半角英数で入力してください");
+          this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください"
+
+        } else if(length(this.loginForm.loginEmail) > 15){
+          //マジックナンバーになってる。
+          //最大文字数のバリテーション
+          console.log("(login)メールアドレスを15文字以内にしてください");
+          this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
+
+        } else if(length(this.loginForm.loginEmail) > 15){
+          //マジックナンバーになってる。
+          //最大文字数のバリテーション
+          console.log("(login)メールアドレスを15文字以内にしてください");
+          this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
+
+        } else if(length(this.loginForm.loginEmail) < 5){
+          //マジックナンバーになってる。
+          //最小文字数のバリテーション
+          console.log("(login)メールアドレスは5文字以上にしてください");
+          this.Validation.loginEmailErrMsg = "メールアドレスは5文字以上にしてください"
+        } else {
+            //バリテーションOKな場合
+            console.log("(login)バリテーションOKです");
+            this.loginFormResult.emailResult = true;
+        }
+
+        //パスワードのバリデーション
+        if (!this.loginForm.password) {
+          //空文字チェック
+          console.log("(login)パスワードを入力してください");
+          this.Validation.PasswordErrMsg = "パスワードを入力してください"
+        } else if(this.loginForm.loginId.match(/^[0-9a-zA-Z]*$/)){
+          //半角英数字チェック
+          console.log("(login)パスワードは半角英数字で入力してください");
+          this.Validation.PasswordErrMsg = "パスワードは半角英数字で入力してください"
+        } else if(length(this.loginForm.password) > 15){
+          //最大文字数チェック
+          console.log("(login)パスワードは15文字以内で入力してください");
+          this.Validation.PasswordErrMsg = "パスワードは15文字以内で入力してください"
+        } else if(length(this.loginForm.password) < 5){
+          //最小文字数チェック
+          console.log("(login)パスワードは5文字以上で入力してください");
+          this.Validation.PasswordErrMsg = "パスワードは5文字以上入力してください"
+        } else if(this.loginForm.password === this.loginForm.password_confirmation){
+          //最小文字数チェック
+          console.log("(login)確認用パスワードと一致しません");
+          this.Validation.PasswordErrMsg = "確認用パスワードと一致しません"
+        } else {
+          //バリテーションOK
+          this.loginFormResult.passwordResult = true;
+        }
+
+        if(this.loginFormResult.emailResult === true && this.loginFormResult.passwordResult === true && this.loginFormResult.password_confirmationResult === true){
+          console.log("ログイン用バリテーションOKです。");
+          try {
+            //動作確認待ち
+            console.log("ログイン処理に入りました。");
+            console.log(this.loginForm);
+            //登録しているかの確認
+            //想定している処理の流れ・・・フォーム内情報をdispachを経由してvuex->laravelへリクエスト。
+            //そのレスポンス内容を元に共通メッセージを出力させる。
+            //上の登録処理から返ってきた結果をgetterで取得。それを元にメッセージの挿入を判断する。
+            // if () {
+            //   console.log("(login)登録情報がありませんでした。");
+            //   this.Validation.signUpCommonErrMsg = "メールアドレスまたはパスワードが違います"
+            // }
+            return true;
+          } catch (e) {
+            console.log("ログイン処理中に例外的エラーが発生しました。");
+            //そのレスポンス内容を元に共通メッセージを出力させる。
+            this.Validation.signUpCommonErrMsg = "エラーが発生しました。しばらく経ってからやり直してください。"
+            return false;
+          }
+        }
+      }
   }
 }
 </script>
