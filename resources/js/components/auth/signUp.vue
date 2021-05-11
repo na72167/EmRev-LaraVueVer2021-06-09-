@@ -46,14 +46,25 @@
 
         <!-- 確認用パスワード入力 -->
         <div class="signup-confirmationPasswardField">
-          <!-- 後にphpでエラー時用のスタイルを付属させる様にする。 -->
+          <!-- 後にphpでエラー時用のスタイルを付属させる様にする。 register-->
           <label class="#">
               <input class="signup-passwordConfirmationForm" :class="{ errInput: Validation.signUpPasswordConfirmationErrMsg }" type="password" placeholder="Confirmation Password" v-model="signUpForm.password_confirmation">
           </label>
         </div>
 
         <div class="signup-registerBtnField">
-          <input class="signup-registerBtn" type="submit" value="登録する">
+          <!-- <input
+          class="signup-registerBtn"
+          type="submit"
+          value=""
+          :disabled="isSubmit"
+          > -->
+          <button class="signup-registerBtnField"
+            type="submit"
+            :disabled="isSubmit"
+          >
+          {{ signUpButton }}
+          </button>
         </div>
 
     </form>
@@ -61,8 +72,10 @@
 </template>
 
 <script>
+// @は基本半角で
 // 外部のjsファイルの読み込みが上手くいかないのでマジックナンバーやメソッドの切り分けは一旦保留。
-// import SIGNUP_NUM from '.../utils/signUp'
+// TODO:読み込み元ファイルを一度読み込み先ファイルと同階層に移さないとパスが読み込まれないエラーを解決する。
+import {validWhiteSpace} from "./utils/validate"
 
 export default {
     data () {
@@ -88,90 +101,130 @@ export default {
           emailResult: false,
           passwordResult: false,
           password_confirmationResult: false
-        }
+        },
+        //連続で登録処理をさせない用
+        isSubmit: false,
+        signUpButton: "登録する"
       }
     },
     methods: {
-
+      // 【JavaScript】varとfunction"文"は使わずにletとconstを使って欲しい
+      // https://qiita.com/mejileben/items/b8502173216aebae8d36
       // :rulesがvuetify独自のタグかどうか調べる。
       // https://qiita.com/tekunikaruza_jp/items/0a68d86084d961d632ac
       //バリ関数は後で纏める。
-      signUp () {
-        //Emailのバリデーション
-        if (!this.signUpForm.email) {
-          //空かどうかのバリテーション
-          console.log("(signUp)メールアドレスの入力がありません");
-          this.Validation.EmailErrMsg = "メールアドレスを入力してください"
+        async signUp () {
+          //Emailのバリデーション
+          // if (!this.signUpForm.email) {
+          //   //空かどうかのバリテーション
+          //   console.log("(signUp)メールアドレスの入力がありません");
+          //   this.Validation.EmailErrMsg = "メールアドレスを入力してください"
 
-        } else if(this.signUpForm.loginId.match(/^[0-9a-zA-Z]*$/)){
-          //半角英数字のバリテーション
-          console.log("(signUp)メールアドレスを半角英数で入力してください");
-          this.Validation.EmailErrMsg = "半角英数で入力してください"
+          // } else if(this.signUpForm.loginId.match(/^[0-9a-zA-Z]*$/)){
+          //   //半角英数字のバリテーション
+          //   console.log("(signUp)メールアドレスを半角英数で入力してください");
+          //   this.Validation.EmailErrMsg = "半角英数で入力してください"
 
-        } else if(length(this.signUpForm.loginId) > 15){
-          //マジックナンバーになってる。
-          //最大文字数のバリテーション
-          console.log("(signUp)メールアドレスを15文字以内にしてください");
-          this.Validation.EmailErrMsg = "メールアドレスは15文字以内にしてください"
-        // } else if(){
-        //   //ここはさすがに外部ファイルに切り出せないと長くなりすぎるので一旦保留。
-        //   //重複確認のバリテーション
-        //   console.log("(signUp)メールアドレスが重複しています");
-        //   this.Validation.EmailErrMsg = "メールアドレスが重複しています"
-        } else {
-          //バリテーションがOKな場合
-          console.log("(signUp)バリテーションOKです");
-          this.signUpFormResult.emailResult = true;
-        }
+          // } else if(length(this.signUpForm.loginId) > 15){
+          //   //マジックナンバーになってる。
+          //   //最大文字数のバリテーション
+          //   console.log("(signUp)メールアドレスを15文字以内にしてください");
+          //   this.Validation.EmailErrMsg = "メールアドレスは15文字以内にしてください"
+          // // } else if(){
+          // //   //ここはさすがに外部ファイルに切り出せないと長くなりすぎるので一旦保留。
+          // //   //重複確認のバリテーション
+          // //   console.log("(signUp)メールアドレスが重複しています");
+          // //   this.Validation.EmailErrMsg = "メールアドレスが重複しています"
+          // } else {
+          //   //バリテーションがOKな場合
+          //   console.log("(signUp)バリテーションOKです");
+          //   this.signUpFormResult.emailResult = true;
+          // }
 
-        //パスワードのバリデーション
-        if (!this.signUpForm.password) {
-          //空文字チェック
-          console.log("(signUp)パスワードを入力してください");
-          this.Validation.PasswordErrMsg = "パスワードを入力してください"
-        } else if(this.loginForm.loginId.match(/^[0-9a-zA-Z]*$/)){
-          //半角英数字チェック
-          console.log("(signUp)パスワードは半角英数字で入力してください");
-          this.Validation.PasswordErrMsg = "パスワードは半角英数字で入力してください"
-        } else if(length(this.signUpForm.password) > 15){
-          //最大文字数チェック
-          console.log("(signUp)パスワードは15文字以内で入力してください");
-          this.Validation.PasswordErrMsg = "パスワードは15文字以内で入力してください"
-        } else if(length(this.signUpForm.password) < 5){
-          //最小文字数チェック
-          console.log("(signUp)パスワードは5文字以上で入力してください");
-          this.Validation.PasswordErrMsg = "パスワードは5文字以上入力してください"
-        } else if(this.signUpForm.password === this.signUpForm.password_confirmation){
-          //最小文字数チェック
-          console.log("(signUp)確認用パスワードと一致しません");
-          this.Validation.PasswordErrMsg = "確認用パスワードと一致しません"
-        } else {
-          //バリテーションOK
-          console.log("(signUp)バリテーションOKです");
-          this.signUpFormResult.passwordResult = true;
-        }
+          // //パスワードのバリデーション
+          // if (!this.signUpForm.password) {
+          //   //空文字チェック
+          //   console.log("(signUp)パスワードを入力してください");
+          //   this.Validation.PasswordErrMsg = "パスワードを入力してください"
+          // } else if(this.loginForm.loginId.match(/^[0-9a-zA-Z]*$/)){
+          //   //半角英数字チェック
+          //   console.log("(signUp)パスワードは半角英数字で入力してください");
+          //   this.Validation.PasswordErrMsg = "パスワードは半角英数字で入力してください"
+          // } else if(length(this.signUpForm.password) > 15){
+          //   //最大文字数チェック
+          //   console.log("(signUp)パスワードは15文字以内で入力してください");
+          //   this.Validation.PasswordErrMsg = "パスワードは15文字以内で入力してください"
+          // } else if(length(this.signUpForm.password) < 5){
+          //   //最小文字数チェック
+          //   console.log("(signUp)パスワードは5文字以上で入力してください");
+          //   this.Validation.PasswordErrMsg = "パスワードは5文字以上入力してください"
+          // } else if(this.signUpForm.password === this.signUpForm.password_confirmation){
+          //   //最小文字数チェック
+          //   console.log("(signUp)確認用パスワードと一致しません");
+          //   this.Validation.PasswordErrMsg = "確認用パスワードと一致しません"
+          // } else {
+          //   //バリテーションOK
+          //   console.log("(signUp)バリテーションOKです");
+          //   this.signUpFormResult.passwordResult = true;
+          // }
 
 
-        if(this.signUpFormResult.emailResult === true && this.signUpFormResult.passwordResult === true){
-          console.log("ユーザ登録バリテーションOKです。");
+          // if(this.signUpFormResult.emailResult === true && this.signUpFormResult.passwordResult === true){
+          //   console.log("ユーザ登録バリテーションOKです。");
+          //   try {
+          //     //動作確認待ち
+          //     console.log("登録処理に入りました。");
+          //     console.log(this.signUpForm);
+          //     // ここにregister
+          //     // const response = await axios.post('/api/register', data)
+
+          //     // マイページへ飛ばすパスを書く。
+          //     // プロパティの保持期間がよくわからないので、画面遷移後
+          //     this.signUpFormResult.emailResult = false;
+          //     this.signUpFormResult.passwordResult = false;
+          //   } catch (e) {
+          //     console.log("登録処理中に例外的エラーが発生しました。");
+          //     this.signUpFormResult.emailResult = false;
+          //     this.signUpFormResult.passwordResult = false;
+          //   }
+          // }
           try {
-            //動作確認待ち
-            console.log("登録処理に入りました。");
-            console.log(this.signUpForm);
-
-            // マイページへ飛ばすパスを書く。
-            // プロパティの保持期間がよくわからないので、画面遷移後
-            this.signUpFormResult.emailResult = false;
-            this.signUpFormResult.passwordResult = false;
-          } catch (e) {
-            console.log("登録処理中に例外的エラーが発生しました。");
-            this.signUpFormResult.emailResult = false;
-            this.signUpFormResult.passwordResult = false;
+            this.isSubmit = true;
+            this.submitButton = "登録中です";
+            if (this.signUpFormResult.emailResult === false && this.signUpFormResult.passwordResult === false){
+              console.log("登録内容にエラーがありました。");
+              this.isSubmit = false;
+              this.submitButton = "登録";
+              return;
+            }else if(this.signUpFormResult.emailResult === true && this.signUpFormResult.passwordResult === true)
+            // ロード画面実装処理
+            // this.$store.dispatch("app/setLoading");
+              this.Validation = "";
+              console.log("登録処理に入りました。");
+              console.log(this.signUpForm);
+              // 登録処理
+              this.$store.dispatch("auth/createUser",this.signUpForm);
+              //バリテーション結果の初期化
+              this.signUpFormResult.emailResult = false;
+              this.signUpFormResult.passwordResult = false;
+              // マイページへ飛ばすパスを書く。
+              // this.$router.push('/mypage.{id}');
+            } catch (e) {
+                console.log("登録処理中に例外エラーが発生しました。");
+                this.signUpFormResult.emailResult = false;
+                this.signUpFormResult.passwordResult = false;
+            }
+            // jQueryやJavaScriptでvar_dump()したいときは、console.log(hoge)してChromeのコンソールでみればいいらしい
+            // https://blog.nakachon.com/2012/04/10/jquery%E3%82%84javascript%E3%81%A7var_dump%E3%81%97%E3%81%9F%E3%81%84%E3%81%A8%E3%81%8D%E3%81%AF%E3%80%81console-loghoge%E3%81%97%E3%81%A6chrome%E3%81%AE%E3%82%B3%E3%83%B3%E3%82%BD%E3%83%BC/
+            // finally {
+            //   // 必ず実行する処理の記述(try..catch..finally)
+            //   // https://www.javadrive.jp/start/exception/index3.html
+            //   // ローディング画面の終了
+            //   this.isSubmitting = false;
+            // }
           }
         }
       }
-    }
-}
 </script>
 
 <style lang="scss" scope>

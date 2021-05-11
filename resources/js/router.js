@@ -8,10 +8,16 @@ Vue.use(VueRouter)
 // パスとコンポーネントのマッピング
 const routes = [
   {
+    path: '/404',
+    name: 'NotFound',
+    component: () =>
+        import ('./views/errors/NotFound'),
+  },
+  {
     path: '/',
     name: 'home',
     component: () =>
-        import ('./views/home'),
+        import ('./views/Home'),
   }
 ]
 

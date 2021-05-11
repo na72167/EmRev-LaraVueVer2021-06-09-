@@ -13,39 +13,58 @@
                 <a class="hero__text-aboutLink" href="#index-about">このアプリについて</a>
             </div>
             <div class="hero__signup-loginWrap">
-                <span v-show="switching_auth === 'signup'">
-                  <SignUp/>
-                </span>
-                <span v-show="switching_auth === 'login'">
-                  <Login/>
-                </span>
+              <!-- TODO: v-bind:classを使ってdateに依存したスタイル(トランジションクラス使用)の設定を行う。 -->
+              <!-- [Vue.js メモ]条件に応じてトランジション変更したい場合 -->
+              <!-- https://qiita.com/riversun/items/a233bdf589c78ea9b149 -->
+              <!-- 【JS】Vueの:classの書き方3通り -->
+              <!-- https://jsnotice.com/posts/2019-06-29/ -->
+              <!-- Vue.jsでいい感じのアニメーションを作りたい -->
+              <!-- https://qiita.com/b0ntenmaru/items/ba25ecec99820faddd8e#%E8%A4%87%E6%95%B0%E8%A6%81%E7%B4%A0%E3%81%AE%E3%83%88%E3%83%A9%E3%83%B3%E3%82%B8%E3%82%B7%E3%83%A7%E3%83%B3 -->
+              <!-- 会社情報登録ページ画面の一覧表示に使うといいかも -->
+              <!-- https://qiita.com/gyarasu/items/eadc0690037609c041e3 -->
+              <!-- Eslint-plugin-vue: 「v-model」ディレクティブはでサポートされていません -->
+              <!-- https://bleepcoder.com/ja/eslint-plugin-vue/311235046/v-model-directives-aren-t-supported-on-div-elements -->
+              <!-- Vue.jsのv-modelを正しく使う -->
+              <!-- https://qiita.com/simezi9/items/c27d69f17d2d08722b3a -->
+                <SignUp
+                  v-if="authComponentsState === 'signUp'"
+                />
+                <Login
+                  v-if="authComponentsState === 'login'"
+                />
             </div>
         </div>
     </section>
 </template>
 
 <script>
+
 // Cannot find module 'モジュールファイル名'の原因
 // 1.タイポ
 // 2.対象ファイルに何かしらのエラーが出ており,呼び込み元のファイルからモジュールと認識されていない(?)
 // app.js:203 Uncaught ReferenceError:の原因
 // 1.エイリアス名とファイル名が違う(passが../auth/SignUp なのにエイリアス名がsignUp等)
-//あとvueのコンポーネント名は大文字が基本っぽい
+// あとvueのコンポーネント名は大文字が基本っぽい
+// mapGettersとmapStatesの使い分け・・・読み込み時のみstateを参照したい->mapGetters
+// リアルタイムでstateを参照したい->mapStates
+// mapGettersで書く時とmapStateで書く時ではパスの書き方が違う?
+// authComponentsState 'auth/authComponentsState'
 
+import { mapState } from "vuex";
 import SignUp from '../auth/SignUp';
 import Login from '../auth/Login';
 
 export default {
-    components: {
+  components: {
     SignUp,
     Login
-    },
-    data () {
-        return {
-            //ユーザー登録とログイン用コンポーネントの切り替え
-            switching_auth: 'signup'
-        }
-    }
+  },
+  computed: {
+    ...mapState({
+    //mapStateを通してstate内データを扱いたい場合は以下の様に書く。
+    authComponentsState: state => state.auth.authComponentsState,
+    })
+  }
 }
 </script>
 

@@ -20,30 +20,58 @@
             <!-- false(正確にはそれ以外) -->
             <nav class="header__nav" v-else>
               <!-- ここでプロパティの切り替えを行う。そのプロパティを親コンポーネントに伝えてログイン・サインアップのコンポーネントを切り替える。 -->
-              <li class="header__nav-list active-login-menu" @click="tswitching_auth = 'login'">LOGIN</li>
-              <li class="header__nav-list active-signup-menu" @click="switching_auth = 'signup'">SIGNUP</li>
+              <li class="header__nav-list active-login-menu" @click="changeLoginProp">LOGIN</li>
+              <li class="header__nav-list active-signup-menu" @click="changeSignUpProp">SIGNUP</li>
             </nav>
         </div>
     </header>
+
+    <!-- propsと$emitでデータを引き渡す -->
+    <!-- https://qiita.com/d0ne1s/items/f88ecd6aaa90c7bbc5d4 -->
+
 </template>
 
 <script>
+
+//次はviexを使ってheader内ボタンから送信されるauth切り替えプロパティ
+//をsignupコンポーネントとloginコンポーネントの切り替えをする処理を書く。
+import { mapGetters } from "vuex";
+
 export default {
     computed: {
-        isLogin () {
-        return this.$store.getters['auth/check']
-        }
+      //ログイン情報確認getter
+      ...mapGetters(["userLoginCheck"]),
+    },
+    data () {
+      return {
+        isLogin: this.userLoginCheck
+      }
     },
     methods: {
-        async logout () {
-        // authストアのresigterアクションを呼び出す
-        // 多分dispatchの第一引数はstoreフォルダ内のファイルを探している。
-        await this.$store.dispatch('auth/logout')
-        //ステート内を空にする為に第二引数にnullを指定する。
-        context.commit('setUser', null)
-        // ホームに移動する
-        this.$router.push('/')
+        // propsと$emitでデータを引き渡す
+        // https://qiita.com/d0ne1s/items/f88ecd6aaa90c7bbc5d4
+        // ログインコンポーネント切り替え
+        async changeLoginProp() {
+          //actionのメソッドに変更
+          await this.$store.dispatch('auth/changeLogin','login')
         },
+        // ユーザー登録コンポーネント切り替え
+        async changeSignUpProp() {
+          //mutaion に直接 commit せず、action 経由で実行することを強く推奨する
+          //https://uncle-javascript.com/vuex-actions
+          await this.$store.dispatch('auth/changeSignUp','signUp');
+        },
+        // async/awate
+        // async logout () {
+        //   // authストアのresigterアクションを呼び出す
+        //   // 多分dispatchの第一引数はstoreフォルダ内のファイルを探している。
+        //   // 対象関数のPromiseの結果が返ってくるまで処理が一時停止される。
+        //   await this.$store.dispatch('auth/logout')
+        //   //ステート内を空にする為に第二引数にnullを指定する。
+        //   context.commit('setUser', null)
+        //   // ホームに移動する
+        //   this.$router.push('/')
+        // },
         unti() {
         // ホームに移動する
         this.$router.push('/myPage')
