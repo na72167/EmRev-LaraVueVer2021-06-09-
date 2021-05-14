@@ -38,15 +38,18 @@
 import { mapGetters } from "vuex";
 
 export default {
-    computed: {
-      //ログイン情報確認getter
-      ...mapGetters(["userLoginCheck"]),
-    },
-    data () {
-      return {
-        isLogin: this.userLoginCheck
-      }
-    },
+    // computed: {
+    //   //ログイン情報確認getter
+    //   // ...mapGetters(["userLoginCheck"]),
+    // },
+    // data:function() {
+    //   const user = if(isset(Cookies.get('user_id'))) ()=> {
+
+    //   };
+    //   return {
+    //     isLogin: this.user
+    //   }
+    // },
     methods: {
         // propsと$emitでデータを引き渡す
         // https://qiita.com/d0ne1s/items/f88ecd6aaa90c7bbc5d4

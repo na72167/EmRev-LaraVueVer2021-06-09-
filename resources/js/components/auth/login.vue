@@ -42,7 +42,13 @@
             </div>
 
             <div class="login-registerBtnField">
-                <input class="login-registerBtn" type="submit" value="ログイン">
+              <!-- <input class="login-registerBtn" type="submit" value="ログイン"> -->
+              <button class="login-registerBtnField"
+                type="submit"
+                :disabled="isSubmit"
+              >
+              {{ loginButton }}
+              </button>
             </div>
 
         </form>
@@ -51,68 +57,84 @@
 </template>
 
 <script>
+// @は基本半角で
+// 外部のjsファイルの読み込みが上手くいかないのでマジックナンバーやメソッドの切り分けは一旦保留。
+// TODO:読み込み元ファイルを一度読み込み先ファイルと同階層に移さないとパスが読み込まれないエラーを解決する。
+import Cookies from "js-cookie";
+import axios from "axios";
+import {validHalfNumAlp,validEmail,validEmailDup,validMaxLen,validMixLen} from "./utils/validate"
+import {LOGIN_NUM} from "./utils/login-number-mappings"
+
 export default {
   data () {
-      return {
-        // 入力情報を保持
-        loginForm: {
-          email: '',
-          password: ''
-        },
-        // エラーメッセージを保持
-        Validation:{
-            loginEmailErrMsg: "",
-            loginPasswordErrMsg: "",
-            loginCommonErrMsg: ""
-        },
-        // 各バリテーションの総合的な結果情報の管理
-        // (上のValidation内の各プロパティ内にmsg内があるかどうかで判定してもいいけど今後TS導入予定なのでもしかすると
-        //「扱う情報の型数を狭めて管理するプロパティの数を増やした方が型制御の恩恵を受けやすいのかな？」
-        // と思ったので一旦この形で)
-        loginFormResult: {
-          emailResult: false,
-          passwordResult: false
-        }
-      }
-    },
+    return {
+      // 入力情報を保持
+      loginForm: {
+        email: null,
+        password: null
+      },
+      // エラーメッセージを保持
+      Validation:{
+          loginEmailErrMsg: null,
+          loginPasswordErrMsg: null,
+          loginCommonErrMsg: null
+      },
+      // 各バリテーションの総合的な結果情報の管理
+      // (上のValidation内の各プロパティ内にmsg内があるかどうかで判定してもいいけど今後TS導入予定なのでもしかすると
+      //「扱う情報の型数を狭めて管理するプロパティの数を増やした方が型制御の恩恵を受けやすいのかな？」
+      // と思ったので一旦この形で)
+      loginFormResult: {
+        emailResult: false,
+        passwordResult: false,
+        password_confirmationResult: false
+      },
+      //連続で登録処理をさせない用
+      isSubmit: false,
+      loginButton: '登録する',
+      RegistUser: null,
+      sesLimit: 3600,
+      debug: null,
+    }
+  },
   methods: {
-    login () {
+    login: async function () {
       // そのうちこれを参考に書き直す
       // JavaScriptでconsole.log()を使うのはやめよう
       // https://qiita.com/baby-degu/items/1046763163bc794870ea
-      // ぶっちゃけログインのバリテーションっているのかな〜？
+      // ぶっちゃけログインのバリテーションっているのかな〜？signUp
 
         //Emailのバリデーション
-        if (!this.signUpForm.email) {
+        if (!this.loginForm.email) {
           // 空かどうかのバリテーション
           console.log("(login)メールアドレスの入力がありません");
           this.Validation.loginEmailErrMsg = "メールアドレスの入力がありません"
-        } else if(this.loginForm.loginEmail.match(/^[0-9a-zA-Z]*$/)){
-          //半角英数字のバリテーション
+
+        } else if(!validEmail(this.loginForm.loginEmail)){
+          // メールアドレスの形式確認
           console.log("(login)メールアドレスを半角英数で入力してください");
           this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください"
 
+        } else if(validHalfNumAlp(this.loginForm.loginEmail)){
+          // 半角英数字のバリテーション
+        console.log("(login)メールアドレスを半角英数で入力してください");
+        this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください"
+
+          // 次する事 バリの記入の続き。ログインメソッドの記入続き
+
         } else if(length(this.loginForm.loginEmail) > 15){
-          //マジックナンバーになってる。
           //最大文字数のバリテーション
           console.log("(login)メールアドレスを15文字以内にしてください");
           this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
 
         } else if(length(this.loginForm.loginEmail) > 15){
-          //マジックナンバーになってる。
-          //最大文字数のバリテーション
-          console.log("(login)メールアドレスを15文字以内にしてください");
-          this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
-
-        } else if(length(this.loginForm.loginEmail) < 5){
-          //マジックナンバーになってる。
           //最小文字数のバリテーション
-          console.log("(login)メールアドレスは5文字以上にしてください");
-          this.Validation.loginEmailErrMsg = "メールアドレスは5文字以上にしてください"
+          console.log("(login)メールアドレスを15文字以内にしてください");
+          this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
+
         } else {
-            //バリテーションOKな場合
-            console.log("(login)バリテーションOKです");
-            this.loginFormResult.emailResult = true;
+          //バリテーションOKな場合
+          console.log("(login)バリテーションOKです");
+          this.loginFormResult.emailResult = true;
         }
 
         //パスワードのバリデーション
@@ -153,13 +175,13 @@ export default {
             //上の登録処理から返ってきた結果をgetterで取得。それを元にメッセージの挿入を判断する。
             // if () {
             //   console.log("(login)登録情報がありませんでした。");
-            //   this.Validation.signUpCommonErrMsg = "メールアドレスまたはパスワードが違います"
+            //   this.Validation.loginCommonErrMsg = "メールアドレスまたはパスワードが違います"
             // }
             return true;
           } catch (e) {
             console.log("ログイン処理中に例外的エラーが発生しました。");
             //そのレスポンス内容を元に共通メッセージを出力させる。
-            this.Validation.signUpCommonErrMsg = "エラーが発生しました。しばらく経ってからやり直してください。"
+            this.Validation.loginCommonErrMsg = "エラーが発生しました。しばらく経ってからやり直してください。"
             return false;
           }
         }
