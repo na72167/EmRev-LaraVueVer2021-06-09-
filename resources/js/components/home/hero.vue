@@ -12,7 +12,10 @@
                 </div>
                 <a class="hero__text-aboutLink" href="#index-about">このアプリについて</a>
             </div>
-            <div class="hero__signup-loginWrap">
+            <!-- TODO:ログイン機能とログアウト機能が完成した後、ifの条件をイコールに変更する。 -->
+            <div class="hero__signup-loginWrap"
+              v-if="user_id !== true"
+            >
               <!-- TODO: v-bind:classを使ってdateに依存したスタイル(トランジションクラス使用)の設定を行う。 -->
               <!-- [Vue.js メモ]条件に応じてトランジション変更したい場合 -->
               <!-- https://qiita.com/riversun/items/a233bdf589c78ea9b149 -->
@@ -50,11 +53,19 @@
 // mapGettersで書く時とmapStateで書く時ではパスの書き方が違う?
 // authComponentsState 'auth/authComponentsState'
 
+import Cookies from "js-cookie";
 import { mapState } from "vuex";
 import SignUp from '../auth/SignUp';
 import Login from '../auth/Login';
 
 export default {
+  data: function() {
+    return {
+      user_id: Cookies.get('user_id') || null,
+      login_date: Cookies.get('login_date') || null,
+      login_limit: Cookies.get('login_limit') || null,
+    }
+  },
   components: {
     SignUp,
     Login

@@ -2089,12 +2089,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -2132,12 +2126,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //をsignupコンポーネントとloginコンポーネントの切り替えをする処理を書く。
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["userLoginCheck"])),
-  data: function data() {
-    return {
-      isLogin: this.userLoginCheck
-    };
-  },
+  // computed: {
+  //   //ログイン情報確認getter
+  //   // ...mapGetters(["userLoginCheck"]),
+  // },
+  // data:function() {
+  //   const user = if(isset(Cookies.get('user_id'))) ()=> {
+  //   };
+  //   return {
+  //     isLogin: this.user
+  //   }
+  // },
   methods: {
     // propsと$emitでデータを引き渡す
     // https://qiita.com/d0ne1s/items/f88ecd6aaa90c7bbc5d4
@@ -21299,9 +21298,15 @@ var routes = [{
   }
 }, {
   path: '/',
-  name: 'home',
+  name: 'Home',
   component: function component() {
     return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./views/Home */ "./resources/js/views/Home.vue"));
+  }
+}, {
+  path: '/mypage/:id',
+  name: 'MyPage',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./views/MyPage */ "./resources/js/views/MyPage.vue"));
   }
 }]; // VueRouterインスタンスを作成する
 
@@ -21430,24 +21435,14 @@ var actions = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
-/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _utils_ResponseStateCode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/ResponseStateCode */ "./resources/js/store/utils/ResponseStateCode.js");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_ResponseState_mappings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/ResponseState-mappings */ "./resources/js/store/utils/ResponseState-mappings.js");
 //ユーザー登録やログイン関係など
 
 
- // 次回いつも参考にしている記事の以下部分を読んだのち、ユーザー登録の続き
-// import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
 
 var state = {
   authComponentsState: 'signUp',
@@ -21477,50 +21472,42 @@ var actions = {
   changeSignUp: function changeSignUp(_ref2, _changeSignUp) {
     var commit = _ref2.commit;
     commit('setChangeAuthSignUp', _changeSignUp);
-  },
-  createUser: function createUser(_ref3, createUserdate) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-      var commit, response;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              commit = _ref3.commit;
-              _context.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/api/register', createUserdate)["catch"](function (err) {
-                return err.response || err;
-              });
+  } // ,
+  // async createUser({ commit }, createUserdate){
+  //   // JavaScriptでオブジェクトの内容が知りたい時
+  //   // https://qiita.com/ms2sato/items/27e82d6d881fce012459
+  //   // Promise.prototype.catch()
+  //   // https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch
+  //   // 次回はバックのユーザー登録機能が想定どおりに動作するかの確認。
+  //   // その後ログイン機能の実装とユーザー情報をCookieで管理する処理を書く。
+  //   // 第一引数の指定は「フォルダ名/router側で指定したname属性」で良いはず。
+  //   const response = await axios.post('/api/register', createUserdate)
+  //   .catch(err => err.response || err)
+  //   console.dir("サーバー側からのレスポンス内容:".response);
+  //   return response
+  //   // //バックからの処理が想定通り動作した場合
+  //   // if (response.status === RESPONSE_STATE.OK) {
+  //   //   context.commit('setApiStatus', true)
+  //   //   // レスポンス内容を増やす(レスポンスステータス以外にも登録したメールアドレスを元にid情報なども引っ張ってきて
+  //   //   // response内に格納。cookieに保存する。)
+  //   //   // もしくは登録したメールアドレスを元にもう一度バックにリクエストを送る。
+  //   //   // JavaScriptプラグインjs-cookieで超簡単にクッキー管理
+  //   //   // https://pizzamanz.net/web/javascript/js-cookie/
+  //   //   Cookies.set('id','email','password','roll','report_flg','delete_flg','create_date','update_date');
+  //   //   const cookieDate = Cookies.get('id','email','password','roll','report_flg','delete_flg','create_date','update_date');
+  //   //   console.dir("現在保存されているCookie内情報:".cookieDate);
+  //   //   this.$router.push('/mypage/'.cookieDate['id']);
+  //   //   //ここのユーザー情報の格納をCookieに変更
+  //   //   context.commit('setUser', response.data)
+  //   //   // 条件に当てはまった場合ここで処理を打ち切る
+  //   //   return false
+  //   // }
+  //   // // 想定通り動作しなかった場合,ApiStateの状態をfalseに変更。
+  //   // // エラー内情報をerrorストアへ更新する。
+  //   // context.commit('setApiStatus', false)
+  //   // context.commit('error/setCode', response.status, { root: true })
+  // }
 
-            case 3:
-              response = _context.sent;
-              console.dir("サーバー側からのレスポンス内容:".response); //バックからの処理が想定通り動作した場合
-
-              if (!(response.status === _utils_ResponseStateCode__WEBPACK_IMPORTED_MODULE_3__["RESPONSE_STATE"].OK)) {
-                _context.next = 9;
-                break;
-              }
-
-              context.commit('setApiStatus', true); //ここのユーザー情報の格納をCookieに変更
-
-              context.commit('setUser', response.data);
-              return _context.abrupt("return", false);
-
-            case 9:
-              // 想定通り動作しなかった場合,ApiStateの状態をfalseに変更。
-              // エラー内情報をerrorストアへ更新する。
-              context.commit('setApiStatus', false);
-              context.commit('error/setCode', response.status, {
-                root: true
-              });
-
-            case 11:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
-  }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
   namespaced: true,
@@ -21557,10 +21544,10 @@ var mutations = {
 
 /***/ }),
 
-/***/ "./resources/js/store/utils/ResponseStateCode.js":
-/*!*******************************************************!*\
-  !*** ./resources/js/store/utils/ResponseStateCode.js ***!
-  \*******************************************************/
+/***/ "./resources/js/store/utils/ResponseState-mappings.js":
+/*!************************************************************!*\
+  !*** ./resources/js/store/utils/ResponseState-mappings.js ***!
+  \************************************************************/
 /*! exports provided: RESPONSE_STATE */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 

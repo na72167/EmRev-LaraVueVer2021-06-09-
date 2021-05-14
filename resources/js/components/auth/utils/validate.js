@@ -1,15 +1,6 @@
+import axios from "axios";
 /**
- * URLのバリテーション
- * @param {String} textval
- * @return {Boolean}
- */
-export function validURL(url) {
-  const reg = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
-  return reg.test(url);
-}
-
-/**
- * 小文字の文字列か検証する
+ * 小文字の文字列か検証するvalidHalfNumAlp
  * @return {Boolean}
  * @param {String} str
  */
@@ -46,6 +37,21 @@ export function validAlphabets(str) {
 export function validEmail(email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
+}
+
+/**
+ * メールアドレスの重複検証
+ * @param {String} email
+ * @return {Boolean}
+ */
+export async function validEmailDup(email) {
+  const query = {
+    'email': email
+  }
+  const response = await axios.post('/api/emailDup',query);
+  //TODO:重複が合った場合のresponseの内容の確認
+  // 重複が合った場合はtrueを返す処理を書く。
+  console.dir(response);
 }
 
 /**
@@ -98,7 +104,7 @@ export function validTel(tel) {
 }
 
 /**
- * 半角英数字を有効にする
+ * 半角英数字であるかを検証にする
  * @param {String} halfNumAlp
  * @return {Boolean}
  */
@@ -108,7 +114,7 @@ export function validHalfNumAlp(halfNumAlp) {
 }
 
 /**
- * 半角数字かを検証する
+ * 半角数字であるかを検証する
  * @param {String} validNumber
  * @return {Boolean}
  */
@@ -117,11 +123,39 @@ export function validNumber(Number){
     return re.test(Number);
   }
 
-  /**
+/**
  * 空白かどうかを検証する
- */
-
+*/
 export function validWhiteSpace(string) {
   const re = /^[\x20\u3000]+$/
   return re.test(string)
 }
+
+/**
+ * 最大文字数の検証
+ * @param {String} string
+ * @param {Integer} maxNum
+ * @return {Boolean}
+ */
+export function validMaxLen(string,maxNum){
+  if(string.length >= maxNum){
+    return true
+  } else {
+    return false
+  }
+}
+
+/**
+* 最小文字数の検証
+* @param {String} string
+* @param {Integer} minNum
+* @return {Boolean}
+*/
+export function validMixLen(string,minNum){
+  if(string.length <= minNum){
+    return true
+  } else {
+    return false
+  }
+}
+

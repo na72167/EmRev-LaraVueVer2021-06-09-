@@ -20,10 +20,10 @@ class RegisterApiTest extends TestCase
 
     /**
      * A basic feature test get method.
-     *
+     * @test
      * @return void
      */
-    public function test_post_新しいユーザーを作成して返却する()
+    public function test新しいユーザーを作成して返却する()
     {
         $response = $this->json('POST', route('register'), [
             'email' => 'dummy@email.com',
