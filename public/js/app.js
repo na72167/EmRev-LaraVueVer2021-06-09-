@@ -4397,39 +4397,25 @@ var render = function() {
       _c("div", { staticClass: "header__content-wrap" }, [
         _vm._m(0),
         _vm._v(" "),
-        _vm.isLogin
-          ? _c("nav", { staticClass: "header__nav" }, [
-              _c("li", { staticClass: "header__nav-list js-toggle-sp-menu" }, [
-                _vm._v("MENU")
-              ]),
-              _vm._v(" "),
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
-                "li",
-                { staticClass: "header__nav-list", on: { click: _vm.logout } },
-                [_vm._v("LOGOUT")]
-              )
-            ])
-          : _c("nav", { staticClass: "header__nav" }, [
-              _c(
-                "li",
-                {
-                  staticClass: "header__nav-list active-login-menu",
-                  on: { click: _vm.changeLoginProp }
-                },
-                [_vm._v("LOGIN")]
-              ),
-              _vm._v(" "),
-              _c(
-                "li",
-                {
-                  staticClass: "header__nav-list active-signup-menu",
-                  on: { click: _vm.changeSignUpProp }
-                },
-                [_vm._v("SIGNUP")]
-              )
-            ])
+        _c("nav", { staticClass: "header__nav" }, [
+          _c(
+            "li",
+            {
+              staticClass: "header__nav-list active-login-menu",
+              on: { click: _vm.changeLoginProp }
+            },
+            [_vm._v("LOGIN")]
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              staticClass: "header__nav-list active-signup-menu",
+              on: { click: _vm.changeSignUpProp }
+            },
+            [_vm._v("SIGNUP")]
+          )
+        ])
       ])
     ]
   )
@@ -4450,16 +4436,6 @@ var staticRenderFns = [
         )
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "header__nav-list" }, [
-      _c("a", { attrs: { href: "./reviewRegister-cList.php" } }, [
-        _vm._v("REVIEW REGISTRATION")
-      ])
-    ])
   }
 ]
 render._withStripped = true
@@ -21300,13 +21276,13 @@ var routes = [{
   path: '/',
   name: 'Home',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./views/Home */ "./resources/js/views/Home.vue"));
+    return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./views/Home */ "./resources/js/views/Home.vue"));
   }
 }, {
   path: '/mypage/:id',
   name: 'MyPage',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./views/MyPage */ "./resources/js/views/MyPage.vue"));
+    return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./views/MyPage */ "./resources/js/views/MyPage.vue"));
   }
 }]; // VueRouterインスタンスを作成する
 
@@ -21349,7 +21325,8 @@ __webpack_require__.r(__webpack_exports__);
 // https://hapicode.com/javascript/npmjs.html
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a); // TODO:Vuexに型付けしたい。
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a); // TODO:サイトの重さ軽減とかもやってみたい。https://ics.media/entry/200716/
+// TODO:Vuexに型付けしたい。
 // Vue/Vuexに静的に型を付ける
 // https://joe-re.hatenablog.com/entry/2017/07/26/101805
 // Webpackでフォルダ内の全ファイルを一気にrequireする

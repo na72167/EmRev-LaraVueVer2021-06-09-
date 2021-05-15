@@ -2,7 +2,7 @@
     <!-- ログイン関係 -->
     <div class="login js-login-style hidden">
 
-        <form method="POST" class="login-formStyle" @submit.prevent="login">
+        <form class="login-formStyle" @submit.prevent="login">
 
             <h2 class="login-title">Login</h2>
             <div class="login-commonMsgArea">
@@ -17,7 +17,7 @@
                 <!-- 後にphpでエラー時用のスタイルを付属させる様にする。 -->
                 <label class="#">
                     <!-- バリに引っかかった際にはerrクラスを付属させる。 -->
-                    <input class="login-emailForm" :class="{ errInput: Validation.loginEmailErrMsg }" v-model="loginForm.email">
+                    <input class="login-emailForm" :class="{ errInput: Validation.loginEmailErrMsg }" type="text" placeholder="Email" v-model="loginForm.email">
                     <div class="login-areaMsg">
                         <!-- エラーメッセージの出力 -->
                         <span class="#">
@@ -31,7 +31,7 @@
             <div class="login-passwardField">
                 <label class="#">
                     <!-- 後にphpでエラー時用のスタイルを付属させる様にする。 -->
-                    <input class="login-passwordForm" :class="{ errInput: Validation.loginPasswordErrMsg }" v-model="loginForm.password">
+                    <input class="login-passwordForm" :class="{ errInput: Validation.loginPasswordErrMsg }" type="password" placeholder="Password" v-model="loginForm.password">
                     <div class="login-areaMsg">
                       <!-- エラーメッセージの出力 -->
                         <span class="#">
@@ -62,9 +62,11 @@
 // TODO:読み込み元ファイルを一度読み込み先ファイルと同階層に移さないとパスが読み込まれないエラーを解決する。
 import Cookies from "js-cookie";
 import axios from "axios";
-import {validHalfNumAlp,validEmail,validEmailDup,validMaxLen,validMixLen} from "./utils/validate"
+import {validHalfNumAlp,validEmail,validEmailDup,validMaxLen,validMinLen} from "./utils/validate"
 import {LOGIN_NUM} from "./utils/login-number-mappings"
 
+// 【Vue】配列の追加・削除には注意が必要👮
+// https://qiita.com/_masa_u/items/f9076777b044673eea2a
 export default {
   data () {
     return {
@@ -75,9 +77,9 @@ export default {
       },
       // エラーメッセージを保持
       Validation:{
-          loginEmailErrMsg: null,
-          loginPasswordErrMsg: null,
-          loginCommonErrMsg: null
+        loginEmailErrMsg: null,
+        loginPasswordErrMsg: null,
+        loginCommonErrMsg: null
       },
       // 各バリテーションの総合的な結果情報の管理
       // (上のValidation内の各プロパティ内にmsg内があるかどうかで判定してもいいけど今後TS導入予定なのでもしかすると
@@ -85,107 +87,137 @@ export default {
       // と思ったので一旦この形で)
       loginFormResult: {
         emailResult: false,
-        passwordResult: false,
-        password_confirmationResult: false
+        passwordResult: false
       },
       //連続で登録処理をさせない用
       isSubmit: false,
       loginButton: '登録する',
-      RegistUser: null,
+      LoginUser: null,
       sesLimit: 3600,
       debug: null,
     }
   },
   methods: {
-    login: async function () {
+    async login() {
       // そのうちこれを参考に書き直す
       // JavaScriptでconsole.log()を使うのはやめよう
       // https://qiita.com/baby-degu/items/1046763163bc794870ea
-      // ぶっちゃけログインのバリテーションっているのかな〜？signUp
+      // ぶっちゃけログインのバリテーションっているのかな〜？
 
-        //Emailのバリデーション
-        if (!this.loginForm.email) {
-          // 空かどうかのバリテーション
-          console.log("(login)メールアドレスの入力がありません");
-          this.Validation.loginEmailErrMsg = "メールアドレスの入力がありません"
+      //Emailのバリデーション
+      if (!this.loginForm.email) {
+        // 空かどうかのバリテーション
+        console.log("(login)メールアドレスの入力がありません");
+        this.Validation.loginEmailErrMsg = "メールアドレスの入力がありません"
 
-        } else if(!validEmail(this.loginForm.loginEmail)){
-          // メールアドレスの形式確認
-          console.log("(login)メールアドレスを半角英数で入力してください");
-          this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください"
-
-        } else if(validHalfNumAlp(this.loginForm.loginEmail)){
-          // 半角英数字のバリテーション
-        console.log("(login)メールアドレスを半角英数で入力してください");
+      } else if(validEmail(this.loginForm.loginEmail)){
+        // メールアドレスの形式確認
+        console.log("(login)メールアドレスの形式が正しくありません");
         this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください"
 
-          // 次する事 バリの記入の続き。ログインメソッドの記入続き
+      } else if(!validHalfNumAlp(this.loginForm.loginEmail)){
+      // 半角英数字のバリテーション
+      console.log("(login)メールアドレスを半角英数で入力してください");
+      this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください"
 
-        } else if(length(this.loginForm.loginEmail) > 15){
-          //最大文字数のバリテーション
-          console.log("(login)メールアドレスを15文字以内にしてください");
-          this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
+      }
+      //TODO:ここの部分は呼び出し先ファイル関係に問題があるためか、未定義のプロパティ:lengthを呼び出している
+      //というエラーが出ている
+      //  else if(validMinLen(this.loginForm.loginEmail,LOGIN_NUM.LOGIN_EMAIL_MAXLEN)){
+      //   //最大文字数のバリテーション
+      //   console.log("(login)メールアドレスを15文字以内にしてください");
+      //   this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
 
-        } else if(length(this.loginForm.loginEmail) > 15){
-          //最小文字数のバリテーション
-          console.log("(login)メールアドレスを15文字以内にしてください");
-          this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
+      // } else if(validMinLen(this.loginForm.loginEmail,LOGIN_NUM.LOGIN_EMAIL_MINLEN)){
+      //   //最小文字数のバリテーション
+      //   console.log("(login)メールアドレスを15文字以内にしてください");
+      //   this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
 
-        } else {
-          //バリテーションOKな場合
-          console.log("(login)バリテーションOKです");
-          this.loginFormResult.emailResult = true;
-        }
+      // }
+      else {
+        //バリテーションOKな場合
+        console.log("(login)EmailバリテーションOKです");
+        this.loginFormResult.emailResult = true;
+      }
 
-        //パスワードのバリデーション
-        if (!this.loginForm.password) {
-          //空文字チェック
-          console.log("(login)パスワードを入力してください");
-          this.Validation.PasswordErrMsg = "パスワードを入力してください"
-        } else if(this.loginForm.loginId.match(/^[0-9a-zA-Z]*$/)){
-          //半角英数字チェック
-          console.log("(login)パスワードは半角英数字で入力してください");
-          this.Validation.PasswordErrMsg = "パスワードは半角英数字で入力してください"
-        } else if(length(this.loginForm.password) > 15){
-          //最大文字数チェック
-          console.log("(login)パスワードは15文字以内で入力してください");
-          this.Validation.PasswordErrMsg = "パスワードは15文字以内で入力してください"
-        } else if(length(this.loginForm.password) < 5){
-          //最小文字数チェック
-          console.log("(login)パスワードは5文字以上で入力してください");
-          this.Validation.PasswordErrMsg = "パスワードは5文字以上入力してください"
-        } else if(this.loginForm.password === this.loginForm.password_confirmation){
-          //最小文字数チェック
-          console.log("(login)確認用パスワードと一致しません");
-          this.Validation.PasswordErrMsg = "確認用パスワードと一致しません"
-        } else {
-          //バリテーションOK
-          this.loginFormResult.passwordResult = true;
-        }
+      //パスワードのバリデーション
+      if (!this.loginForm.password) {
+        //空文字チェック
+        console.log("(login)パスワードを入力してください");
+        this.Validation.PasswordErrMsg = "パスワードを入力してください"
+      } else if(!validHalfNumAlp(this.loginForm.password)){
+        //半角英数字チェック
+        console.log("(login)パスワードは半角英数字で入力してください");
+        this.Validation.PasswordErrMsg = "パスワードは半角英数字で入力してください"
+      }
+      //TODO:ここの部分は呼び出し先ファイル関係に問題があるためか、未定義のプロパティ:lengthを呼び出している
+      //というエラーが出ている
+      // else if(validMaxLen(this.loginForm.password,LOGIN_NUM.LOGIN_PASSWORD_MAXLEN)){
+      //   //最大文字数チェック
+      //   console.log("(login)パスワードは15文字以内で入力してください");
+      //   this.Validation.PasswordErrMsg = "パスワードは15文字以内で入力してください"
+      // } else if(validMinLen(this.loginForm.password,LOGIN_NUM.LOGIN_PASSWORD_MINLEN)){
+      //   //最小文字数チェック
+      //   console.log("(login)パスワードは5文字以上で入力してください");
+      //   this.Validation.PasswordErrMsg = "パスワードは5文字以上入力してください"
+      // } else if(this.loginForm.password === this.loginForm.password_confirmation){
+      //   //確認用パスワードと合致するかチェック
+      //   console.log("(login)確認用パスワードと一致しません");
+      //   this.Validation.PasswordErrMsg = "確認用パスワードと一致しません"
+      // }
+      else {
+        console.log("(login)PasswordバリテーションOKです");
+        this.loginFormResult.passwordResult = true;
+      }
 
-        if(this.loginFormResult.emailResult === true && this.loginFormResult.passwordResult === true && this.loginFormResult.password_confirmationResult === true){
-          console.log("ログイン用バリテーションOKです。");
-          try {
-            //動作確認待ち
-            console.log("ログイン処理に入りました。");
-            console.log(this.loginForm);
-            //登録しているかの確認
-            //想定している処理の流れ・・・フォーム内情報をdispachを経由してvuex->laravelへリクエスト。
-            //そのレスポンス内容を元に共通メッセージを出力させる。
-            //上の登録処理から返ってきた結果をgetterで取得。それを元にメッセージの挿入を判断する。
-            // if () {
-            //   console.log("(login)登録情報がありませんでした。");
-            //   this.Validation.loginCommonErrMsg = "メールアドレスまたはパスワードが違います"
-            // }
-            return true;
-          } catch (e) {
-            console.log("ログイン処理中に例外的エラーが発生しました。");
-            //そのレスポンス内容を元に共通メッセージを出力させる。
-            this.Validation.loginCommonErrMsg = "エラーが発生しました。しばらく経ってからやり直してください。"
+      if(this.loginFormResult.emailResult === true && this.loginFormResult.passwordResult === true){
+        console.log("ログイン用バリテーションOKです。");
+        try {
+            this.isSubmit = true;
+            this.submitButton = '登録中です';
+          if (this.loginFormResult.emailResult === false && this.loginFormResult.passwordResult === false){
+            console.log("登録内容にエラーがありました。");
+            this.Validation.loginCommonErrMsg = '登録内容にエラーがありました。';
+            this.isSubmit = false;
+            this.submitButton = "登録";
             return false;
+          }else if(this.loginFormResult.emailResult === true && this.loginFormResult.passwordResult === true){
+            // ロード画面実装処理
+            // this.$store.dispatch("app/setLoading");
+            console.log("ログイン処理に入りました。");
+            this.LoginUser = await axios.post('/api/login',this.loginForm);
+            console.log(this.LoginUser);
+
+            if(this.LoginUser){
+              // Cookieにログイン時刻とIDを挿入。
+              Cookies.set('login_date', Date.now());
+              Cookies.set('login_limit',Date.now()+this.sesLimit);
+              // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
+              Cookies.set('user_id',this.LoginUser.data.id);
+              // バリテーション結果の初期化
+              this.signUpForm = "";
+              this.signUpFormResult.emailResult = false;
+              this.signUpFormResult.passwordResult = false;
+              // マイページへ飛ばすパスを書く。
+              this.$router.push(`/mypage/${Cookies.get('user_id')}`);
+            }else{
+              return false;
+            }
           }
+        } catch (e) {
+          console.log("ログイン処理中に例外的エラーが発生しました。");
+          this.Validation.loginCommonErrMsg = '接続に失敗しました。'
+          this.loginFormResult.emailResult = false;
+          this.loginFormResult.passwordResult = false;
+        }  finally {
+          // 必ず実行する処理の記述(try..catch..finally)
+          // https://www.javadrive.jp/start/exception/index3.html
+          // ローディング画面の終了
+          this.isSubmitting = false;
+          this.isSubmit = false;
         }
       }
+    }
   }
 }
 </script>

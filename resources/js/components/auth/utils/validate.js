@@ -151,7 +151,7 @@ export function validMaxLen(string,maxNum){
 * @param {Integer} minNum
 * @return {Boolean}
 */
-export function validMixLen(string,minNum){
+export function validMinLen(string,minNum){
   if(string.length <= minNum){
     return true
   } else {
