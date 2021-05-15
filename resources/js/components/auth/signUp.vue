@@ -3,7 +3,7 @@
     <div class="signup js-signup-style">
 
     <!-- postメソッド・uriに/register持ちのルーティングにアクセス -->
-    <form method="POST" class="signup-formStyle" @submit.prevent="signUp">
+    <form class="signup-formStyle" @submit.prevent="signUp">
 
         <h2 class="signup-title">SignUp</h2>
         <div class="signup-commonMsgArea">
@@ -77,9 +77,8 @@
 // TODO:読み込み元ファイルを一度読み込み先ファイルと同階層に移さないとパスが読み込まれないエラーを解決する。
 import Cookies from "js-cookie";
 import axios from "axios";
-import {validHalfNumAlp,validEmail,validEmailDup,validMaxLen,validMixLen} from "./utils/validate"
+import {validHalfNumAlp,validEmail,validEmailDup,validMaxLen,validMinLen} from "./utils/validate"
 import {SIGNUP_NUM} from "./utils/signUp-number-mappings"
-import {LOGIN_NUM} from "./utils/login-number-mappings"
 
 export default {
     data () {
@@ -122,7 +121,7 @@ export default {
       //バリ関数は後で纏める。
       // jQueryやJavaScriptでvar_dump()したいときは、console.log(hoge)してChromeのコンソールでみればいいらしい
       // https://blog.nakachon.com/2012/04/10/jquery%E3%82%84javascript%E3%81%A7var_dump%E3%81%97%E3%81%9F%E3%81%84%E3%81%A8%E3%81%8D%E3%81%AF%E3%80%81console-loghoge%E3%81%97%E3%81%A6chrome%E3%81%AE%E3%82%B3%E3%83%B3%E3%82%BD%E3%83%BC/
-          signUp: async function () {
+          async signUp() {
             //Emailのバリデーション
             if (!this.signUpForm.email) {
               //空かどうかのバリテーション
@@ -144,9 +143,9 @@ export default {
               console.log("(signUp)メールアドレスを20文字以内にしてください");
               this.Validation.signUpEmailErrMsg = 'メールアドレスは20文字以内にしてください'
 
-            } else if(validMixLen(this.signUpForm.email,SIGNUP_NUM.SIGNUP_EMAIL_MINLEN)){
+            } else if(validMinLen(this.signUpForm.email,SIGNUP_NUM.SIGNUP_EMAIL_MINLEN)){
               //最小文字数のバリテーション
-              console.log("(signUp)メールアドレスを20文字以内にしてください");
+              console.log("(signUp)メールアドレスは4文字以上にしてください");
               this.Validation.signUpEmailErrMsg = 'メールアドレスは4文字以上にしてください'
 
             }
@@ -172,11 +171,11 @@ export default {
               //半角英数字チェック
               console.log("(signUp)パスワードは半角英数字で入力してください");
               this.Validation.signUpPasswordErrMsg = 'パスワードは半角英数字で入力してください'
-            } else if(validMaxLen(this.signUpForm.password,SIGNUP.SIGNUP_PASSWORD_MAXLEN)){
+            } else if(validMaxLen(this.signUpForm.password,SIGNUP_NUM.SIGNUP_PASSWORD_MAXLEN)){
               //最大文字数チェック
               console.log("(signUp)パスワードは20文字以内で入力してください");
               this.Validation.signUpPasswordErrMsg = 'パスワードは20文字以内で入力してください'
-            } else if(validMixLen(this.signUpForm.password,SIGNUP.SIGNUP_PASSWORD_MINLEN)){
+            } else if(validMinLen(this.signUpForm.password,SIGNUP_NUM.SIGNUP_PASSWORD_MINLEN)){
               //最小文字数チェック
               console.log("(signUp)パスワードは6文字以上で入力してください");
               this.Validation.signUpPasswordErrMsg = 'パスワードは6文字以上入力してください'
@@ -192,6 +191,7 @@ export default {
 
           // バリテーションが通っているかを確認。
           if(this.signUpFormResult.emailResult === true && this.signUpFormResult.passwordResult === true){
+            console.log("ユーザー登録用バリテーションOKです。");
             try {
                 this.isSubmit = true;
                 this.submitButton = '登録中です';
@@ -200,14 +200,14 @@ export default {
                   this.Validation.signUpCommonErrMsg = '登録内容にエラーがありました。'
                   this.isSubmit = false;
                   this.submitButton = "登録";
-                  return;
-                } else if(this.signUpFormResult.emailResult === true && this.signUpFormResult.passwordResult === true){
+                  return false;
+                }else if(this.signUpFormResult.emailResult === true && this.signUpFormResult.passwordResult === true){
                   // ロード画面実装処理
                   // this.$store.dispatch("app/setLoading");
                   this.Validation = "";
                   console.log("登録処理に入りました。");
                   this.RegistUser = await axios.post('/api/register',this.signUpForm);
-                  // console.log('レスポンス内容'.RegistUser);
+                  console.log('レスポンス内容'.RegistUser);
 
                   //ユーザー情報管理
                   // Cookieにログイン時刻とIDを挿入。
@@ -220,10 +220,8 @@ export default {
                   this.signUpForm = "";
                   this.signUpFormResult.emailResult = false;
                   this.signUpFormResult.passwordResult = false;
-                  // クッキー内から取得する
                   // マイページへ飛ばすパスを書く。
                   this.$router.push(`/mypage/${Cookies.get('user_id')}`)
-                  // this.$router.push('/mypage.{id}');
                 }
               } catch (e) {
                   console.log("登録処理中に例外エラーが発生しました。");

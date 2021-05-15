@@ -13,6 +13,7 @@ import error from './modules/error';
 Vue.use(Vuex)
 Vue.use(Cookies)
 
+// TODO:サイトの重さ軽減とかもやってみたい。https://ics.media/entry/200716/
 // TODO:Vuexに型付けしたい。
 // Vue/Vuexに静的に型を付ける
 // https://joe-re.hatenablog.com/entry/2017/07/26/101805

@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class RegisterApiTest extends TestCase
+class AuthApiTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -23,13 +23,22 @@ class RegisterApiTest extends TestCase
      * @test
      * @return void
      */
-    public function test新しいユーザーを作成して返却する()
+    public function test_新しいユーザーを作成して返却する()
     {
         $response = $this->json('POST', route('register'), [
             'email' => 'dummy@email.com',
             'password' => 'test12345',
         ]);
 
+        $response->assertStatus(201);
+    }
+    public function test_ログイン()
+    {
+        // ->where('password',$request['password'])
+        $response = $this->json('POST', route('login'), [
+            'email' => 'dummy@email.com',
+            'password' => 'test12345',
+        ]);
         $response->assertStatus(201);
     }
 }
