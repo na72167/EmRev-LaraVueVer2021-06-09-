@@ -194,10 +194,10 @@ export default {
               Cookies.set('login_limit',Date.now()+this.sesLimit);
               // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
               Cookies.set('user_id',this.LoginUser.data.id);
-              // バリテーション結果の初期化
-              this.signUpForm = "";
-              this.signUpFormResult.emailResult = false;
-              this.signUpFormResult.passwordResult = false;
+              // // バリテーション結果の初期化
+              this.loginForm = "";
+              this.loginFormResult.emailResult = false;
+              this.loginFormResult.passwordResult = false;
               // マイページへ飛ばすパスを書く。
               this.$router.push(`/mypage/${Cookies.get('user_id')}`);
             }else{

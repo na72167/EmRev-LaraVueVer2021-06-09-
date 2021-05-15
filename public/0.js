@@ -238,11 +238,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_date', Date.now());
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_limit', Date.now() + _this.sesLimit); // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
 
-                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('user_id', _this.LoginUser.data.id); // バリテーション結果の初期化
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('user_id', _this.LoginUser.data.id); // // バリテーション結果の初期化
 
-                _this.signUpForm = "";
-                _this.signUpFormResult.emailResult = false;
-                _this.signUpFormResult.passwordResult = false; // マイページへ飛ばすパスを書く。
+                _this.loginForm = "";
+                _this.loginFormResult.emailResult = false;
+                _this.loginFormResult.passwordResult = false; // マイページへ飛ばすパスを書く。
 
                 _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
 
