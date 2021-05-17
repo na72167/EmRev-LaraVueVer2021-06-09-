@@ -2082,13 +2082,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2118,25 +2126,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//次はviexを使ってheader内ボタンから送信されるauth切り替えプロパティ
-//をsignupコンポーネントとloginコンポーネントの切り替えをする処理を書く。
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  // computed: {
-  //   //ログイン情報確認getter
-  //   // ...mapGetters(["userLoginCheck"]),
-  // },
-  // data:function() {
-  //   const user = if(isset(Cookies.get('user_id'))) ()=> {
-  //   };
-  //   return {
-  //     isLogin: this.user
-  //   }
-  // },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapState"])({
+    user: function user(state) {
+      return state.users.user;
+    }
+  })),
   methods: {
     // propsと$emitでデータを引き渡す
     // https://qiita.com/d0ne1s/items/f88ecd6aaa90c7bbc5d4
@@ -2180,20 +2177,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    // async/awate
-    // async logout () {
-    //   // authストアのresigterアクションを呼び出す
-    //   // 多分dispatchの第一引数はstoreフォルダ内のファイルを探している。
-    //   // 対象関数のPromiseの結果が返ってくるまで処理が一時停止される。
-    //   await this.$store.dispatch('auth/logout')
-    //   //ステート内を空にする為に第二引数にnullを指定する。
-    //   context.commit('setUser', null)
-    //   // ホームに移動する
-    //   this.$router.push('/')
-    // },
-    unti: function unti() {
-      // ホームに移動する
-      this.$router.push('/myPage');
+    logout: function logout() {
+      js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.remove('user_id');
+      js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.remove('login_date');
+      js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.remove('login_limit');
+      this.$store.dispatch("users/setLoginUserInfo"); // ホームに移動する
+
+      this.$router.push('/', function () {});
     }
   }
 });
@@ -4397,25 +4387,41 @@ var render = function() {
       _c("div", { staticClass: "header__content-wrap" }, [
         _vm._m(0),
         _vm._v(" "),
-        _c("nav", { staticClass: "header__nav" }, [
-          _c(
-            "li",
-            {
-              staticClass: "header__nav-list active-login-menu",
-              on: { click: _vm.changeLoginProp }
-            },
-            [_vm._v("LOGIN")]
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "header__nav-list active-signup-menu",
-              on: { click: _vm.changeSignUpProp }
-            },
-            [_vm._v("SIGNUP")]
-          )
-        ])
+        _vm.user
+          ? _c("nav", { staticClass: "header__nav" }, [
+              _c("li", { staticClass: "header__nav-list js-toggle-sp-menu" }, [
+                _vm._v("MENU")
+              ]),
+              _vm._v(" "),
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "li",
+                { staticClass: "header__nav-list", on: { click: _vm.logout } },
+                [_vm._v("LOGOUT")]
+              )
+            ])
+          : !_vm.user
+          ? _c("nav", { staticClass: "header__nav" }, [
+              _c(
+                "li",
+                {
+                  staticClass: "header__nav-list active-login-menu",
+                  on: { click: _vm.changeLoginProp }
+                },
+                [_vm._v("LOGIN")]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "header__nav-list active-signup-menu",
+                  on: { click: _vm.changeSignUpProp }
+                },
+                [_vm._v("SIGNUP")]
+              )
+            ])
+          : _vm._e()
       ])
     ]
   )
@@ -4436,6 +4442,16 @@ var staticRenderFns = [
         )
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "header__nav-list" }, [
+      _c("a", { attrs: { href: "./reviewRegister-cList.php" } }, [
+        _vm._v("REVIEW REGISTRATION")
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -21314,6 +21330,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/auth */ "./resources/js/store/modules/auth.js");
 /* harmony import */ var _modules_app__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/app */ "./resources/js/store/modules/app.js");
 /* harmony import */ var _modules_error__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/error */ "./resources/js/store/modules/error.js");
+/* harmony import */ var _modules_users__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/users */ "./resources/js/store/modules/users.js");
+
 
 
 
@@ -21350,7 +21368,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
     auth: _modules_auth__WEBPACK_IMPORTED_MODULE_3__["default"],
     app: _modules_app__WEBPACK_IMPORTED_MODULE_4__["default"],
-    error: _modules_error__WEBPACK_IMPORTED_MODULE_5__["default"]
+    error: _modules_error__WEBPACK_IMPORTED_MODULE_5__["default"],
+    users: _modules_users__WEBPACK_IMPORTED_MODULE_6__["default"]
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (store);
@@ -21517,6 +21536,45 @@ var mutations = {
   namespaced: true,
   state: state,
   mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/users.js":
+/*!*********************************************!*\
+  !*** ./resources/js/store/modules/users.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_0__);
+//ユーザー登録やログイン関係など
+
+var state = {
+  user: ''
+};
+var getters = {};
+var mutations = {
+  SET_LOGIN_USER: function SET_LOGIN_USER(state) {
+    state.user = js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('user_id');
+  }
+}; // mutaion に直接 commit せず、action 経由で実行することを強く推奨する
+// https://uncle-javascript.com/vuex-actions
+
+var actions = {
+  setLoginUserInfo: function setLoginUserInfo(context) {
+    context.commit('SET_LOGIN_USER');
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  mutations: mutations,
+  actions: actions
 });
 
 /***/ }),

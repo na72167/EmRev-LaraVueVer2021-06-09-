@@ -1,29 +1,25 @@
 <template>
         <!-- ヘッダー関係 -->
     <header id="index-top" class="header js-toggle-sp-menu-target">
-        <div class="header__content-wrap">
+      <div class="header__content-wrap">
         <!-- タイトル -->
         <h1 class="header__title" href="index.php"><a href="index.php" class="header__title-link">EmRev</a></h1>
-            <!-- v-show・v-ifの使い分け -->
-            <!-- 判断元がtrueかfalse・・・v-if -->
-            <!-- それ以外の判断元・・・v-show -->
-            <!-- もっと詳しく -->
-            <!-- https://qiita.com/Aqua_ix/items/61eac355f3c24d7676e1 -->
-            <!-- ステート内にログイン履歴があるかどうかどうかを元に表示判定をする。 -->
-            <!-- ture -->
-            <!-- <nav class="header__nav">
-              <li class="header__nav-list js-toggle-sp-menu">MENU</li>
-              <li class="header__nav-list"><a href="./reviewRegister-cList.php">REVIEW REGISTRATION</a></li>
-              <li class="header__nav-list" @click="logout">LOGOUT</li>
-            </nav> -->
+        <!-- v-show・v-ifの使い分け -->
+        <!-- https://qiita.com/Aqua_ix/items/61eac355f3c24d7676e1 -->
 
-            <!-- false(正確にはそれ以外) -->
-            <nav class="header__nav">
-              <!-- ここでプロパティの切り替えを行う。そのプロパティを親コンポーネントに伝えてログイン・サインアップのコンポーネントを切り替える。 -->
-              <li class="header__nav-list active-login-menu" @click="changeLoginProp">LOGIN</li>
-              <li class="header__nav-list active-signup-menu" @click="changeSignUpProp">SIGNUP</li>
-            </nav>
+        <nav class="header__nav" v-if="user">
+          <li class="header__nav-list js-toggle-sp-menu">MENU</li>
+          <li class="header__nav-list"><a href="./reviewRegister-cList.php">REVIEW REGISTRATION</a></li>
+          <li class="header__nav-list" @click="logout">LOGOUT</li>
+        </nav>
+
+        <nav class="header__nav" v-else-if="!user">
+          <li class="header__nav-list active-login-menu" @click="changeLoginProp">LOGIN</li>
+          <li class="header__nav-list active-signup-menu" @click="changeSignUpProp">SIGNUP</li>
+        </nav>
+
         </div>
+      </div>
     </header>
 
     <!-- propsと$emitでデータを引き渡す -->
@@ -33,53 +29,38 @@
 
 <script>
 
-//次はviexを使ってheader内ボタンから送信されるauth切り替えプロパティ
-//をsignupコンポーネントとloginコンポーネントの切り替えをする処理を書く。
-import { mapGetters } from "vuex";
+import Cookies from "js-cookie";
+import { mapState } from "vuex";
 
 export default {
-    // computed: {
-    //   //ログイン情報確認getter
-    //   // ...mapGetters(["userLoginCheck"]),
-    // },
-    // data:function() {
-    //   const user = if(isset(Cookies.get('user_id'))) ()=> {
-
-    //   };
-    //   return {
-    //     isLogin: this.user
-    //   }
-    // },
-    methods: {
-        // propsと$emitでデータを引き渡す
-        // https://qiita.com/d0ne1s/items/f88ecd6aaa90c7bbc5d4
-        // ログインコンポーネント切り替え
-        async changeLoginProp() {
-          //actionのメソッドに変更
-          await this.$store.dispatch('auth/changeLogin','login')
-        },
-        // ユーザー登録コンポーネント切り替え
-        async changeSignUpProp() {
-          //mutaion に直接 commit せず、action 経由で実行することを強く推奨する
-          //https://uncle-javascript.com/vuex-actions
-          await this.$store.dispatch('auth/changeSignUp','signUp');
-        },
-        // async/awate
-        // async logout () {
-        //   // authストアのresigterアクションを呼び出す
-        //   // 多分dispatchの第一引数はstoreフォルダ内のファイルを探している。
-        //   // 対象関数のPromiseの結果が返ってくるまで処理が一時停止される。
-        //   await this.$store.dispatch('auth/logout')
-        //   //ステート内を空にする為に第二引数にnullを指定する。
-        //   context.commit('setUser', null)
-        //   // ホームに移動する
-        //   this.$router.push('/')
-        // },
-        unti() {
-        // ホームに移動する
-        this.$router.push('/myPage')
-        }
+  computed: {
+    ...mapState({
+      user: state => state.users.user
+    })
+  },
+  methods: {
+    // propsと$emitでデータを引き渡す
+    // https://qiita.com/d0ne1s/items/f88ecd6aaa90c7bbc5d4
+    // ログインコンポーネント切り替え
+    async changeLoginProp() {
+      //actionのメソッドに変更
+      await this.$store.dispatch('auth/changeLogin','login')
     },
+    // ユーザー登録コンポーネント切り替え
+    async changeSignUpProp() {
+      //mutaion に直接 commit せず、action 経由で実行することを強く推奨する
+      //https://uncle-javascript.com/vuex-actions
+      await this.$store.dispatch('auth/changeSignUp','signUp');
+    },
+    logout () {
+      Cookies.remove('user_id');
+      Cookies.remove('login_date');
+      Cookies.remove('login_limit');
+      this.$store.dispatch("users/setLoginUserInfo");
+      // ホームに移動する
+      this.$router.push('/', () => {});
+    }
+  },
 }
 </script>
 

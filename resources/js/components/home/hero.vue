@@ -14,7 +14,7 @@
             </div>
             <!-- TODO:ログイン機能とログアウト機能が完成した後、ifの条件をイコールに変更する。 -->
             <div class="hero__signup-loginWrap"
-              v-if="user_id !== true"
+              v-if="!this.user_id"
             >
               <!-- TODO: v-bind:classを使ってdateに依存したスタイル(トランジションクラス使用)の設定を行う。 -->
               <!-- [Vue.js メモ]条件に応じてトランジション変更したい場合 -->
@@ -61,9 +61,7 @@ import Login from '../auth/Login';
 export default {
   data: function() {
     return {
-      user_id: Cookies.get('user_id') || null,
-      login_date: Cookies.get('login_date') || null,
-      login_limit: Cookies.get('login_limit') || null,
+      user_id: Cookies.get('user_id') || null
     }
   },
   components: {
