@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import auth from './modules/auth';
 import app from './modules/app';
 import error from './modules/error';
+import users from './modules/users';
 
 // TODO: camelCaseライブラリの影響でテキスト内の一部がキャメルケースになっているかもしれないので
 // パス周りで影響が出るかも。
@@ -40,7 +41,8 @@ const store = new Vuex.Store({
   modules: {
     auth,
     app,
-    error
+    error,
+    users
   }
 })
 

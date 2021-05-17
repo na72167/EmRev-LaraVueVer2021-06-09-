@@ -198,9 +198,12 @@ export default {
               this.loginForm = "";
               this.loginFormResult.emailResult = false;
               this.loginFormResult.passwordResult = false;
+
+              this.$store.dispatch("users/setLoginUserInfo");
               // マイページへ飛ばすパスを書く。
               this.$router.push(`/mypage/${Cookies.get('user_id')}`);
-            }else{
+            }else if(this.LoginUser === false){
+              this.Validation.loginCommonErrMsg = 'メールアドレスまたはパスワードが違います';
               return false;
             }
           }

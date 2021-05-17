@@ -220,6 +220,8 @@ export default {
                   this.signUpForm = "";
                   this.signUpFormResult.emailResult = false;
                   this.signUpFormResult.passwordResult = false;
+
+                  this.$store.dispatch("users/setLoginUserInfo");
                   // マイページへ飛ばすパスを書く。
                   this.$router.push(`/mypage/${Cookies.get('user_id')}`)
                 }

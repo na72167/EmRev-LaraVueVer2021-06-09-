@@ -9,20 +9,20 @@ const getters = {
 
 const mutations = {
     SET_LOADING: (state) => {
-        state.loading = true;
+      state.loading = true;
     },
     CLEAR_LOADING: (state) => {
-        state.loading = false;
+      state.loading = false;
     },
 };
 
 const actions = {
-    setLoading({ commit }) {
-        commit("SET_LOADING");
-    },
-    clearLoading({ commit }) {
-        commit("CLEAR_LOADING");
-    },
+  setLoading({ commit }) {
+    commit("SET_LOADING");
+  },
+  clearLoading({ commit }) {
+    commit("CLEAR_LOADING");
+  },
 };
 
 export default {
