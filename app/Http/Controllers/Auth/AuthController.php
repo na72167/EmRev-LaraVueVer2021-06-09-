@@ -51,17 +51,17 @@ class AuthController extends Controller
     protected function login(Request $request)
     {
         Log::debug("リクエスト内容".$request);
-        $loginUser = User::where('email',$request["email"])->first();
+        $loginUser = User::where('email',$request['email'])->first();
         Log::debug("検索結果".$loginUser);
 
         // ワイ「何でsalt無しでHash::checkできるんや？」
         // https://qiita.com/anchor-cable/items/4be34b75d726aee89190
-        if($request["email"] === $loginUser["email"] && Hash::check($request["password"], $loginUser["password"])){
+        if($request['email'] === $loginUser->email && Hash::check($request['password'],$loginUser->password)){
             Log::debug("条件が合致しました");
             return response()->json($loginUser,201);
         }else{
             Log::debug("条件に合致しませんでした");
-            return false;
+            return true;
         };
     }
 }

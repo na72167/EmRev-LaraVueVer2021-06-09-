@@ -14,7 +14,7 @@
             </div>
             <!-- TODO:ログイン機能とログアウト機能が完成した後、ifの条件をイコールに変更する。 -->
             <div class="hero__signup-loginWrap"
-              v-if="!this.user_id"
+              v-if="!user"
             >
               <!-- TODO: v-bind:classを使ってdateに依存したスタイル(トランジションクラス使用)の設定を行う。 -->
               <!-- [Vue.js メモ]条件に応じてトランジション変更したい場合 -->
@@ -59,11 +59,6 @@ import SignUp from '../auth/SignUp';
 import Login from '../auth/Login';
 
 export default {
-  data: function() {
-    return {
-      user_id: Cookies.get('user_id') || null
-    }
-  },
   components: {
     SignUp,
     Login
@@ -72,6 +67,7 @@ export default {
     ...mapState({
     //mapStateを通してstate内データを扱いたい場合は以下の様に書く。
     authComponentsState: state => state.auth.authComponentsState,
+    user: state => state.users.user
     })
   }
 }

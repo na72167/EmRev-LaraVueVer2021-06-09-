@@ -21,8 +21,6 @@ class User extends Authenticatable
         'password', //パスワード
         'roll', //権限
         'report_flg', //通報確認用フラグ
-        'emailToken', //認証トークン
-        'auth_key_limit', //ログイン情報の期限保持
         'created_at',  //ユーザーデータ作成時刻
         'updated_at', //最終更新日時
         'deleted_at' //ソフトデリートフラグ

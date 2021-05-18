@@ -672,11 +672,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      user_id: js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('user_id') || null
-    };
-  },
   components: {
     SignUp: _auth_SignUp__WEBPACK_IMPORTED_MODULE_2__["default"],
     Login: _auth_Login__WEBPACK_IMPORTED_MODULE_3__["default"]
@@ -685,6 +680,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //mapStateを通してstate内データを扱いたい場合は以下の様に書く。
     authComponentsState: function authComponentsState(state) {
       return state.auth.authComponentsState;
+    },
+    user: function user(state) {
+      return state.users.user;
     }
   }))
 });
@@ -1226,7 +1224,7 @@ var render = function() {
     _c("div", { staticClass: "hero__content" }, [
       _vm._m(0),
       _vm._v(" "),
-      !this.user_id
+      !_vm.user
         ? _c(
             "div",
             { staticClass: "hero__signup-loginWrap" },
