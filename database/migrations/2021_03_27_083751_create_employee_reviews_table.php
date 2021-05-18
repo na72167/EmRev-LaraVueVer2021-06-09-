@@ -13,7 +13,7 @@ class CreateEmployeeReviewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('EmployeeReviewse', function (Blueprint $table) {
+        Schema::create('EmployeeReviews', function (Blueprint $table) {
             $table->integer('id',true);
             $table->integer('employee_id')->index();
             $table->integer('review_company_id')->index();
