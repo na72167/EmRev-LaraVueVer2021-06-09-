@@ -109,7 +109,7 @@ export default {
         isSubmit: false,
         signUpButton: '登録する',
         RegistUser: null,
-        sesLimit: 3600,
+        sesLimit: SIGNUP_NUM.SES_LIMIT,
         debug: null,
       }
     },
@@ -153,7 +153,6 @@ export default {
             //   //重複確認のバリテーション
             //   console.log("(signUp)メールアドレスが重複しています");
             //   this.Validation.signUpEmailErrMsg = "メールアドレスが重複しています"
-
             // }
             else {
               //バリテーションがOKな場合
@@ -210,11 +209,12 @@ export default {
                   console.log('レスポンス内容'.RegistUser);
 
                   //ユーザー情報管理
-                  // Cookieにログイン時刻とIDを挿入。
-                  Cookies.set('login_date', Date.now());
-                  Cookies.set('login_limit',Date.now()+this.sesLimit);
+                  // Cookieにログイン時刻とIDと権限情報挿入。
                   // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
-                  Cookies.set('user_id',this.RegistUser.data.id);
+                  Cookies.set('user_id',this.RegistUser.data.id, {expires: 30});
+                  Cookies.set('roll',this.RegistUser.data.roll, {expires: 30});
+                  Cookies.set('login_date', Date.now(), {expires: 30});
+                  Cookies.set('login_limit',Date.now()+this.sesLimit, {expires: 30});
 
                   //バリテーション結果の初期化
                   this.signUpForm = "";

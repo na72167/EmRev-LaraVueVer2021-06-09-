@@ -1,4 +1,12 @@
-//ユーザー登録やログイン関係など
+// ユーザー登録やログイン関係など
+// JavaScript クッキー操作できるjs-cookie使ってみた
+// https://chaika.hatenablog.com/entry/2019/02/05/083000
+// JavaScriptで簡単にCookie操作ができるライブラリ「js-cookie」
+// https://webrandum.net/js-cookie/
+// JSのデバッグにはconsole.log()ではなくNodeのデバッガーを使いなさい
+// https://www.webprofessional.jp/debugging-javascript-node-debugger/
+// VS CodeでJavaScriptアプリを作成する上で知っていると便利（？）なこと
+// https://www.atmarkit.co.jp/ait/articles/1807/10/news033_3.html
 import Cookies from "js-cookie";
 
 const state = {

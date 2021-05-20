@@ -112,11 +112,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         emailResult: false,
         passwordResult: false
       },
-      //連続で登録処理をさせない用
+      // 604800・・・一週間を秒換算したもの
+      // TODO:ログイン有効期限が1ヶ月は長すぎる気がするので
       isSubmit: false,
       loginButton: '登録する',
       LoginUser: null,
-      sesLimit: 3600,
+      sesLimit: _utils_login_number_mappings__WEBPACK_IMPORTED_MODULE_4__["LOGIN_NUM"].SES_LIMIT,
       debug: null
     };
   },
@@ -234,18 +235,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   break;
                 }
 
-                // Cookieにログイン時刻とIDを挿入。
-                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_date', Date.now());
-                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_limit', Date.now() + _this.sesLimit); // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
+                // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
+                // 挿入したデータは1ヶ月で削除
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('user_id', _this.LoginUser.data.id, {
+                  expires: 7
+                });
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('roll', _this.LoginUser.data.roll, {
+                  expires: 7
+                }); // Cookieにログイン時刻とIDを挿入。
 
-                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('user_id', _this.LoginUser.data.id); // // バリテーション結果の初期化
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_date', Date.now(), {
+                  expires: 7
+                });
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_limit', Date.now() + _this.sesLimit, {
+                  expires: 7
+                }); // バリテーション結果の初期化
 
                 _this.loginForm = "";
                 _this.loginFormResult.emailResult = false;
-                _this.loginFormResult.passwordResult = false;
-
-                _this.$store.dispatch("users/setLoginUserInfo"); // マイページへ飛ばすパスを書く。
-
+                _this.loginFormResult.passwordResult = false; // マイページへ飛ばすパスを書く。
 
                 _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
 
@@ -427,7 +435,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       isSubmit: false,
       signUpButton: '登録する',
       RegistUser: null,
-      sesLimit: 3600,
+      sesLimit: _utils_signUp_number_mappings__WEBPACK_IMPORTED_MODULE_4__["SIGNUP_NUM"].SES_LIMIT,
       debug: null
     };
   },
@@ -509,7 +517,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
                 if (!(_this.signUpFormResult.emailResult === true && _this.signUpFormResult.passwordResult === true)) {
-                  _context.next = 42;
+                  _context.next = 43;
                   break;
                 }
 
@@ -531,7 +539,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 15:
                 if (!(_this.signUpFormResult.emailResult === true && _this.signUpFormResult.passwordResult === true)) {
-                  _context.next = 30;
+                  _context.next = 31;
                   break;
                 }
 
@@ -545,12 +553,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 20:
                 _this.RegistUser = _context.sent;
                 console.log('レスポンス内容'.RegistUser); //ユーザー情報管理
-                // Cookieにログイン時刻とIDを挿入。
+                // Cookieにログイン時刻とIDと権限情報挿入。
+                // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
 
-                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_date', Date.now());
-                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_limit', Date.now() + _this.sesLimit); // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
-
-                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('user_id', _this.RegistUser.data.id); //バリテーション結果の初期化
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('user_id', _this.RegistUser.data.id, {
+                  expires: 30
+                });
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('roll', _this.RegistUser.data.roll, {
+                  expires: 30
+                });
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_date', Date.now(), {
+                  expires: 30
+                });
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_limit', Date.now() + _this.sesLimit, {
+                  expires: 30
+                }); //バリテーション結果の初期化
 
                 _this.signUpForm = "";
                 _this.signUpFormResult.emailResult = false;
@@ -561,33 +578,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
 
-              case 30:
-                _context.next = 38;
+              case 31:
+                _context.next = 39;
                 break;
 
-              case 32:
-                _context.prev = 32;
+              case 33:
+                _context.prev = 33;
                 _context.t0 = _context["catch"](4);
                 console.log("登録処理中に例外エラーが発生しました。");
                 _this.Validation.signUpCommonErrMsg = '接続に失敗しました。';
                 _this.signUpFormResult.emailResult = false;
                 _this.signUpFormResult.passwordResult = false;
 
-              case 38:
-                _context.prev = 38;
+              case 39:
+                _context.prev = 39;
                 // 必ず実行する処理の記述(try..catch..finally)
                 // https://www.javadrive.jp/start/exception/index3.html
                 // ローディング画面の終了
                 _this.isSubmitting = false;
                 _this.isSubmit = false;
-                return _context.finish(38);
+                return _context.finish(39);
 
-              case 42:
+              case 43:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[4, 32, 38, 42]]);
+        }, _callee, null, [[4, 33, 39, 43]]);
       }))();
     }
   }
@@ -1521,7 +1538,8 @@ var LOGIN_NUM = {
   LOGIN_EMAIL_MAXLEN: 20,
   LOGIN_EMAIL_MINLEN: 4,
   LOGIN_PASSWORD_MAXLEN: 20,
-  LOGIN_PASSWORD_MINLEN: 6
+  LOGIN_PASSWORD_MINLEN: 6,
+  SES_LIMIT: 604800
 };
 
 /***/ }),
@@ -1541,7 +1559,8 @@ var SIGNUP_NUM = {
   SIGNUP_EMAIL_MAXLEN: 20,
   SIGNUP_EMAIL_MINLEN: 4,
   SIGNUP_PASSWORD_MAXLEN: 20,
-  SIGNUP_PASSWORD_MINLEN: 6
+  SIGNUP_PASSWORD_MINLEN: 6,
+  SES_LIMIT: 604800
 };
 
 /***/ }),

@@ -89,11 +89,12 @@ export default {
         emailResult: false,
         passwordResult: false
       },
-      //連続で登録処理をさせない用
+      // 604800・・・一週間を秒換算したもの
+      // TODO:ログイン有効期限が1ヶ月は長すぎる気がするので
       isSubmit: false,
       loginButton: '登録する',
       LoginUser: null,
-      sesLimit: 3600,
+      sesLimit: LOGIN_NUM.SES_LIMIT,
       debug: null,
     }
   },
@@ -189,17 +190,18 @@ export default {
             console.log(this.LoginUser);
 
             if(this.LoginUser){
-              // Cookieにログイン時刻とIDを挿入。
-              Cookies.set('login_date', Date.now());
-              Cookies.set('login_limit',Date.now()+this.sesLimit);
               // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
-              Cookies.set('user_id',this.LoginUser.data.id);
-              // // バリテーション結果の初期化
+              // 挿入したデータは1ヶ月で削除
+              Cookies.set('user_id',this.LoginUser.data.id, {expires: 7});
+              Cookies.set('roll',this.LoginUser.data.roll, {expires: 7});
+              // Cookieにログイン時刻とIDを挿入。
+              Cookies.set('login_date', Date.now(), {expires: 7});
+              Cookies.set('login_limit',Date.now()+this.sesLimit, {expires: 7});
+
+              // バリテーション結果の初期化
               this.loginForm = "";
               this.loginFormResult.emailResult = false;
               this.loginFormResult.passwordResult = false;
-
-              this.$store.dispatch("users/setLoginUserInfo");
               // マイページへ飛ばすパスを書く。
               this.$router.push(`/mypage/${Cookies.get('user_id')}`);
             }else if(this.LoginUser === false){
