@@ -7,11 +7,16 @@
         <!-- v-show・v-ifの使い分け -->
         <!-- https://qiita.com/Aqua_ix/items/61eac355f3c24d7676e1 -->
 
-        <nav class="header__nav" v-if="user">
-          <li class="header__nav-list js-toggle-sp-menu">MENU</li>
-          <li class="header__nav-list"><a href="./reviewRegister-cList.php">REVIEW REGISTRATION</a></li>
-          <li class="header__nav-list" @click="logout">LOGOUT</li>
-        </nav>
+        <div v-if="user">
+          <nav class="header__nav">
+            <li class="header__nav-list" @click="switchMenuState">MENU</li>
+            <li class="header__nav-list"><a href="./reviewRegister-cList.php">REVIEW REGISTRATION</a></li>
+            <li class="header__nav-list" @click="logout">LOGOUT</li>
+          </nav>
+            <AboutMenu
+              :class="aboutMenuState"
+            />
+        </div>
 
         <nav class="header__nav" v-else-if="!user">
           <li class="header__nav-list active-login-menu" @click="changeLoginProp">LOGIN</li>
@@ -28,37 +33,55 @@
 </template>
 
 <script>
-
 import Cookies from "js-cookie";
 import { mapState } from "vuex";
+import AboutMenu from './AboutMenu';
 
 export default {
+  data () {
+    return {
+      switchingMenu: false,
+      switchingMenuState: false,
+    }
+  },
+  components: {
+    AboutMenu
+  },
   computed: {
     ...mapState({
-      user: state => state.users.user
-    })
+      user: state => state.users.user,
+      aboutMenuState: state => state.app.aboutMenuState
+    }),
   },
   methods: {
     // propsと$emitでデータを引き渡す
     // https://qiita.com/d0ne1s/items/f88ecd6aaa90c7bbc5d4
     // ログインコンポーネント切り替え
     async changeLoginProp() {
-      //actionのメソッドに変更
+      // actionのメソッドに変更
       await this.$store.dispatch('auth/changeLogin','login')
     },
     // ユーザー登録コンポーネント切り替え
     async changeSignUpProp() {
-      //mutaion に直接 commit せず、action 経由で実行することを強く推奨する
-      //https://uncle-javascript.com/vuex-actions
+      // mutaion に直接 commit せず、action 経由で実行することを強く推奨する
+      // https://uncle-javascript.com/vuex-actions
       await this.$store.dispatch('auth/changeSignUp','signUp');
     },
     logout () {
+      //TODO:空の配列を外部ファイルに用意するか検討する。
       Cookies.remove('user_id');
+      Cookies.remove('roll');
       Cookies.remove('login_date');
       Cookies.remove('login_limit');
-      this.$store.dispatch("users/setLoginUserInfo");
       // ホームに移動する
+      // 指定パスと同一ページで遷移をすると再レンダリングされないので、
+      // App.vueファイル内でページ遷移を検知後専用メソッドを発火させる処理を書いている。
       this.$router.push('/', () => {});
+    },
+    async switchMenuState() {
+      // 'openAboutMenu'は動的クラスの要素になる。
+      this.switchingMenuState = this.switchingMenuState === false ? 'openAboutMenu' : false;
+      await this.$store.dispatch('app/switchMenuComponent',this.switchingMenuState);
     }
   },
 }
@@ -114,5 +137,9 @@ export default {
             }
             }
         }
+    }
+    .openAboutMenu{
+      transition: all .5s;
+      transform: translateX(100%);
     }
 </style>

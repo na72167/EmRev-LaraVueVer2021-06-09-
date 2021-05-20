@@ -36,6 +36,12 @@ Vue.use(Cookies)
 //   return modules;
 // }, {});
 
+// 次やること
+// https://hafilog.com/aftereach
+// 上サイト機能使ってログイン認証機能を作る。
+// 認証を噛ませてcookeyの内容を確認後、特定変数に代入させてvuexのstateを更新する。
+// mapstateが結果的に同じ値を代入する場合でも対象コンポーネントにリクエストを送るかを確認する。
+
 //vueの標準機能に関する物を追加で使いたい場合はここに記入する。
 const store = new Vuex.Store({
   modules: {
