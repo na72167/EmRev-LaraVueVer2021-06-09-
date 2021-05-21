@@ -2060,6 +2060,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  // TODO:Vue.js: Vue I18nでアプリケーションを多言語に対応させる
   // 動的ルートマッチング.動的セグメント・・・受け取ったパラメータ等に応じて変更される可能性がある区間の事。
   // https://router.vuejs.org/ja/guide/essentials/dynamic-matching.html#%E3%83%8F%E3%82%9A%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC%E5%A4%89%E6%9B%B4%E3%81%AE%E6%A4%9C%E7%9F%A5
   // vue-routerでページ遷移を検知して、GAのpageviewを送信する
@@ -2093,9 +2094,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
-/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2119,14 +2128,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapState"])({
     aboutMenuState: function aboutMenuState(state) {
       return state.app.aboutMenuState;
     }
-  }))
+  })),
+  methods: {
+    switchMenuState: function switchMenuState() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                // 'openAboutMenu'は動的クラスの要素になる。
+                _this.switchingMenuState = _this.aboutMenuState; // aboutMenuState内の要素を反転させる。
+
+                _this.switchingMenuState = _this.switchingMenuState === false ? 'openAboutMenu' : false;
+                _context.next = 4;
+                return _this.$store.dispatch('app/switchMenuComponent', _this.switchingMenuState);
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  }
 });
 
 /***/ }),
@@ -2196,12 +2232,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      switchingMenu: false,
-      switchingMenuState: false
-    };
-  },
   components: {
     AboutMenu: _AboutMenu__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
@@ -2276,11 +2306,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context3.prev = _context3.next) {
               case 0:
                 // 'openAboutMenu'は動的クラスの要素になる。
+                _this3.switchingMenuState = _this3.aboutMenuState;
                 _this3.switchingMenuState = _this3.switchingMenuState === false ? 'openAboutMenu' : false;
-                _context3.next = 3;
+                _context3.next = 4;
                 return _this3.$store.dispatch('app/switchMenuComponent', _this3.switchingMenuState);
 
-              case 3:
+              case 4:
               case "end":
                 return _context3.stop();
             }
@@ -2324,7 +2355,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".menuAbout {\n  max-height: 2421px;\n  width: 100%;\n  background: #2A3A50;\n  display: block;\n  position: fixed;\n  top: 70px;\n  left: -100%;\n  text-align: center;\n  transition: all 0.5s;\n  border-top: 1px solid #b4becb;\n  border-bottom: 1px solid #b4becb;\n  z-index: 2;\n}\n.menuAbout__itemWrap {\n  height: 100%;\n  width: 100%;\n  display: block;\n}\n.menuAbout__itemWrap-item {\n  height: 9%;\n  display: block;\n  padding: 32px 0;\n  font-size: 20px;\n  text-decoration: none;\n  font-family: montserrat;\n  color: #fff;\n}\n.menuAbout__itemWrap-item:visited {\n  color: #fff;\n}\n.menuAbout__itemWrap-item:hover {\n  transition: 0.5s;\n  border-top: 1px solid #b4becb;\n  border-bottom: 1px solid #b4becb;\n  background-color: #fff;\n  color: #0082e6;\n}", ""]);
+exports.push([module.i, ".menuAbout {\n  max-height: 2421px;\n  width: 100%;\n  background: #2A3A50;\n  display: block;\n  position: fixed;\n  top: 70px;\n  left: -100%;\n  text-align: center;\n  transition: all 0.5s;\n  border-top: 1px solid #b4becb;\n  border-bottom: 1px solid #b4becb;\n  z-index: 2;\n}\n.menuAbout__itemWrap {\n  height: 100%;\n  width: 100%;\n  display: block;\n}\n.menuAbout__itemWrap-lineNone {\n  text-decoration: none;\n}\n.menuAbout__itemWrap-item {\n  height: 9%;\n  display: block;\n  padding: 32px 0;\n  font-size: 20px;\n  text-decoration: none;\n  font-family: montserrat;\n  color: #fff;\n}\n.menuAbout__itemWrap-item:visited {\n  color: #fff;\n}\n.menuAbout__itemWrap-item:hover {\n  transition: 0.5s;\n  border-top: 1px solid #b4becb;\n  border-bottom: 1px solid #b4becb;\n  background-color: #fff;\n  color: #0082e6;\n}", ""]);
 
 // exports
 
@@ -2433,6 +2464,18 @@ function toComment(sourceMap) {
 
 	return '/*# ' + data + ' */';
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/dayjs/dayjs.min.js":
+/*!*****************************************!*\
+  !*** ./node_modules/dayjs/dayjs.min.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(t,e){ true?module.exports=e():undefined}(this,function(){"use strict";var t="millisecond",e="second",n="minute",r="hour",i="day",s="week",u="month",a="quarter",o="year",f="date",h=/^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[^0-9]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/,c=/\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,d={name:"en",weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_")},$=function(t,e,n){var r=String(t);return!r||r.length>=e?t:""+Array(e+1-r.length).join(n)+t},l={s:$,z:function(t){var e=-t.utcOffset(),n=Math.abs(e),r=Math.floor(n/60),i=n%60;return(e<=0?"+":"-")+$(r,2,"0")+":"+$(i,2,"0")},m:function t(e,n){if(e.date()<n.date())return-t(n,e);var r=12*(n.year()-e.year())+(n.month()-e.month()),i=e.clone().add(r,u),s=n-i<0,a=e.clone().add(r+(s?-1:1),u);return+(-(r+(n-i)/(s?i-a:a-i))||0)},a:function(t){return t<0?Math.ceil(t)||0:Math.floor(t)},p:function(h){return{M:u,y:o,w:s,d:i,D:f,h:r,m:n,s:e,ms:t,Q:a}[h]||String(h||"").toLowerCase().replace(/s$/,"")},u:function(t){return void 0===t}},y="en",M={};M[y]=d;var m=function(t){return t instanceof S},D=function(t,e,n){var r;if(!t)return y;if("string"==typeof t)M[t]&&(r=t),e&&(M[t]=e,r=t);else{var i=t.name;M[i]=t,r=i}return!n&&r&&(y=r),r||!n&&y},v=function(t,e){if(m(t))return t.clone();var n="object"==typeof e?e:{};return n.date=t,n.args=arguments,new S(n)},g=l;g.l=D,g.i=m,g.w=function(t,e){return v(t,{locale:e.$L,utc:e.$u,x:e.$x,$offset:e.$offset})};var S=function(){function d(t){this.$L=D(t.locale,null,!0),this.parse(t)}var $=d.prototype;return $.parse=function(t){this.$d=function(t){var e=t.date,n=t.utc;if(null===e)return new Date(NaN);if(g.u(e))return new Date;if(e instanceof Date)return new Date(e);if("string"==typeof e&&!/Z$/i.test(e)){var r=e.match(h);if(r){var i=r[2]-1||0,s=(r[7]||"0").substring(0,3);return n?new Date(Date.UTC(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)):new Date(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)}}return new Date(e)}(t),this.$x=t.x||{},this.init()},$.init=function(){var t=this.$d;this.$y=t.getFullYear(),this.$M=t.getMonth(),this.$D=t.getDate(),this.$W=t.getDay(),this.$H=t.getHours(),this.$m=t.getMinutes(),this.$s=t.getSeconds(),this.$ms=t.getMilliseconds()},$.$utils=function(){return g},$.isValid=function(){return!("Invalid Date"===this.$d.toString())},$.isSame=function(t,e){var n=v(t);return this.startOf(e)<=n&&n<=this.endOf(e)},$.isAfter=function(t,e){return v(t)<this.startOf(e)},$.isBefore=function(t,e){return this.endOf(e)<v(t)},$.$g=function(t,e,n){return g.u(t)?this[e]:this.set(n,t)},$.unix=function(){return Math.floor(this.valueOf()/1e3)},$.valueOf=function(){return this.$d.getTime()},$.startOf=function(t,a){var h=this,c=!!g.u(a)||a,d=g.p(t),$=function(t,e){var n=g.w(h.$u?Date.UTC(h.$y,e,t):new Date(h.$y,e,t),h);return c?n:n.endOf(i)},l=function(t,e){return g.w(h.toDate()[t].apply(h.toDate("s"),(c?[0,0,0,0]:[23,59,59,999]).slice(e)),h)},y=this.$W,M=this.$M,m=this.$D,D="set"+(this.$u?"UTC":"");switch(d){case o:return c?$(1,0):$(31,11);case u:return c?$(1,M):$(0,M+1);case s:var v=this.$locale().weekStart||0,S=(y<v?y+7:y)-v;return $(c?m-S:m+(6-S),M);case i:case f:return l(D+"Hours",0);case r:return l(D+"Minutes",1);case n:return l(D+"Seconds",2);case e:return l(D+"Milliseconds",3);default:return this.clone()}},$.endOf=function(t){return this.startOf(t,!1)},$.$set=function(s,a){var h,c=g.p(s),d="set"+(this.$u?"UTC":""),$=(h={},h[i]=d+"Date",h[f]=d+"Date",h[u]=d+"Month",h[o]=d+"FullYear",h[r]=d+"Hours",h[n]=d+"Minutes",h[e]=d+"Seconds",h[t]=d+"Milliseconds",h)[c],l=c===i?this.$D+(a-this.$W):a;if(c===u||c===o){var y=this.clone().set(f,1);y.$d[$](l),y.init(),this.$d=y.set(f,Math.min(this.$D,y.daysInMonth())).$d}else $&&this.$d[$](l);return this.init(),this},$.set=function(t,e){return this.clone().$set(t,e)},$.get=function(t){return this[g.p(t)]()},$.add=function(t,a){var f,h=this;t=Number(t);var c=g.p(a),d=function(e){var n=v(h);return g.w(n.date(n.date()+Math.round(e*t)),h)};if(c===u)return this.set(u,this.$M+t);if(c===o)return this.set(o,this.$y+t);if(c===i)return d(1);if(c===s)return d(7);var $=(f={},f[n]=6e4,f[r]=36e5,f[e]=1e3,f)[c]||1,l=this.$d.getTime()+t*$;return g.w(l,this)},$.subtract=function(t,e){return this.add(-1*t,e)},$.format=function(t){var e=this;if(!this.isValid())return"Invalid Date";var n=t||"YYYY-MM-DDTHH:mm:ssZ",r=g.z(this),i=this.$locale(),s=this.$H,u=this.$m,a=this.$M,o=i.weekdays,f=i.months,h=function(t,r,i,s){return t&&(t[r]||t(e,n))||i[r].substr(0,s)},d=function(t){return g.s(s%12||12,t,"0")},$=i.meridiem||function(t,e,n){var r=t<12?"AM":"PM";return n?r.toLowerCase():r},l={YY:String(this.$y).slice(-2),YYYY:this.$y,M:a+1,MM:g.s(a+1,2,"0"),MMM:h(i.monthsShort,a,f,3),MMMM:h(f,a),D:this.$D,DD:g.s(this.$D,2,"0"),d:String(this.$W),dd:h(i.weekdaysMin,this.$W,o,2),ddd:h(i.weekdaysShort,this.$W,o,3),dddd:o[this.$W],H:String(s),HH:g.s(s,2,"0"),h:d(1),hh:d(2),a:$(s,u,!0),A:$(s,u,!1),m:String(u),mm:g.s(u,2,"0"),s:String(this.$s),ss:g.s(this.$s,2,"0"),SSS:g.s(this.$ms,3,"0"),Z:r};return n.replace(c,function(t,e){return e||l[t]||r.replace(":","")})},$.utcOffset=function(){return 15*-Math.round(this.$d.getTimezoneOffset()/15)},$.diff=function(t,f,h){var c,d=g.p(f),$=v(t),l=6e4*($.utcOffset()-this.utcOffset()),y=this-$,M=g.m(this,$);return M=(c={},c[o]=M/12,c[u]=M,c[a]=M/3,c[s]=(y-l)/6048e5,c[i]=(y-l)/864e5,c[r]=y/36e5,c[n]=y/6e4,c[e]=y/1e3,c)[d]||y,h?M:g.a(M)},$.daysInMonth=function(){return this.endOf(u).$D},$.$locale=function(){return M[this.$L]},$.locale=function(t,e){if(!t)return this.$L;var n=this.clone(),r=D(t,e,!0);return r&&(n.$L=r),n},$.clone=function(){return g.w(this.$d,this)},$.toDate=function(){return new Date(this.valueOf())},$.toJSON=function(){return this.isValid()?this.toISOString():null},$.toISOString=function(){return this.$d.toISOString()},$.toString=function(){return this.$d.toUTCString()},d}(),p=S.prototype;return v.prototype=p,[["$ms",t],["$s",e],["$m",n],["$H",r],["$W",i],["$M",u],["$y",o],["$D",f]].forEach(function(t){p[t[1]]=function(e){return this.$g(e,t[0],t[1])}}),v.extend=function(t,e){return t.$i||(t(e,S,v),t.$i=!0),v},v.locale=D,v.isDayjs=m,v.unix=function(t){return v(1e3*t)},v.en=M[y],v.Ls=M,v.p={},v});
 
 
 /***/ }),
@@ -4529,15 +4572,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("nav", { staticClass: "menuAbout" }, [
-      _c("ul", { staticClass: "menuAbout__itemWrap" }, [
+  return _c("nav", { staticClass: "menuAbout" }, [
+    _c(
+      "ul",
+      { staticClass: "menuAbout__itemWrap" },
+      [
         _c("li", { staticClass: "menuAbout__itemWrap-item" }, [
           _vm._v("マイページ")
         ]),
@@ -4562,9 +4601,23 @@ var staticRenderFns = [
           _vm._v("登録社員一覧")
         ]),
         _vm._v(" "),
-        _c("li", { staticClass: "menuAbout__itemWrap-item" }, [
-          _vm._v("パスワード変更")
-        ]),
+        _c(
+          "router-link",
+          {
+            staticClass: "menuAbout__itemWrap-lineNone",
+            attrs: { to: "/PasswordReminder" }
+          },
+          [
+            _c(
+              "li",
+              {
+                staticClass: "menuAbout__itemWrap-item",
+                on: { click: _vm.switchMenuState }
+              },
+              [_vm._v("パスワード変更")]
+            )
+          ]
+        ),
         _vm._v(" "),
         _c("li", { staticClass: "menuAbout__itemWrap-item" }, [
           _vm._v("レビュー会社登録申請")
@@ -4573,10 +4626,12 @@ var staticRenderFns = [
         _c("li", { staticClass: "menuAbout__itemWrap-item" }, [
           _vm._v("退会する")
         ])
-      ])
-    ])
-  }
-]
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -21587,6 +21642,27 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/router/accessControl.js":
+/*!**********************************************!*\
+  !*** ./resources/js/router/accessControl.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// import Cookies from "js-cookie";
+// import router from "../router";
+// import store from "../store";
+// import {AUTH_ROUTER_NUM} from "./utils/auth_route_num"
+// const AccessControl = () => {
+//   let isPublic = Cookies.get('user_id');
+//   let isRoll = Cookies.get('roll');
+//   let isLoginData = Cookies.get('login_date');
+//   let isLoginLimit = Cookies.get('login_limit');
+// };
+// export { AccessControl };
+
+/***/ }),
+
 /***/ "./resources/js/router/auth.js":
 /*!*************************************!*\
   !*** ./resources/js/router/auth.js ***!
@@ -21599,9 +21675,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthFilter", function() { return AuthFilter; });
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../router */ "./resources/js/router/index.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../store */ "./resources/js/store/index.js");
-/* harmony import */ var _utils_auth_route_num__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/auth_route_num */ "./resources/js/router/utils/auth_route_num.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../router */ "./resources/js/router/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../store */ "./resources/js/store/index.js");
+/* harmony import */ var _utils_auth_route_num__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/auth_route_num */ "./resources/js/router/utils/auth_route_num.js");
+
 
 
 
@@ -21611,32 +21690,44 @@ var AuthFilter = function AuthFilter() {
   var isPublic = js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('user_id');
   var isRoll = js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('roll');
   var isLoginData = js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('login_date');
-  var isLoginLimit = js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('login_limit'); // JavaScriptにおける配列の空要素除去filterパターン
+  var isLoginLimit = js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('login_limit'); // JavaScriptで値が数値かどうかチェックする：isNaN()
+  // https://uxmilk.jp/46961
+  // JavaScriptにおける配列の空要素除去filterパターン
   // https://qiita.com/akameco/items/1636e0448e81e17e3646
   // .fillter(Boolean)が上手く動作しないので、上の変数の配列管理は後回しにする。
   //ユーザー認証チェック
 
   if (isPublic) {
     console.log('ログイン済みユーザーです。');
+    console.log(isPublic);
 
-    if (isLoginLimit < Date.now()) {
+    if (isLoginLimit < dayjs__WEBPACK_IMPORTED_MODULE_1___default()()) {
       console.log('ログイン有効期限外です。'); //TODO:フラッシュメッセージで「ログイン有効期限外です。再度ログインし直して下さい。」と表示。
       //TODO:配列で纏める。https://webrandum.net/js-cookie/
       //userStateの更新
 
-      _store__WEBPACK_IMPORTED_MODULE_2__["default"].dispatch("users/setLoginUserInfo");
-    } else if (isLoginLimit > Date.now()) {
+      js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.remove('user_id');
+      js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.remove('roll');
+      js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.remove('login_date');
+      js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.remove('login_limit');
+      _store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch("users/setLoginUserInfo");
+    } else if (isLoginLimit > dayjs__WEBPACK_IMPORTED_MODULE_1___default()()) {
       console.log('ログイン有効期限内です。');
-      js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.set('login_limit', Date.now() + _utils_auth_route_num__WEBPACK_IMPORTED_MODULE_3__["AUTH_ROUTER_NUM"].SES_LIMIT, {
-        expires: _utils_auth_route_num__WEBPACK_IMPORTED_MODULE_3__["AUTH_ROUTER_NUM"].LOGON_LIMIT
+      console.log(isLoginLimit);
+      js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.set('login_date', dayjs__WEBPACK_IMPORTED_MODULE_1___default()(), {
+        expires: _utils_auth_route_num__WEBPACK_IMPORTED_MODULE_4__["AUTH_ROUTER_NUM"].LOGON_LIMIT
+      });
+      js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.set('login_limit', dayjs__WEBPACK_IMPORTED_MODULE_1___default()() + _utils_auth_route_num__WEBPACK_IMPORTED_MODULE_4__["AUTH_ROUTER_NUM"].SES_LIMIT, {
+        expires: _utils_auth_route_num__WEBPACK_IMPORTED_MODULE_4__["AUTH_ROUTER_NUM"].LOGON_LIMIT
       }); //userState情報の再挿入(ページ遷移ごとに再挿入させる事でvuex内のuserStateを永続化させている。)
 
-      _store__WEBPACK_IMPORTED_MODULE_2__["default"].dispatch("users/setLoginUserInfo");
+      _store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch("users/setLoginUserInfo");
     }
-  } else if (!isPublic) {
+  } else {
     //TODO:フラッシュメッセージで「ログイン情報がありません。ホームに戻ります。」と表示。
-    _store__WEBPACK_IMPORTED_MODULE_2__["default"].dispatch("users/setLoginUserInfo");
-    _router__WEBPACK_IMPORTED_MODULE_1__["default"].push('/', function () {});
+    console.log('ログイン情報がありません。');
+    _store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch("users/setLoginUserInfo");
+    _router__WEBPACK_IMPORTED_MODULE_2__["default"].push('/', function () {});
   }
 };
 
@@ -21655,8 +21746,11 @@ var AuthFilter = function AuthFilter() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./auth */ "./resources/js/router/auth.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var _accessControl__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./accessControl */ "./resources/js/router/accessControl.js");
+/* harmony import */ var _accessControl__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_accessControl__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth */ "./resources/js/router/auth.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+
 
 
  // VueRouterプラグインを使用する
@@ -21666,14 +21760,14 @@ __webpack_require__.r(__webpack_exports__);
 // vue-routerチートシート
 // https://qiita.com/morrr/items/873ea25a806167c8d426
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]); // パスとコンポーネントのマッピング
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]); // パスとコンポーネントのマッピング
 
 var routes = [{
   // 対象のページが無い時は
   path: '/404',
   name: 'NotFound',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ../views/errors/NotFound */ "./resources/js/views/errors/NotFound.vue"));
+    return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ../views/errors/NotFound */ "./resources/js/views/errors/NotFound.vue"));
   }
 }, {
   path: '/',
@@ -21682,21 +21776,32 @@ var routes = [{
     return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ../views/Home */ "./resources/js/views/Home.vue"));
   }
 }, {
-  path: '/mypage/:id',
+  path: '/MyPage/:id',
   name: 'MyPage',
   component: function component() {
     return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ../views/MyPage */ "./resources/js/views/MyPage.vue"));
   }
+}, {
+  path: '/PasswordReminder',
+  name: 'PasswordReminder',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ../views/PasswordReminder */ "./resources/js/views/PasswordReminder.vue"));
+  }
 }]; // VueRouterインスタンスを作成する
 
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
-  mode: 'history',
-  // ★ 追加
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
+  // TODO:historyModeの対策をする。
+  // Vue.jsのhistory mode 404対策について
+  // https://qiita.com/go6887/items/dcb7aa86ba6a006d4746
+  // mode: 'history', // ★ 追加
   routes: routes
-}); //【Vue.js】全ての画面で実行したい処理の実装方法
+}); // TODO:$to・$fromでアクセス元、アクセス先を取得後
+// それが同一だった場合、読み込み予定のコンポーネントを再レンダリングさせる処理を書く。
+// router.afterEach(AccessControl);
+//【Vue.js】全ての画面で実行したい処理の実装方法
 // https://hafilog.com/aftereach
 
-router.afterEach(_auth__WEBPACK_IMPORTED_MODULE_1__["AuthFilter"]); // 【Vue.js】ナビゲーションガードについて
+router.afterEach(_auth__WEBPACK_IMPORTED_MODULE_2__["AuthFilter"]); // 【Vue.js】ナビゲーションガードについて
 // https://tsudoi.org/weblog/5738/
 // ローディングのアニメーションに使う
 // router.beforeResolve();

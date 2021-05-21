@@ -38,12 +38,6 @@ import { mapState } from "vuex";
 import AboutMenu from './AboutMenu';
 
 export default {
-  data () {
-    return {
-      switchingMenu: false,
-      switchingMenuState: false,
-    }
-  },
   components: {
     AboutMenu
   },
@@ -80,6 +74,7 @@ export default {
     },
     async switchMenuState() {
       // 'openAboutMenu'は動的クラスの要素になる。
+      this.switchingMenuState = this.aboutMenuState;
       this.switchingMenuState = this.switchingMenuState === false ? 'openAboutMenu' : false;
       await this.$store.dispatch('app/switchMenuComponent',this.switchingMenuState);
     }

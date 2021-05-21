@@ -8,7 +8,9 @@
       <li class="menuAbout__itemWrap-item">閲覧履歴</li>
       <li class="menuAbout__itemWrap-item">投稿者登録</li>
       <li class="menuAbout__itemWrap-item">登録社員一覧</li>
-      <li class="menuAbout__itemWrap-item">パスワード変更</li>
+      <router-link to="/PasswordReminder" class="menuAbout__itemWrap-lineNone">
+        <li class="menuAbout__itemWrap-item" @click="switchMenuState">パスワード変更</li>
+      </router-link>
       <li class="menuAbout__itemWrap-item">レビュー会社登録申請</li>
       <li class="menuAbout__itemWrap-item">退会する</li>
     </ul>
@@ -25,7 +27,16 @@ export default {
       aboutMenuState: state => state.app.aboutMenuState
     }),
   },
-}
+  methods: {
+    async switchMenuState() {
+      // 'openAboutMenu'は動的クラスの要素になる。
+      this.switchingMenuState = this.aboutMenuState;
+      // aboutMenuState内の要素を反転させる。
+      this.switchingMenuState = this.switchingMenuState === false ? 'openAboutMenu' : false;
+      await this.$store.dispatch('app/switchMenuComponent',this.switchingMenuState);
+    }
+  }
+  }
 </script>
 
 <style lang="scss" scope>
@@ -43,11 +54,13 @@ export default {
     border-top: 1px solid #b4becb;
     border-bottom: 1px solid #b4becb;
     z-index: 2;
-
     &__itemWrap{
       height: 100%;
       width: 100%;
       display: block;
+    }
+    &__itemWrap-lineNone{
+      text-decoration:none;
     }
     &__itemWrap-item{
       height: 9%;

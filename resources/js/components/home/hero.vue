@@ -52,6 +52,8 @@
 // リアルタイムでstateを参照したい->mapStates
 // mapGettersで書く時とmapStateで書く時ではパスの書き方が違う?
 // authComponentsState 'auth/authComponentsState'
+// js.cookie.jsの使い方(もしかするとjs-cookieとは違う可能性あり)
+// https://illbenet.jp/view/howto-js_cookie_js
 
 import Cookies from "js-cookie";
 import { mapState } from "vuex";
