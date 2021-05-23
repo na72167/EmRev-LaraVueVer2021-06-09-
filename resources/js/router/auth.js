@@ -35,13 +35,12 @@ const AuthFilter = () => {
     }else if(isLoginLimit > Dayjs()){
       console.log('ログイン有効期限内です。');
       console.log(isLoginLimit);
-
       Cookies.set('login_date',Dayjs(),{expires: AUTH_ROUTER_NUM.LOGON_LIMIT});
       Cookies.set('login_limit',Dayjs()+AUTH_ROUTER_NUM.SES_LIMIT, {expires: AUTH_ROUTER_NUM.LOGON_LIMIT});
       //userState情報の再挿入(ページ遷移ごとに再挿入させる事でvuex内のuserStateを永続化させている。)
       store.dispatch("users/setLoginUserInfo");
     }
-  }else{
+  }else if(!isPublic){
     //TODO:フラッシュメッセージで「ログイン情報がありません。ホームに戻ります。」と表示。
     console.log('ログイン情報がありません。');
     store.dispatch("users/setLoginUserInfo");

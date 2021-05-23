@@ -17,8 +17,8 @@ class UsersTableSeeder extends Seeder
 
 		// 一般ユーザー権限持ちユーザーを作成する。
 		\DB::table('users')->insert(array (
-            'email' => 'dummy@gmail.com',
-            'password' => Hash::make('test12345')
+            "email" => "dummy@gmail.com",
+            "password" => Hash::make("test12345")
 		));
 	}
 }

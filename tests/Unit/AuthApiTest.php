@@ -19,11 +19,15 @@ class AuthApiTest extends TestCase
     // Laravel 5.3でREST APIのテストコードを書く
     // 422が返ってきている時はバリテーション周りで引っかかっている。
     // https://qiita.com/keitakn/items/1a43d53e9c3b422ec5ef
+    // Laravel7でログイン画面を作ってPHPUnitで動作確認する
+    // https://engineer-lady.com/program_info/create-login-phpunit-laravel7/
 
     use RefreshDatabase;
 
-    protected $resetDatabase = true;
+    protected $resetDatabase = false;
 
+    // 【Laravel】テストで使用するsetUpメソッドについて
+    // https://tektektech.com/laravel-setup-test/
     /**
      * Setup the test environment.
      *
@@ -40,7 +44,6 @@ class AuthApiTest extends TestCase
     }
 
     /**
-     * A basic feature test get method.
      * @test
      * @return void
      */
@@ -54,10 +57,16 @@ class AuthApiTest extends TestCase
     }
 
     /**
-     * A basic feature test get method.
      * @test
      * @return void
      */
+    // TODO:Trying to get property 'email' of non-object
+    // というエラーが出てきて、テストが通らない。
+    // 原因:上のsetUp関数が上手く動作していない為。
+    // 想定ではテスト用DBに接続後、DB内を掃除。db:seedで
+    // ダミーデータが挿入されているはずだが上手く言っておらず、
+    // DB内が空のまま->それを参照してもemailのプロパティなんて無いので
+    // Trying to get property 'email' of non-objectと返されている。
     public function test_ログイン()
     {
         $response = $this->json('POST', route('login'), [
@@ -66,4 +75,5 @@ class AuthApiTest extends TestCase
         ]);
         $response->assertStatus(201);
     }
+
 }

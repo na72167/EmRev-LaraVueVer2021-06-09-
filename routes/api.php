@@ -16,9 +16,7 @@ use Illuminate\Http\Request;
 // 認証系
 Route::post('/register', 'Auth\AuthController@register')->name('register');
 Route::post('/login', 'Auth\AuthController@login')->name('login');
-
-
-
+Route::post('/passwordReminder', 'Auth\AuthController@updatePassword')->name('passwordReminder');
 
 // バリテーション関係
 // emailの重複確認

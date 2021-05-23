@@ -194,37 +194,29 @@ export default {
             try {
                 this.isSubmit = true;
                 this.submitButton = '登録中です';
-                if (this.signUpFormResult.emailResult === false && this.signUpFormResult.passwordResult === false){
-                  console.log("登録内容にエラーがありました。");
-                  this.Validation.signUpCommonErrMsg = '登録内容にエラーがありました。'
-                  this.isSubmit = false;
-                  this.submitButton = "登録";
-                  return false;
-                }else if(this.signUpFormResult.emailResult === true && this.signUpFormResult.passwordResult === true){
-                  // ロード画面実装処理
-                  // this.$store.dispatch("app/setLoading");
-                  this.Validation = "";
-                  console.log("登録処理に入りました。");
-                  this.RegistUser = await axios.post('/api/register',this.signUpForm);
-                  console.log('レスポンス内容'.RegistUser);
+                // ロード画面実装処理
+                // this.$store.dispatch("app/setLoading");
+                this.Validation = "";
+                console.log("登録処理に入りました。");
+                this.RegistUser = await axios.post('/api/register',this.signUpForm);
+                console.log('レスポンス内容'.RegistUser);
 
-                  //ユーザー情報管理
-                  // Cookieにログイン時刻とIDと権限情報挿入。
-                  // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
-                  Cookies.set('user_id',this.RegistUser.data.id, {expires: 30});
-                  Cookies.set('roll',this.RegistUser.data.roll, {expires: 30});
-                  Cookies.set('login_date', Date.now(), {expires: 30});
-                  Cookies.set('login_limit',Date.now()+this.sesLimit, {expires: 30});
+                //ユーザー情報管理
+                // Cookieにログイン時刻とIDと権限情報挿入。
+                // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
+                Cookies.set('user_id',this.RegistUser.data.id, {expires: 30});
+                Cookies.set('roll',this.RegistUser.data.roll, {expires: 30});
+                Cookies.set('login_date', Date.now(), {expires: 30});
+                Cookies.set('login_limit',Date.now()+this.sesLimit, {expires: 30});
 
-                  //バリテーション結果の初期化
-                  this.signUpForm = "";
-                  this.signUpFormResult.emailResult = false;
-                  this.signUpFormResult.passwordResult = false;
-
-                  this.$store.dispatch("users/setLoginUserInfo");
-                  // マイページへ飛ばすパスを書く。
-                  this.$router.push(`/mypage/${Cookies.get('user_id')}`)
-                }
+                //バリテーション結果の初期化
+                this.signUpForm = "";
+                this.signUpFormResult.emailResult = false;
+                this.signUpFormResult.passwordResult = false;
+                this.$store.dispatch("users/setLoginUserInfo");
+                this.submitButton = "登録";
+                // マイページへ飛ばすパスを書く。
+                this.$router.push(`/mypage/${Cookies.get('user_id')}`)
               } catch (e) {
                   console.log("登録処理中に例外エラーが発生しました。");
                   this.Validation.signUpCommonErrMsg = '接続に失敗しました。'

@@ -1,0 +1,16 @@
+現在書いているEmRevのサーバーサイド部分をC++で書き直して、PHPとのすり合わせをやりたい。
+
+C++初心者がDockerで開発環境をつくってみた
+https://qiita.com/kai_kou/items/1f4b9a45a5d4d6788649
+
+EmscriptenでC言語をJavaScriptに変換する
+https://qiita.com/sassy_watson/items/3ec69b19a22a457362a9
+
+htmlにC++を組み込む
+https://teratail.com/questions/26885
+
+ゼロから学ぶ C++
+https://rinatz.github.io/cpp-book/ch02-09-lambda-expressions/
+
+C++ から MySQL に接続する
+https://qiita.com/tomov3/items/cd2a3df22f025ff167cd

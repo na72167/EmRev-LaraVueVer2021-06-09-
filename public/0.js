@@ -517,40 +517,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
                 if (!(_this.signUpFormResult.emailResult === true && _this.signUpFormResult.passwordResult === true)) {
-                  _context.next = 43;
+                  _context.next = 35;
                   break;
                 }
 
                 console.log("ユーザー登録用バリテーションOKです。");
                 _context.prev = 4;
                 _this.isSubmit = true;
-                _this.submitButton = '登録中です';
-
-                if (!(_this.signUpFormResult.emailResult === false && _this.signUpFormResult.passwordResult === false)) {
-                  _context.next = 15;
-                  break;
-                }
-
-                console.log("登録内容にエラーがありました。");
-                _this.Validation.signUpCommonErrMsg = '登録内容にエラーがありました。';
-                _this.isSubmit = false;
-                _this.submitButton = "登録";
-                return _context.abrupt("return", false);
-
-              case 15:
-                if (!(_this.signUpFormResult.emailResult === true && _this.signUpFormResult.passwordResult === true)) {
-                  _context.next = 31;
-                  break;
-                }
-
-                // ロード画面実装処理
+                _this.submitButton = '登録中です'; // ロード画面実装処理
                 // this.$store.dispatch("app/setLoading");
+
                 _this.Validation = "";
                 console.log("登録処理に入りました。");
-                _context.next = 20;
+                _context.next = 11;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/api/register', _this.signUpForm);
 
-              case 20:
+              case 11:
                 _this.RegistUser = _context.sent;
                 console.log('レスポンス内容'.RegistUser); //ユーザー情報管理
                 // Cookieにログイン時刻とIDと権限情報挿入。
@@ -573,38 +555,38 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.signUpFormResult.emailResult = false;
                 _this.signUpFormResult.passwordResult = false;
 
-                _this.$store.dispatch("users/setLoginUserInfo"); // マイページへ飛ばすパスを書く。
+                _this.$store.dispatch("users/setLoginUserInfo");
 
+                _this.submitButton = "登録"; // マイページへ飛ばすパスを書く。
 
                 _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
 
-              case 31:
-                _context.next = 39;
+                _context.next = 31;
                 break;
 
-              case 33:
-                _context.prev = 33;
+              case 25:
+                _context.prev = 25;
                 _context.t0 = _context["catch"](4);
                 console.log("登録処理中に例外エラーが発生しました。");
                 _this.Validation.signUpCommonErrMsg = '接続に失敗しました。';
                 _this.signUpFormResult.emailResult = false;
                 _this.signUpFormResult.passwordResult = false;
 
-              case 39:
-                _context.prev = 39;
+              case 31:
+                _context.prev = 31;
                 // 必ず実行する処理の記述(try..catch..finally)
                 // https://www.javadrive.jp/start/exception/index3.html
                 // ローディング画面の終了
                 _this.isSubmitting = false;
                 _this.isSubmit = false;
-                return _context.finish(39);
+                return _context.finish(31);
 
-              case 43:
+              case 35:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[4, 33, 39, 43]]);
+        }, _callee, null, [[4, 25, 31, 35]]);
       }))();
     }
   }
