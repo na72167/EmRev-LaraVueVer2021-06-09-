@@ -13,6 +13,7 @@
             <li class="header__nav-list"><a href="./reviewRegister-cList.php">REVIEW REGISTRATION</a></li>
             <li class="header__nav-list" @click="logout">LOGOUT</li>
           </nav>
+            <!-- ここの:classはメニュー内容のアニメーション関係のもの -->
             <AboutMenu
               :class="aboutMenuState"
             />

@@ -28,6 +28,7 @@ export default {
     }),
   },
   methods: {
+    // ここのaboutMenuStateはvuexのstateを切り替える為のメソッド
     async switchMenuState() {
       // 'openAboutMenu'は動的クラスの要素になる。
       this.switchingMenuState = this.aboutMenuState;
@@ -36,7 +37,7 @@ export default {
       await this.$store.dispatch('app/switchMenuComponent',this.switchingMenuState);
     }
   }
-  }
+}
 </script>
 
 <style lang="scss" scope>

@@ -1,0 +1,20 @@
+Laravel
+・パスワードリマインダー機能
+  -LaravelのPasswordBrokerについて調べる
+  https://zenn.dev/fagai/articles/d9188458766a7ecdfda9
+
+・PHPでスロットリング処理
+https://qiita.com/hatahata/items/f6177b7dd56da83251c1
+
+・Laravel5.8でパスワードリセット処理であった
+ -static::INVALID_USER
+https://www.google.com/search?q=static%3A%3AINVALID_USER&oq=static%3A%3AINVALID_USER&aqs=chrome.0.69i59j69i58.3904j0j7&sourceid=chrome&ie=UTF-8
+
+・モデル内にデータ追加後、イベントを実行するなどの処理について調べる。
+https://blog.capilano-fw.com/?p=699
+
+上の記事の
+「しかも、もうひとつ重要なことがあります。insert()は、イベントの自動実行ができないということです。
+例えば、以下のようにモデル内にデータ追加後に「ItemAdded」というイベントを実行するように設定していたとしても、
+insert()の場合は無視されてしまうのです。」
+部分をヒントに調べてみる。

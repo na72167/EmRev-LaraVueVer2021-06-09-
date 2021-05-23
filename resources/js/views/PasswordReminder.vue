@@ -1,21 +1,30 @@
 <template>
   <div>
     <Intro/>
-    <PasswordReminder/>
-    <!-- <PassRemindRecieve/> -->
+    <PasswordReminder
+      v-if="this.ReminderCompMode === 'reminder'"
+    />
+    <PassRemindRecieve
+      v-if="this.ReminderCompMode === 'receive'"
+    />
   </div>
 </template>
 
 <script>
 import Intro from '../components/intro/Intro'
-import PasswordReminder from '../components/password/PasswordReminder'
-import PassRemindRecieve from '../components/password/PassRemindRecieve'
+import PasswordReminder from '../components/passwordReminder/PasswordReminder'
+import PassRemindRecieve from '../components/passwordReminder/PasswordReceive'
 
 export default {
+  data: function() {
+    return {
+      ReminderCompMode: 'reminder',
+    };
+  },
   components: {
-  Intro,
-  PasswordReminder,
-  PassRemindRecieve
+    Intro,
+    PasswordReminder,
+    PassRemindRecieve
   }
 }
 </script>

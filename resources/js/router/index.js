@@ -18,25 +18,25 @@ const routes = [
     path: '/404',
     name: 'NotFound',
     component: () =>
-        import ('../views/errors/NotFound'),
+      import ('../views/errors/NotFound'),
   },
   {
     path: '/',
     name: 'Home',
     component: () =>
-        import ('../views/Home'),
+      import ('../views/Home'),
   },
   {
     path: '/MyPage/:id',
     name: 'MyPage',
     component: () =>
-        import ('../views/MyPage'),
+      import ('../views/MyPage'),
   },
   {
     path: '/PasswordReminder',
     name: 'PasswordReminder',
     component: () =>
-        import ('../views/PasswordReminder'),
+      import ('../views/PasswordReminder'),
   }
 ]
 

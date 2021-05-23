@@ -2139,6 +2139,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   })),
   methods: {
+    // ここのaboutMenuStateはvuexのstateを切り替える為のメソッド
     switchMenuState: function switchMenuState() {
       var _this = this;
 
@@ -2194,6 +2195,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -21723,7 +21725,7 @@ var AuthFilter = function AuthFilter() {
 
       _store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch("users/setLoginUserInfo");
     }
-  } else {
+  } else if (!isPublic) {
     //TODO:フラッシュメッセージで「ログイン情報がありません。ホームに戻ります。」と表示。
     console.log('ログイン情報がありません。');
     _store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch("users/setLoginUserInfo");
