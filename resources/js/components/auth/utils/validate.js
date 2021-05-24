@@ -45,13 +45,15 @@ export function validEmail(email) {
  * @return {Boolean}
  */
 export async function validEmailDup(email) {
+  // request内でのキー割り振り
   const query = {
     'email': email
   }
   const response = await axios.post('/api/emailDup',query);
-  //TODO:重複が合った場合のresponseの内容の確認
+  // TODO:重複が合った場合のresponseの内容の確認
   // 重複が合った場合はtrueを返す処理を書く。
   console.dir(response);
+  return response
 }
 
 /**

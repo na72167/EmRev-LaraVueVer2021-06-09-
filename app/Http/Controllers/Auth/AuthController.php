@@ -96,7 +96,10 @@ class AuthController extends Controller
         Log::debug("検索結果".$updatePasswordUser);
 
         if($updatePasswordUser->email){
+
             Log::debug("条件に合致しました");
+            // Laravel Mailableでメール送信機能を実装する
+            // https://noumenon-th.net/programming/2020/05/16/mailable/
 
             $auth_key = Str::random(40);
             User::where('email',$updatePasswordUser->email)->update(['emailToken' => $auth_key]);
@@ -127,6 +130,7 @@ class AuthController extends Controller
                 mb_internal_encoding("UTF-8"); //内部の日本語をどうエンコーディング（機械が分かる言葉へ変換）するかを設定
                 //メールを送信（送信結果はtrueかfalseで返ってくる）
                 $result = mb_send_mail($to, $subject, $comment, "From: ".$from);
+                Log::debug($result);
                 //送信結果を判定
                 if ($result) {
                     Log::debug("メールを送信しました。");
@@ -135,19 +139,42 @@ class AuthController extends Controller
                 }
             }
 
-            //認証に必要な情報をセッションへ保存
+            // 認証に必要な情報をセッションへ保存
             // https://tech-blog.rakus.co.jp/entry/20210409/laravel
-            Session::getId();
-            session(['auth_key' => $auth_key]);
-            session(['auth_email' => $updatePasswordUser->email]);
-            session(['auth_key_limit' => time()+(60*30)]);//現在時刻より30分後のUNIXタイムスタンプを入れる
-            Log::debug(session()->all());
-
-            return response(201);
+            // TODO:今のままだと認証用トークンをそのまま受け渡ししている為、セキュリティ的にとても危ない状態になっている。
+            // 以下を参考に色々試してみる。
+            // SPAのログイン認証のベストプラクティスがわからなかったのでわりと網羅的に研究してみた〜JWT or Session どっち？〜
+            // https://qiita.com/Hiro-mi/items/18e00060a0f8654f49d6
+            // Laravel SanctumとVue.jsによるSPA認証
+            // https://noumenon-th.net/programming/2020/05/26/sanctum/
+            // Laravel8 + Vue.js を利用したSanctum認証
+            // https://qiita.com/hikkappi/items/b95626bb51bbf2ebcd2d
+            $ResponseData = array(['auth_key' => $auth_key,'auth_email' => $updatePasswordUser->email,
+            'auth_key_limit' => time()+(60*30)]);//現在時刻より30分後のUNIXタイムスタンプを入れる
+            Log::debug($ResponseData);
+            return response()->json($ResponseData,201);
 
         }else if(is_null($updatePasswordUser->email)){
             Log::debug("条件に合致しませんでした");
             return false;
         }
+    }
+
+    //パスワード変更用認証キー
+    protected function passwordReceive(Request $request)
+    {
+        Log::debug('パスワード更新処理を行います。');
+        Log::debug("リクエスト内容".$request);
+        $UpdatePasswordUser = User::where('email',$request['authEmail'])->first();
+        Log::debug("検索結果".$UpdatePasswordUser);
+
+        if($request['authEmail'] === $UpdatePasswordUser->email && $request['authenticationKey'] === $UpdatePasswordUser->emailToken){
+            Log::debug("条件が合致しました");
+            $UpdateUser = User::where('email',$UpdatePasswordUser->email)->update(['password' => Hash::make($request['changedPassword'])]);
+            return response()->json($UpdateUser,201);
+        }else{
+            Log::debug("条件に合致しませんでした");
+            return false;
+        };
     }
 }

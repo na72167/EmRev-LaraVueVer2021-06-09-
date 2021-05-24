@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Cookies from "js-cookie";
+import passwordReminder from './modules/passwordReminder';
 import auth from './modules/auth';
 import app from './modules/app';
 import error from './modules/error';
@@ -45,6 +46,7 @@ Vue.use(Cookies)
 //vueの標準機能に関する物を追加で使いたい場合はここに記入する。
 const store = new Vuex.Store({
   modules: {
+    passwordReminder,
     auth,
     app,
     error,

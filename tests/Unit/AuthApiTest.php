@@ -76,4 +76,13 @@ class AuthApiTest extends TestCase
         $response->assertStatus(201);
     }
 
+    //上と同じく
+    public function test_パスワード変更()
+    {
+        $response = $this->json('POST', route('passwordReminder'), [
+            'email' => 'dummy@gmail.com'
+        ]);
+        $response->assertStatus(201);
+    }
+
 }

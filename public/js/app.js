@@ -21827,7 +21827,7 @@ __webpack_require__.r(__webpack_exports__);
 // TODO: utilファイルをまとめる。
 var AUTH_ROUTER_NUM = {
   LOGON_LIMIT: 7,
-  SES_LIMIT: 604800
+  SES_LIMIT: 6048000
 };
 
 /***/ }),
@@ -21846,10 +21846,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _modules_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/auth */ "./resources/js/store/modules/auth.js");
-/* harmony import */ var _modules_app__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/app */ "./resources/js/store/modules/app.js");
-/* harmony import */ var _modules_error__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/error */ "./resources/js/store/modules/error.js");
-/* harmony import */ var _modules_users__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/users */ "./resources/js/store/modules/users.js");
+/* harmony import */ var _modules_passwordReminder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/passwordReminder */ "./resources/js/store/modules/passwordReminder.js");
+/* harmony import */ var _modules_auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/auth */ "./resources/js/store/modules/auth.js");
+/* harmony import */ var _modules_app__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/app */ "./resources/js/store/modules/app.js");
+/* harmony import */ var _modules_error__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/error */ "./resources/js/store/modules/error.js");
+/* harmony import */ var _modules_users__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/users */ "./resources/js/store/modules/users.js");
+
 
 
 
@@ -21890,10 +21892,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(js_cookie__WEBPACK_IMPORTED_MODUL
 
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
-    auth: _modules_auth__WEBPACK_IMPORTED_MODULE_3__["default"],
-    app: _modules_app__WEBPACK_IMPORTED_MODULE_4__["default"],
-    error: _modules_error__WEBPACK_IMPORTED_MODULE_5__["default"],
-    users: _modules_users__WEBPACK_IMPORTED_MODULE_6__["default"]
+    passwordReminder: _modules_passwordReminder__WEBPACK_IMPORTED_MODULE_3__["default"],
+    auth: _modules_auth__WEBPACK_IMPORTED_MODULE_4__["default"],
+    app: _modules_app__WEBPACK_IMPORTED_MODULE_5__["default"],
+    error: _modules_error__WEBPACK_IMPORTED_MODULE_6__["default"],
+    users: _modules_users__WEBPACK_IMPORTED_MODULE_7__["default"]
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (store);
@@ -22068,6 +22071,44 @@ var mutations = {
   namespaced: true,
   state: state,
   mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/passwordReminder.js":
+/*!********************************************************!*\
+  !*** ./resources/js/store/modules/passwordReminder.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_0__);
+
+var state = {
+  passwordReminderMode: 'reminder'
+};
+var getters = {};
+var mutations = {
+  SET_RECEIVE_MODE: function SET_RECEIVE_MODE(state, receiveMode) {
+    state.passwordReminderMode = receiveMode;
+  }
+}; // mutaion に直接 commit せず、action 経由で実行することを強く推奨する
+// https://uncle-javascript.com/vuex-actions
+
+var actions = {
+  setReceiveMode: function setReceiveMode(context) {
+    context.commit('SET_RECEIVE_MODE', 'receive');
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  mutations: mutations,
+  actions: actions
 });
 
 /***/ }),
