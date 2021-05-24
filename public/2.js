@@ -37,6 +37,13 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _utils_passwordReminder_str_mappings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/passwordReminder-str-mappings */ "./resources/js/components/passwordReminder/utils/passwordReminder-str-mappings.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -77,139 +84,152 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    mode: {
-      type: String
-    }
+  data: function data() {
+    return {
+      // 入力情報を保持
+      passwordReceiveForm: {
+        authEmail: null,
+        authenticationKey: null,
+        changedPassword: null
+      },
+      authdate: {
+        authEmail: null,
+        authKey: null,
+        authKeyLimit: null
+      },
+      passwordReceiveResponseResult: null,
+      passwordReceiveResult: null,
+      passwordRreceiveErrMsg: null,
+      passwordReceiveButton: "再発行する"
+    };
   },
-  passwordReminder: function passwordReminder() {
-    var _this = this;
+  methods: {
+    passwordReceive: function passwordReceive() {
+      var _this = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              //Emailのバリデーション
-              if (!_this.passwordReminderForm.email) {
-                //空かどうかのバリテーション
-                console.log("(signUp)メールアドレスの入力がありません");
-                _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスを入力してください';
-              } else if (!validEmail(_this.passwordReminderForm.email)) {
-                // メールアドレスの形式確認
-                console.log("(signUp)メールアドレスの形式が正しくありません");
-                _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスの形式が正しくありません';
-              } else if (validHalfNumAlp(_this.passwordReminderForm.email)) {
-                //半角英数字のバリテーション
-                console.log("(signUp)メールアドレスを半角英数で入力してください");
-                _this.Validation.passwordReminderEmailErrMsg = '半角英数で入力してください';
-              } else if (validMaxLen(_this.passwordReminderForm.email, SIGNUP_NUM.SIGNUP_EMAIL_MAXLEN)) {
-                //最大文字数のバリテーション
-                console.log("(signUp)メールアドレスを20文字以内にしてください");
-                _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスは20文字以内にしてください';
-              } else if (validMinLen(_this.passwordReminderForm.email, SIGNUP_NUM.SIGNUP_EMAIL_MINLEN)) {
-                //最小文字数のバリテーション
-                console.log("(signUp)メールアドレスは4文字以上にしてください");
-                _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスは4文字以上にしてください';
-              } // else if(await validEmailDup(this.passwordReminderForm.email)){
-              //   //重複確認のバリテーション
-              //   console.log("(signUp)メールアドレスが重複しています");
-              //   this.Validation.passwordReminderEmailErrMsg = "メールアドレスが重複しています"
-              // }
-              else {
-                  //バリテーションがOKな場合
-                  console.log("(signUp)メールアドレスのバリテーションOKです");
-                  _this.Validation.passwordReminderEmailErrMsg = "";
-                  _this.passwordReminderResult.emailResult = true;
-                } // バリテーションが通っているかを確認。
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                //認証周りの情報をCookieから取得
+                _this.authdate.authEmail = js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('auth_email');
+                _this.authdate.authKey = js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('auth_key');
+                _this.authdate.authKeyLimit = js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('auth_key_limit');
+                console.log(_this.authdate);
 
+                if (!_this.authdate.authKey) {
+                  _context.next = 37;
+                  break;
+                }
 
-              if (!(_this.passwordReminderResult.emailResult === true)) {
-                _context.next = 38;
-                break;
-              }
+                console.log("認証キーが確認できました。");
 
-              console.log("ユーザー登録用バリテーションOKです。");
-              _context.prev = 3;
-              _this.isSubmit = true;
-              _this.submitButton = '登録中です';
+                if (!(_this.authdate.authKeyLimit < dayjs__WEBPACK_IMPORTED_MODULE_2___default()())) {
+                  _context.next = 34;
+                  break;
+                }
 
-              if (!(_this.passwordReminderResult.emailResult === false)) {
-                _context.next = 14;
-                break;
-              }
+                console.log("認証キー期限内です。");
 
-              console.log("登録内容にエラーがありました。");
-              _this.Validation.signUpCommonErrMsg = '登録内容にエラーがありました。';
-              _this.isSubmit = false;
-              _this.submitButton = "登録";
-              return _context.abrupt("return", false);
+                if (!(!_this.passwordReceiveForm.authEmail === _this.authdate.authEmail)) {
+                  _context.next = 12;
+                  break;
+                }
 
-            case 14:
-              if (!(_this.passwordReminderResult.emailResult === true)) {
+                // 変更対象のメールアドレスと
+                console.log("(passwordReceive)認証キーを発行したメールアドレスと一致しません");
+                _this.passwordReceiveErrMsg = "認証キーを発行したメールアドレスと一致しません";
+                return _context.abrupt("return", false);
+
+              case 12:
+                _context.prev = 12;
+                _this.isSubmit = true;
+                _this.submitButton = '再発行中です'; // ロード画面実装処理 passwordRreceiveErrMsg
+                // this.$store.dispatch("app/setLoading");
+
+                console.log("変更処理に入りました。");
+                _context.next = 18;
+                return axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/api/passwordReceive', _this.passwordReceiveForm);
+
+              case 18:
+                _this.passwordReceiveResponseResult = _context.sent;
+                console.log(_this.passwordReceiveResponseResult);
+
+                if (_this.passwordReceiveResponseResult) {
+                  console.log("認証トークンの発行成功。"); // 認証トークン関係は10分間のみ保持の想定
+
+                  js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.remove('auth_email');
+                  js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.remove('auth_key');
+                  js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.remove('auth_key_limit'); // TODO:フラッシュメッセージで「パスワード変更に成功しました。」と表示させる。
+
+                  _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
+                } else if (_this.passwordReceiveResponseResult === false) {
+                  console.log("変更に失敗しました。再度認証キーの変更からお願いします。");
+                  js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.remove('auth_email');
+                  js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.remove('auth_key');
+                  js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.remove('auth_key_limit'); // TODO:フラッシュメッセージで「変更に失敗しました。再度認証キーの発行からお願いします。」と表示させる。
+
+                  _this.$emit("CangePassReminderComponents", _utils_passwordReminder_str_mappings__WEBPACK_IMPORTED_MODULE_4__["PASSWORD_REMINDER_STR"].REMINDER_MODE);
+                }
+
                 _context.next = 27;
                 break;
-              }
 
-              å; // ロード画面実装処理
-              // this.$store.dispatch("app/setLoading");
+              case 23:
+                _context.prev = 23;
+                _context.t0 = _context["catch"](12);
+                console.log("登録処理中に例外エラーが発生しました。");
+                _this.signUpCommonErrMsg = '接続に失敗しました。';
 
-              console.log("登録処理に入りました。");
-              _context.next = 19;
-              return axios.post('/api/register', _this.passwordReminderForm);
+              case 27:
+                _context.prev = 27;
+                // 必ず実行する処理の記述(try..catch..finally)
+                // https://www.javadrive.jp/start/exception/index3.html
+                // ローディング画面の終了
+                _this.isSubmitting = false;
+                _this.isSubmit = false;
+                _this.submitButton = "再発行する";
+                return _context.finish(27);
 
-            case 19:
-              _this.RegistUser = _context.sent;
-              console.log('レスポンス内容'.RegistUser); //ユーザー情報管理
-              // Cookieにログイン時刻とIDと権限情報挿入。
-              // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
+              case 32:
+                _context.next = 35;
+                break;
 
-              Cookies.set('user_id', _this.RegistUser.data.id, {
-                expires: 30
-              });
-              Cookies.set('roll', _this.RegistUser.data.roll, {
-                expires: 30
-              });
-              Cookies.set('login_date', Date.now(), {
-                expires: 30
-              });
-              Cookies.set('login_limit', Date.now() + _this.sesLimit, {
-                expires: 30
-              });
+              case 34:
+                if (_this.authdate.authKeyLimit > dayjs__WEBPACK_IMPORTED_MODULE_2___default()()) {
+                  console.log("認証キーの期限が切れています。"); // TODO:フラッシュメッセージで「認証キーの期限が切れています。再度発行し直して下さい。」と出力する。
+                  // Cookies.remove('auth_email');
+                  // Cookies.remove('auth_key');
+                  // Cookies.remove('auth_key_limit');
+                  // this.$emit("CangePassReminderComponents", PASSWORD_REMINDER_STR.REMINDER_MODE);
+                }
 
-              _this.$store.dispatch("users/setLoginUserInfo"); // マイページへ飛ばすパスを書く。
+              case 35:
+                _context.next = 38;
+                break;
 
+              case 37:
+                if (!_this.authdate.authKey) {// TODO:フラッシュメッセージで「認証キーが存在しません。再度発行し直して下さい。」と出力する。
+                  // Cookies.remove('auth_email');
+                  // Cookies.remove('auth_key');
+                  // Cookies.remove('auth_key_limit');
+                  // this.$emit("CangePassReminderComponents", PASSWORD_REMINDER_STR.REMINDER_MODE);
+                }
 
-              _this.$router.push('/mypage');
-
-            case 27:
-              _context.next = 34;
-              break;
-
-            case 29:
-              _context.prev = 29;
-              _context.t0 = _context["catch"](3);
-              console.log("登録処理中に例外エラーが発生しました。");
-              _this.Validation.signUpCommonErrMsg = '接続に失敗しました。';
-              _this.passwordReminderResult.emailResult = false;
-
-            case 34:
-              _context.prev = 34;
-              // 必ず実行する処理の記述(try..catch..finally)
-              // https://www.javadrive.jp/start/exception/index3.html
-              // ローディング画面の終了
-              _this.isSubmitting = false;
-              _this.isSubmit = false;
-              return _context.finish(34);
-
-            case 38:
-            case "end":
-              return _context.stop();
+              case 38:
+              case "end":
+                return _context.stop();
+            }
           }
-        }
-      }, _callee, null, [[3, 29, 34, 38]]);
-    }))();
+        }, _callee, null, [[12, 23, 27, 32]]);
+      }))();
+    }
   }
 });
 
@@ -226,10 +246,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _utils_validate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/validate */ "./resources/js/components/passwordReminder/utils/validate.js");
-/* harmony import */ var _utils_passwordReminder_number_mappings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/passwordReminder-number-mappings */ "./resources/js/components/passwordReminder/utils/passwordReminder-number-mappings.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils_validate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/validate */ "./resources/js/components/passwordReminder/utils/validate.js");
+/* harmony import */ var _utils_passwordReminder_number_mappings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/passwordReminder-number-mappings */ "./resources/js/components/passwordReminder/utils/passwordReminder-number-mappings.js");
+/* harmony import */ var _utils_passwordReminder_str_mappings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils/passwordReminder-str-mappings */ "./resources/js/components/passwordReminder/utils/passwordReminder-str-mappings.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -267,6 +290,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -276,7 +301,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       },
       // エラーメッセージを保持
       Validation: {
-        passwordReminderEmailErrMsg: null
+        passwordReminderEmailErrMsg: null,
+        passwordReminderCommonErrMsg: null
       },
       // 各バリテーションの総合的な結果情報の管理
       // (上のValidation内の各プロパティ内にmsgがあるかどうかで判定してもいいけど今後TS導入予定なのでもしかすると
@@ -285,6 +311,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       passwordReminderResult: {
         emailResult: false
       },
+      passwordReminderResponseResult: null,
       //連続で登録処理をさせない用
       RegistUser: null,
       isSubmit: false,
@@ -297,126 +324,152 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var ResponseData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                //Emailのバリデーション
-                if (!_this.passwordReminderForm.email) {
-                  //空かどうかのバリテーション
-                  console.log("(PassReminder)メールアドレスの入力がありません");
-                  _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスを入力してください';
-                } else if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validEmail"])(_this.passwordReminderForm.email)) {
-                  // メールアドレスの形式確認
-                  console.log("(PassReminder)メールアドレスの形式が正しくありません");
-                  _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスの形式が正しくありません';
-                } else if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validHalfNumAlp"])(_this.passwordReminderForm.email)) {
-                  //半角英数字のバリテーション
-                  console.log("(PassReminder)メールアドレスを半角英数で入力してください");
-                  _this.Validation.passwordReminderEmailErrMsg = '半角英数で入力してください';
-                } else if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validMaxLen"])(_this.passwordReminderForm.email, _utils_passwordReminder_number_mappings__WEBPACK_IMPORTED_MODULE_3__["PASSREMINDER_NUM"].PASSREMINDER_EMAIL_MAXLEN)) {
-                  //最大文字数のバリテーション
-                  console.log("(PassReminder)メールアドレスを20文字以内にしてください");
-                  _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスは20文字以内にしてください';
-                } else if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validMinLen"])(_this.passwordReminderForm.email, _utils_passwordReminder_number_mappings__WEBPACK_IMPORTED_MODULE_3__["PASSREMINDER_NUM"].PASSREMINDER_EMAIL_MINLEN)) {
-                  //最小文字数のバリテーション
-                  console.log("(PassReminder)メールアドレスは4文字以上にしてください");
-                  _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスは4文字以上にしてください';
-                } // else if(await validEmailDup(this.passwordReminderForm.email)){
-                //   //メールアドレスが存在するかのバリテーション
-                //   console.log("(PassReminder)入力されたメールアドレスは登録されていません。");
-                //   this.Validation.passwordReminderEmailErrMsg = "入力されたメールアドレスは登録されていません"
-                // }
-                else {
-                    //バリテーションがOKな場合
-                    console.log("(PassReminder)メールアドレスのバリテーションOKです");
-                    _this.Validation.passwordReminderEmailErrMsg = "";
-                    _this.passwordReminderResult.emailResult = true;
-                  } // バリテーションが通っているかを確認。
+                if (_this.passwordReminderForm.email) {
+                  _context.next = 6;
+                  break;
+                }
 
+                //空かどうかのバリテーション
+                console.log("(PassReminder)メールアドレスの入力がありません");
+                _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスを入力してください';
+                return _context.abrupt("return", false);
 
+              case 6:
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validEmail"])(_this.passwordReminderForm.email)) {
+                  _context.next = 12;
+                  break;
+                }
+
+                // メールアドレスの形式確認
+                console.log("(PassReminder)メールアドレスの形式が正しくありません");
+                _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスの形式が正しくありません';
+                return _context.abrupt("return", false);
+
+              case 12:
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validHalfNumAlp"])(_this.passwordReminderForm.email)) {
+                  _context.next = 18;
+                  break;
+                }
+
+                //半角英数字のバリテーション
+                console.log("(PassReminder)メールアドレスを半角英数で入力してください");
+                _this.Validation.passwordReminderEmailErrMsg = '半角英数で入力してください';
+                return _context.abrupt("return", false);
+
+              case 18:
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validMaxLen"])(_this.passwordReminderForm.email, _utils_passwordReminder_number_mappings__WEBPACK_IMPORTED_MODULE_4__["PASSREMINDER_NUM"].PASSREMINDER_EMAIL_MAXLEN)) {
+                  _context.next = 24;
+                  break;
+                }
+
+                //最大文字数のバリテーション
+                console.log("(PassReminder)メールアドレスを20文字以内にしてください");
+                _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスは20文字以内にしてください';
+                return _context.abrupt("return", false);
+
+              case 24:
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validMinLen"])(_this.passwordReminderForm.email, _utils_passwordReminder_number_mappings__WEBPACK_IMPORTED_MODULE_4__["PASSREMINDER_NUM"].PASSREMINDER_EMAIL_MINLEN)) {
+                  _context.next = 30;
+                  break;
+                }
+
+                //最小文字数のバリテーション
+                console.log("(PassReminder)メールアドレスは4文字以上にしてください");
+                _this.Validation.passwordReminderEmailErrMsg = 'メールアドレスは4文字以上にしてください';
+                return _context.abrupt("return", false);
+
+              case 30:
+                _context.next = 32;
+                return !Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validEmailDup"])(_this.passwordReminderForm.email);
+
+              case 32:
+                if (!_context.sent) {
+                  _context.next = 38;
+                  break;
+                }
+
+                //メールアドレスが存在するかのバリテーション
+                console.log("(PassReminder)入力されたメールアドレスは登録されていません。");
+                _this.Validation.passwordReminderEmailErrMsg = "入力されたメールアドレスは登録されていません";
+                return _context.abrupt("return", false);
+
+              case 38:
+                //バリテーションがOKな場合
+                console.log("(PassReminder)メールアドレスのバリテーションOKです");
+                _this.Validation.passwordReminderEmailErrMsg = "";
+                _this.passwordReminderResult.emailResult = true;
+
+              case 41:
                 if (!(_this.passwordReminderResult.emailResult === true)) {
-                  _context.next = 31;
+                  _context.next = 65;
                   break;
                 }
 
                 console.log("パスワード変更用バリテーションOKです。");
-                _context.prev = 3;
+                _context.prev = 43;
                 _this.isSubmit = true;
-                _this.submitButton = '登録中です';
-
-                if (!(_this.passwordReminderResult.emailResult === false)) {
-                  _context.next = 14;
-                  break;
-                }
-
-                console.log("登録内容にエラーがありました。");
-                _this.Validation.PASSREMINDERCommonErrMsg = '登録内容にエラーがありました。';
-                _this.isSubmit = false;
-                _this.submitButton = "登録";
-                return _context.abrupt("return", false);
-
-              case 14:
-                if (!(_this.passwordReminderResult.emailResult === true)) {
-                  _context.next = 20;
-                  break;
-                }
-
-                // ロード画面実装処理
+                _this.submitButton = '登録中です'; // ロード画面実装処理
                 // this.$store.dispatch("app/setLoading");
+
                 console.log("パスワード変更処理に入りました。");
-                _context.next = 18;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/passwordReminder', _this.passwordReminderForm);
+                _context.next = 49;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/api/passwordReminder', _this.passwordReminderForm);
 
-              case 18:
-                _this.passwordReminderDate = _context.sent;
+              case 49:
+                ResponseData = _context.sent;
+                //直接代入させるとさせると色々と余計なものも保持する事になる為、分別用の定数を一度経由している。
+                _this.passwordReminderResponseResult = ResponseData.data[0];
 
-                if (_this.passwordReminderDate) {
-                  console.log("パスワード変更処理一部成功。");
-                  console.log(_this.passwordReminderDate);
-                } else if (_this.passwordReminderDate === false) {
-                  console.log("パスワード変更処理失敗。");
-                  console.log(_this.passwordReminderDate);
-                } // ==========
-                // console.log('レスポンス内容'.RegistUser);
-                // // ユーザー情報管理
-                // // Cookieにログイン時刻とIDと権限情報挿入。
-                // // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
-                // Cookies.set('user_id',this.RegistUser.data.id, {expires: 30});
-                // Cookies.set('roll',this.RegistUser.data.roll, {expires: 30});
-                // Cookies.set('login_date', Date.now(), {expires: 30});
-                // Cookies.set('login_limit',Date.now()+this.sesLimit, {expires: 30});
-                // this.$store.dispatch("users/setLoginUserInfo");
-                // // マイページへ飛ばすパスを書く。
-                // this.$router.push('/mypage')
+                if (_this.passwordReminderResponseResult) {
+                  console.log("認証トークンの発行成功。"); // 認証トークン関係は10分間のみ保持の想定
 
+                  js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('auth_email', _this.passwordReminderResponseResult.auth_email, {
+                    expires: 0.01
+                  });
+                  js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('auth_key', _this.passwordReminderResponseResult.auth_key, {
+                    expires: 0.01
+                  });
+                  js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('auth_key_limit', _this.passwordReminderResponseResult.auth_key_limit, {
+                    expires: 0.01
+                  });
 
-              case 20:
-                _context.next = 27;
+                  _this.$emit("CangePassReminderComponents", _utils_passwordReminder_str_mappings__WEBPACK_IMPORTED_MODULE_5__["PASSWORD_REMINDER_STR"].RECEIVE_MODE);
+                } else if (!_this.passwordReminderDate) {
+                  console.log("認証トークンの発行失敗。");
+                }
+
+                _context.next = 59;
                 break;
 
-              case 22:
-                _context.prev = 22;
-                _context.t0 = _context["catch"](3);
+              case 54:
+                _context.prev = 54;
+                _context.t0 = _context["catch"](43);
                 console.log("登録処理中に例外エラーが発生しました。");
+                console.log(_context.t0.message);
                 _this.Validation.PassReminderCommonErrMsg = '接続に失敗しました。';
-                _this.passwordReminderResult.emailResult = false;
 
-              case 27:
-                _context.prev = 27;
+              case 59:
+                _context.prev = 59;
                 // 必ず実行する処理の記述(try..catch..finally)
                 // https://www.javadrive.jp/start/exception/index3.html
                 // ローディング画面の終了
+                _this.passwordReminderResult.emailResult = false;
                 _this.isSubmitting = false;
                 _this.isSubmit = false;
-                return _context.finish(27);
+                _this.submitButton = "登録";
+                return _context.finish(59);
 
-              case 31:
+              case 65:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[3, 22, 27, 31]]);
+        }, _callee, null, [[43, 54, 59, 65]]);
       }))();
     }
   }
@@ -448,19 +501,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      ReminderCompMode: 'reminder'
-    };
-  },
   components: {
     Intro: _components_intro_Intro__WEBPACK_IMPORTED_MODULE_0__["default"],
     PasswordReminder: _components_passwordReminder_PasswordReminder__WEBPACK_IMPORTED_MODULE_1__["default"],
     PassRemindRecieve: _components_passwordReminder_PasswordReceive__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  data: function data() {
+    return {
+      // TODO:デフォルトだと'reminder'
+      ReminderCompMode: 'reminder'
+    };
   }
 });
 
@@ -618,103 +681,143 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return this.mode === "receive"
-    ? _c("section", { staticClass: "passwordRreceive" }, [
-        _c("div", { staticClass: "passwordRreceive__content" }, [
-          _c("h1", { staticClass: "passrePasswordReminder__title" }, [
-            _vm._v("Password Reminder")
+  return _c("section", { staticClass: "passwordRreceive" }, [
+    _c("div", { staticClass: "passwordRreceive__content" }, [
+      _c("h1", { staticClass: "passrePasswordReminder__title" }, [
+        _vm._v("Password Reminder")
+      ]),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.passwordReceive($event)
+            }
+          }
+        },
+        [
+          _c("p", [
+            _vm._v(
+              "ご指定のメールアドレスお送りした【パスワード再発行認証】メール内にある「認証キー」をご入力ください。"
+            )
+          ]),
+          _vm._v(" "),
+          _c("p", [_vm._v("＊認証キーの有効時間は10分間となります。")]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v("＊認証画面から離れた場合再度認証メールを発行して頂きます。")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "area-msg" }),
+          _vm._v(" "),
+          _c("label", {}, [
+            _vm._v("\n          Email\n          "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.passwordReceiveForm.authEmail,
+                  expression: "passwordReceiveForm.authEmail"
+                }
+              ],
+              class: { errInput: _vm.passwordRreceiveErrMsg },
+              attrs: { type: "text", placeholder: "Email" },
+              domProps: { value: _vm.passwordReceiveForm.authEmail },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    _vm.passwordReceiveForm,
+                    "authEmail",
+                    $event.target.value
+                  )
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "area-msg" }),
+          _vm._v(" "),
+          _c("label", {}, [
+            _vm._v("\n          認証キー\n          "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.passwordReceiveForm.authenticationKey,
+                  expression: "passwordReceiveForm.authenticationKey"
+                }
+              ],
+              class: { errInput: _vm.passwordRreceiveErrMsg },
+              attrs: { type: "text", placeholder: "受信した認証キーを入力" },
+              domProps: { value: _vm.passwordReceiveForm.authenticationKey },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    _vm.passwordReceiveForm,
+                    "authenticationKey",
+                    $event.target.value
+                  )
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("label", {}, [
+            _vm._v("\n          変更後パスワード\n          "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.passwordReceiveForm.changedPassword,
+                  expression: "passwordReceiveForm.changedPassword"
+                }
+              ],
+              class: { errInput: _vm.passwordRreceiveErrMsg },
+              attrs: { type: "text", placeholder: "変更後パスワードを入力" },
+              domProps: { value: _vm.passwordReceiveForm.changedPassword },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    _vm.passwordReceiveForm,
+                    "changedPassword",
+                    $event.target.value
+                  )
+                }
+              }
+            })
           ]),
           _vm._v(" "),
           _c(
-            "form",
-            {
-              staticClass: "form",
-              attrs: { method: "post" },
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.passwordReceive($event)
-                }
-              }
-            },
+            "button",
+            { staticClass: "btn btn-mid", attrs: { type: "submit" } },
             [
-              _c("p", [
-                _vm._v(
-                  "ご指定のメールアドレスお送りした【パスワード再発行認証】メール内にある「認証キー」をご入力ください。"
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "area-msg" }),
-              _vm._v(" "),
-              _vm._m(0),
-              _vm._v(" "),
-              _c("div", { staticClass: "area-msg" }),
-              _vm._v(" "),
-              _vm._m(1),
-              _vm._v(" "),
-              _vm._m(2),
-              _vm._v(" "),
-              _c("div", { staticClass: "area-msg" }),
-              _vm._v(" "),
-              _vm._m(3)
+              _vm._v(
+                "\n          " +
+                  _vm._s(_vm.passwordReceiveButton) +
+                  "\n        "
+              )
             ]
           )
-        ])
-      ])
-    : _vm._e()
+        ]
+      )
+    ])
+  ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", {}, [
-      _vm._v("\n        Email\n        "),
-      _c("input", { attrs: { type: "text", name: "email", value: "" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", {}, [
-      _vm._v("\n        認証キー\n        "),
-      _c("input", {
-        attrs: {
-          type: "text",
-          name: "token",
-          placeholder: "受信した認証キーを入力"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", {}, [
-      _vm._v("\n        変更後パスワード\n        "),
-      _c("input", {
-        attrs: {
-          type: "text",
-          name: "password",
-          placeholder: "変更後パスワードを入力"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "btn-container" }, [
-      _c("input", {
-        staticClass: "btn btn-mid",
-        attrs: { type: "submit", name: "send", value: "再発行する" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -836,7 +939,15 @@ var render = function() {
     [
       _c("Intro"),
       _vm._v(" "),
-      this.ReminderCompMode === "reminder" ? _c("PasswordReminder") : _vm._e(),
+      this.ReminderCompMode === "reminder"
+        ? _c("PasswordReminder", {
+            on: {
+              CangePassReminderComponents: function($event) {
+                _vm.ReminderCompMode = $event
+              }
+            }
+          })
+        : _vm._e(),
       _vm._v(" "),
       this.ReminderCompMode === "receive" ? _c("PassRemindRecieve") : _vm._e()
     ],
@@ -1117,6 +1228,24 @@ var PASSREMINDER_NUM = {
 
 /***/ }),
 
+/***/ "./resources/js/components/passwordReminder/utils/passwordReminder-str-mappings.js":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/passwordReminder/utils/passwordReminder-str-mappings.js ***!
+  \*****************************************************************************************/
+/*! exports provided: PASSWORD_REMINDER_STR */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PASSWORD_REMINDER_STR", function() { return PASSWORD_REMINDER_STR; });
+// TODO: utilファイルをまとめる。
+var PASSWORD_REMINDER_STR = {
+  REMINDER_MODE: 'reminder',
+  RECEIVE_MODE: 'receive'
+};
+
+/***/ }),
+
 /***/ "./resources/js/components/passwordReminder/utils/validate.js":
 /*!********************************************************************!*\
   !*** ./resources/js/components/passwordReminder/utils/validate.js ***!
@@ -1214,6 +1343,7 @@ function _validEmailDup() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            // request内でのキー割り振り
             query = {
               'email': email
             };
@@ -1222,11 +1352,12 @@ function _validEmailDup() {
 
           case 3:
             response = _context.sent;
-            //TODO:重複が合った場合のresponseの内容の確認
+            // TODO:重複が合った場合のresponseの内容の確認
             // 重複が合った場合はtrueを返す処理を書く。
             console.dir(response);
+            return _context.abrupt("return", response);
 
-          case 5:
+          case 6:
           case "end":
             return _context.stop();
         }

@@ -27,12 +27,13 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 import axios from "axios";
 import {validHalfNumAlp,validEmail,validEmailDup,validMaxLen,validMinLen} from "./utils/validate"
 import {PASSREMINDER_NUM} from "./utils/passwordReminder-number-mappings"
+import {PASSWORD_REMINDER_STR} from "./utils/passwordReminder-str-mappings"
 
 export default {
-
   data () {
     return {
       // 入力情報を保持
@@ -42,6 +43,7 @@ export default {
       // エラーメッセージを保持
       Validation:{
         passwordReminderEmailErrMsg: null,
+        passwordReminderCommonErrMsg: null
       },
       // 各バリテーションの総合的な結果情報の管理
       // (上のValidation内の各プロパティ内にmsgがあるかどうかで判定してもいいけど今後TS導入予定なのでもしかすると
@@ -50,11 +52,12 @@ export default {
       passwordReminderResult: {
         emailResult: false
       },
+      passwordReminderResponseResult: null,
       //連続で登録処理をさせない用
       RegistUser: null,
       isSubmit: false,
       passwordReminderButton: '変更画面へ移動する',
-      passwordReminderDate: null
+      passwordReminderDate: null,
     }
   },
   methods: {
@@ -64,33 +67,33 @@ export default {
         //空かどうかのバリテーション
         console.log("(PassReminder)メールアドレスの入力がありません");
         this.Validation.passwordReminderEmailErrMsg = 'メールアドレスを入力してください'
-
+        return false
       } else if(!validEmail(this.passwordReminderForm.email)){
         // メールアドレスの形式確認
         console.log("(PassReminder)メールアドレスの形式が正しくありません");
         this.Validation.passwordReminderEmailErrMsg = 'メールアドレスの形式が正しくありません'
-
+        return false
       } else if(validHalfNumAlp(this.passwordReminderForm.email)){
         //半角英数字のバリテーション
         console.log("(PassReminder)メールアドレスを半角英数で入力してください");
         this.Validation.passwordReminderEmailErrMsg = '半角英数で入力してください'
-
+        return false
       } else if(validMaxLen(this.passwordReminderForm.email,PASSREMINDER_NUM.PASSREMINDER_EMAIL_MAXLEN)){
         //最大文字数のバリテーション
         console.log("(PassReminder)メールアドレスを20文字以内にしてください");
         this.Validation.passwordReminderEmailErrMsg = 'メールアドレスは20文字以内にしてください'
-
+        return false
       } else if(validMinLen(this.passwordReminderForm.email,PASSREMINDER_NUM.PASSREMINDER_EMAIL_MINLEN)){
         //最小文字数のバリテーション
         console.log("(PassReminder)メールアドレスは4文字以上にしてください");
         this.Validation.passwordReminderEmailErrMsg = 'メールアドレスは4文字以上にしてください'
-      }
-      // else if(await validEmailDup(this.passwordReminderForm.email)){
-      //   //メールアドレスが存在するかのバリテーション
-      //   console.log("(PassReminder)入力されたメールアドレスは登録されていません。");
-      //   this.Validation.passwordReminderEmailErrMsg = "入力されたメールアドレスは登録されていません"
-      // }
-      else {
+        return false
+      } else if(await !validEmailDup(this.passwordReminderForm.email)){
+        //メールアドレスが存在するかのバリテーション
+        console.log("(PassReminder)入力されたメールアドレスは登録されていません。");
+        this.Validation.passwordReminderEmailErrMsg = "入力されたメールアドレスは登録されていません"
+        return false
+      } else {
         //バリテーションがOKな場合
         console.log("(PassReminder)メールアドレスのバリテーションOKです");
         this.Validation.passwordReminderEmailErrMsg = ""
@@ -99,59 +102,43 @@ export default {
 
       // バリテーションが通っているかを確認。
       if(this.passwordReminderResult.emailResult === true){
-        console.log("パスワード変更用バリテーションOKです。");
-          try {
-            this.isSubmit = true;
-            this.submitButton = '登録中です';
-            if (this.passwordReminderResult.emailResult === false){
-              console.log("登録内容にエラーがありました。");
-              this.Validation.PASSREMINDERCommonErrMsg = '登録内容にエラーがありました。'
-              this.isSubmit = false;
-              this.submitButton = "登録";
-              return false;
-            }else if(this.passwordReminderResult.emailResult === true){
-              // ロード画面実装処理
-              // this.$store.dispatch("app/setLoading");
-              console.log("パスワード変更処理に入りました。");
-              this.passwordReminderDate = await axios.post('/api/passwordReminder',this.passwordReminderForm);
+      console.log("パスワード変更用バリテーションOKです。");
+        try {
+          this.isSubmit = true;
+          this.submitButton = '登録中です';
+          // ロード画面実装処理
+          // this.$store.dispatch("app/setLoading");
+          console.log("パスワード変更処理に入りました。");
+          const ResponseData = await axios.post('/api/passwordReminder',this.passwordReminderForm);
+          //直接代入させるとさせると色々と余計なものも保持する事になる為、分別用の定数を一度経由している。
+          this.passwordReminderResponseResult = ResponseData.data[0];
 
-              if(this.passwordReminderDate){
-                console.log("パスワード変更処理一部成功。");
-                console.log(this.passwordReminderDate);
-              }else if(this.passwordReminderDate === false){
-                console.log("パスワード変更処理失敗。");
-                console.log(this.passwordReminderDate);
-              }
-
-              // ==========
-              // console.log('レスポンス内容'.RegistUser);
-              // // ユーザー情報管理
-              // // Cookieにログイン時刻とIDと権限情報挿入。
-              // // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
-              // Cookies.set('user_id',this.RegistUser.data.id, {expires: 30});
-              // Cookies.set('roll',this.RegistUser.data.roll, {expires: 30});
-              // Cookies.set('login_date', Date.now(), {expires: 30});
-              // Cookies.set('login_limit',Date.now()+this.sesLimit, {expires: 30});
-              // this.$store.dispatch("users/setLoginUserInfo");
-              // // マイページへ飛ばすパスを書く。
-              // this.$router.push('/mypage')
-
-            }
+          if(this.passwordReminderResponseResult){
+            console.log("認証トークンの発行成功。");
+            // 認証トークン関係は10分間のみ保持の想定
+            Cookies.set('auth_email',this.passwordReminderResponseResult.auth_email, {expires: 0.01});
+            Cookies.set('auth_key',this.passwordReminderResponseResult.auth_key, {expires: 0.01});
+            Cookies.set('auth_key_limit',this.passwordReminderResponseResult.auth_key_limit, {expires: 0.01});
+            this.$emit("CangePassReminderComponents", PASSWORD_REMINDER_STR.RECEIVE_MODE);
+          }else if(!this.passwordReminderDate){
+            console.log("認証トークンの発行失敗。");
+          }
           } catch (e) {
             console.log("登録処理中に例外エラーが発生しました。");
+            console.log(e.message);
             this.Validation.PassReminderCommonErrMsg = '接続に失敗しました。'
-            this.passwordReminderResult.emailResult = false;
           } finally {
-            // 必ず実行する処理の記述(try..catch..finally)
-            // https://www.javadrive.jp/start/exception/index3.html
-            // ローディング画面の終了
-            this.isSubmitting = false;
-            this.isSubmit = false;
-          }
+          // 必ず実行する処理の記述(try..catch..finally)
+          // https://www.javadrive.jp/start/exception/index3.html
+          // ローディング画面の終了
+          this.passwordReminderResult.emailResult = false;
+          this.isSubmitting = false;
+          this.isSubmit = false;
+          this.submitButton = "登録";
         }
-
       }
     }
+  }
 }
 </script>
 

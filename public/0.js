@@ -81,6 +81,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 // @は基本半角で
 // 外部のjsファイルの読み込みが上手くいかないのでマジックナンバーやメソッドの切り分けは一旦保留。
 // TODO:読み込み元ファイルを一度読み込み先ファイルと同階層に移さないとパスが読み込まれないエラーを解決する。
@@ -130,41 +135,64 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                // そのうちこれを参考に書き直す
-                // JavaScriptでconsole.log()を使うのはやめよう
-                // https://qiita.com/baby-degu/items/1046763163bc794870ea
-                // ぶっちゃけログインのバリテーションっているのかな〜？
-                //Emailのバリデーション
-                if (!_this.loginForm.email) {
-                  // 空かどうかのバリテーション
-                  console.log("(login)メールアドレスの入力がありません");
-                  _this.Validation.loginEmailErrMsg = "メールアドレスの入力がありません";
-                } else if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validEmail"])(_this.loginForm.loginEmail)) {
-                  // メールアドレスの形式確認
-                  console.log("(login)メールアドレスの形式が正しくありません");
-                  _this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください";
-                } else if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validHalfNumAlp"])(_this.loginForm.loginEmail)) {
-                  // 半角英数字のバリテーション
-                  console.log("(login)メールアドレスを半角英数で入力してください");
-                  _this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください";
-                } //TODO:ここの部分は呼び出し先ファイル関係に問題があるためか、未定義のプロパティ:lengthを呼び出している
-                //というエラーが出ている
-                //  else if(validMinLen(this.loginForm.loginEmail,LOGIN_NUM.LOGIN_EMAIL_MAXLEN)){
-                //   //最大文字数のバリテーション
-                //   console.log("(login)メールアドレスを15文字以内にしてください");
-                //   this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
-                // } else if(validMinLen(this.loginForm.loginEmail,LOGIN_NUM.LOGIN_EMAIL_MINLEN)){
-                //   //最小文字数のバリテーション
-                //   console.log("(login)メールアドレスを15文字以内にしてください");
-                //   this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
-                // }
-                else {
-                    //バリテーションOKな場合
-                    console.log("(login)EmailバリテーションOKです");
-                    _this.loginFormResult.emailResult = true;
-                  } //パスワードのバリデーション
+                if (_this.loginForm.email) {
+                  _context.next = 5;
+                  break;
+                }
 
+                // 空かどうかのバリテーション
+                console.log("(login)メールアドレスの入力がありません");
+                _this.Validation.loginEmailErrMsg = "メールアドレスの入力がありません";
+                _context.next = 24;
+                break;
 
+              case 5:
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validEmail"])(_this.loginForm.email)) {
+                  _context.next = 10;
+                  break;
+                }
+
+                // メールアドレスの形式確認
+                console.log("(login)メールアドレスの形式が正しくありません");
+                _this.Validation.loginEmailErrMsg = "メールアドレスの形式が正しくありません";
+                _context.next = 24;
+                break;
+
+              case 10:
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validHalfNumAlp"])(_this.loginForm.email)) {
+                  _context.next = 15;
+                  break;
+                }
+
+                // 半角英数字のバリテーション
+                console.log("(login)メールアドレスを半角英数で入力してください");
+                _this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください";
+                _context.next = 24;
+                break;
+
+              case 15:
+                _context.next = 17;
+                return !Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validEmailDup"])(_this.loginForm.email);
+
+              case 17:
+                if (!_context.sent) {
+                  _context.next = 22;
+                  break;
+                }
+
+                //メールアドレスが存在するか確認のバリテーション
+                console.log("(login)メールアドレスが登録されていません");
+                _this.Validation.loginEmailErrMsg = "メールアドレスが登録されていません";
+                _context.next = 24;
+                break;
+
+              case 22:
+                //バリテーションOKな場合
+                console.log("(login)EmailバリテーションOKです");
+                _this.loginFormResult.emailResult = true;
+
+              case 24:
+                //パスワードのバリデーション
                 if (!_this.loginForm.password) {
                   //空文字チェック
                   console.log("(login)パスワードを入力してください");
@@ -194,17 +222,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
 
                 if (!(_this.loginFormResult.emailResult === true && _this.loginFormResult.passwordResult === true)) {
-                  _context.next = 47;
+                  _context.next = 70;
                   break;
                 }
 
                 console.log("ログイン用バリテーションOKです。");
-                _context.prev = 4;
+                _context.prev = 27;
                 _this.isSubmit = true;
                 _this.submitButton = '登録中です';
 
                 if (!(_this.loginFormResult.emailResult === false && _this.loginFormResult.passwordResult === false)) {
-                  _context.next = 15;
+                  _context.next = 38;
                   break;
                 }
 
@@ -214,24 +242,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.submitButton = "登録";
                 return _context.abrupt("return", false);
 
-              case 15:
+              case 38:
                 if (!(_this.loginFormResult.emailResult === true && _this.loginFormResult.passwordResult === true)) {
-                  _context.next = 35;
+                  _context.next = 58;
                   break;
                 }
 
                 // ロード画面実装処理
                 // this.$store.dispatch("app/setLoading");
                 console.log("ログイン処理に入りました。");
-                _context.next = 19;
+                _context.next = 42;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/api/login', _this.loginForm);
 
-              case 19:
+              case 42:
                 _this.LoginUser = _context.sent;
                 console.log(_this.LoginUser);
 
                 if (!_this.LoginUser) {
-                  _context.next = 32;
+                  _context.next = 55;
                   break;
                 }
 
@@ -257,45 +285,45 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
 
-                _context.next = 35;
+                _context.next = 58;
                 break;
 
-              case 32:
-                if (!(_this.LoginUser === false)) {
-                  _context.next = 35;
+              case 55:
+                if (_this.LoginUser) {
+                  _context.next = 58;
                   break;
                 }
 
                 _this.Validation.loginCommonErrMsg = 'メールアドレスまたはパスワードが違います';
                 return _context.abrupt("return", false);
 
-              case 35:
-                _context.next = 43;
+              case 58:
+                _context.next = 66;
                 break;
 
-              case 37:
-                _context.prev = 37;
-                _context.t0 = _context["catch"](4);
+              case 60:
+                _context.prev = 60;
+                _context.t0 = _context["catch"](27);
                 console.log("ログイン処理中に例外的エラーが発生しました。");
                 _this.Validation.loginCommonErrMsg = '接続に失敗しました。';
                 _this.loginFormResult.emailResult = false;
                 _this.loginFormResult.passwordResult = false;
 
-              case 43:
-                _context.prev = 43;
+              case 66:
+                _context.prev = 66;
                 // 必ず実行する処理の記述(try..catch..finally)
                 // https://www.javadrive.jp/start/exception/index3.html
                 // ローディング画面の終了
                 _this.isSubmitting = false;
                 _this.isSubmit = false;
-                return _context.finish(43);
+                return _context.finish(66);
 
-              case 47:
+              case 70:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[4, 37, 43, 47]]);
+        }, _callee, null, [[27, 60, 66, 70]]);
       }))();
     }
   }
@@ -402,6 +430,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 // @は基本半角で
 // 外部のjsファイルの読み込みが上手くいかないのでマジックナンバーやメソッドの切り分けは一旦保留。
 // TODO:読み込み元ファイルを一度読み込み先ファイルと同階層に移さないとパスが読み込まれないエラーを解決する。
+// jQueryでクッキーを操作するjs.cookie.js（jquery.cookie.js）の使い方まとめ
+// https://illbenet.jp/view/howto-js_cookie_js
+// https://yukimonkey.com/data/cookie/
 
 
 
@@ -455,40 +486,89 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                //Emailのバリデーション
-                if (!_this.signUpForm.email) {
-                  //空かどうかのバリテーション
-                  console.log("(signUp)メールアドレスの入力がありません");
-                  _this.Validation.signUpEmailErrMsg = 'メールアドレスを入力してください';
-                } else if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validEmail"])(_this.signUpForm.email)) {
-                  // メールアドレスの形式確認
-                  console.log("(signUp)メールアドレスの形式が正しくありません");
-                  _this.Validation.signUpEmailErrMsg = 'メールアドレスの形式が正しくありません';
-                } else if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validHalfNumAlp"])(_this.signUpForm.email)) {
-                  //半角英数字のバリテーション
-                  console.log("(signUp)メールアドレスを半角英数で入力してください");
-                  _this.Validation.signUpEmailErrMsg = '半角英数で入力してください';
-                } else if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validMaxLen"])(_this.signUpForm.email, _utils_signUp_number_mappings__WEBPACK_IMPORTED_MODULE_4__["SIGNUP_NUM"].SIGNUP_EMAIL_MAXLEN)) {
-                  //最大文字数のバリテーション
-                  console.log("(signUp)メールアドレスを20文字以内にしてください");
-                  _this.Validation.signUpEmailErrMsg = 'メールアドレスは20文字以内にしてください';
-                } else if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validMinLen"])(_this.signUpForm.email, _utils_signUp_number_mappings__WEBPACK_IMPORTED_MODULE_4__["SIGNUP_NUM"].SIGNUP_EMAIL_MINLEN)) {
-                  //最小文字数のバリテーション
-                  console.log("(signUp)メールアドレスは4文字以上にしてください");
-                  _this.Validation.signUpEmailErrMsg = 'メールアドレスは4文字以上にしてください';
-                } // else if(await validEmailDup(this.signUpForm.email)){
-                //   //重複確認のバリテーション
-                //   console.log("(signUp)メールアドレスが重複しています");
-                //   this.Validation.signUpEmailErrMsg = "メールアドレスが重複しています"
-                // }
-                else {
-                    //バリテーションがOKな場合
-                    console.log("(signUp)メールアドレスのバリテーションOKです");
-                    _this.Validation.signUpEmailErrMsg = "";
-                    _this.signUpFormResult.emailResult = true;
-                  } //パスワードのバリデーション
+                if (_this.signUpForm.email) {
+                  _context.next = 5;
+                  break;
+                }
 
+                //空かどうかのバリテーション
+                console.log("(signUp)メールアドレスの入力がありません");
+                _this.Validation.signUpEmailErrMsg = 'メールアドレスを入力してください';
+                _context.next = 35;
+                break;
 
+              case 5:
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validEmail"])(_this.signUpForm.email)) {
+                  _context.next = 10;
+                  break;
+                }
+
+                // メールアドレスの形式確認
+                console.log("(signUp)メールアドレスの形式が正しくありません");
+                _this.Validation.signUpEmailErrMsg = 'メールアドレスの形式が正しくありません';
+                _context.next = 35;
+                break;
+
+              case 10:
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validHalfNumAlp"])(_this.signUpForm.email)) {
+                  _context.next = 15;
+                  break;
+                }
+
+                //半角英数字のバリテーション
+                console.log("(signUp)メールアドレスを半角英数で入力してください");
+                _this.Validation.signUpEmailErrMsg = '半角英数で入力してください';
+                _context.next = 35;
+                break;
+
+              case 15:
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validMaxLen"])(_this.signUpForm.email, _utils_signUp_number_mappings__WEBPACK_IMPORTED_MODULE_4__["SIGNUP_NUM"].SIGNUP_EMAIL_MAXLEN)) {
+                  _context.next = 20;
+                  break;
+                }
+
+                //最大文字数のバリテーション
+                console.log("(signUp)メールアドレスを20文字以内にしてください");
+                _this.Validation.signUpEmailErrMsg = 'メールアドレスは20文字以内にしてください';
+                _context.next = 35;
+                break;
+
+              case 20:
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validMinLen"])(_this.signUpForm.email, _utils_signUp_number_mappings__WEBPACK_IMPORTED_MODULE_4__["SIGNUP_NUM"].SIGNUP_EMAIL_MINLEN)) {
+                  _context.next = 25;
+                  break;
+                }
+
+                //最小文字数のバリテーション
+                console.log("(signUp)メールアドレスは4文字以上にしてください");
+                _this.Validation.signUpEmailErrMsg = 'メールアドレスは4文字以上にしてください';
+                _context.next = 35;
+                break;
+
+              case 25:
+                _context.next = 27;
+                return Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validEmailDup"])(_this.signUpForm.email);
+
+              case 27:
+                if (!_context.sent) {
+                  _context.next = 32;
+                  break;
+                }
+
+                //重複確認のバリテーション
+                console.log("(signUp)メールアドレスが重複しています");
+                _this.Validation.signUpEmailErrMsg = "メールアドレスが重複しています";
+                _context.next = 35;
+                break;
+
+              case 32:
+                //バリテーションがOKな場合
+                console.log("(signUp)メールアドレスのバリテーションOKです");
+                _this.Validation.signUpEmailErrMsg = "";
+                _this.signUpFormResult.emailResult = true;
+
+              case 35:
+                //パスワードのバリデーション
                 if (!_this.signUpForm.password) {
                   //空文字チェック
                   console.log("(signUp)パスワードを入力してください");
@@ -517,38 +597,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
                 if (!(_this.signUpFormResult.emailResult === true && _this.signUpFormResult.passwordResult === true)) {
-                  _context.next = 35;
+                  _context.next = 69;
                   break;
                 }
 
                 console.log("ユーザー登録用バリテーションOKです。");
-                _context.prev = 4;
+                _context.prev = 38;
                 _this.isSubmit = true;
                 _this.submitButton = '登録中です'; // ロード画面実装処理
                 // this.$store.dispatch("app/setLoading");
 
                 _this.Validation = "";
                 console.log("登録処理に入りました。");
-                _context.next = 11;
+                _context.next = 45;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/api/register', _this.signUpForm);
 
-              case 11:
+              case 45:
                 _this.RegistUser = _context.sent;
                 console.log('レスポンス内容'.RegistUser); //ユーザー情報管理
                 // Cookieにログイン時刻とIDと権限情報挿入。
                 // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
 
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('user_id', _this.RegistUser.data.id, {
-                  expires: 30
+                  expires: 30,
+                  secure: true
                 });
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('roll', _this.RegistUser.data.roll, {
-                  expires: 30
+                  expires: 30,
+                  secure: true
                 });
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_date', Date.now(), {
-                  expires: 30
+                  expires: 30,
+                  secure: true
                 });
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_limit', Date.now() + _this.sesLimit, {
-                  expires: 30
+                  expires: 30,
+                  secure: true
                 }); //バリテーション結果の初期化
 
                 _this.signUpForm = "";
@@ -561,32 +645,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
 
-                _context.next = 31;
+                _context.next = 65;
                 break;
 
-              case 25:
-                _context.prev = 25;
-                _context.t0 = _context["catch"](4);
+              case 59:
+                _context.prev = 59;
+                _context.t0 = _context["catch"](38);
                 console.log("登録処理中に例外エラーが発生しました。");
                 _this.Validation.signUpCommonErrMsg = '接続に失敗しました。';
                 _this.signUpFormResult.emailResult = false;
                 _this.signUpFormResult.passwordResult = false;
 
-              case 31:
-                _context.prev = 31;
+              case 65:
+                _context.prev = 65;
                 // 必ず実行する処理の記述(try..catch..finally)
                 // https://www.javadrive.jp/start/exception/index3.html
                 // ローディング画面の終了
                 _this.isSubmitting = false;
                 _this.isSubmit = false;
-                return _context.finish(31);
+                return _context.finish(65);
 
-              case 35:
+              case 69:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[4, 25, 31, 35]]);
+        }, _callee, null, [[38, 59, 65, 69]]);
       }))();
     }
   }
@@ -1646,6 +1730,7 @@ function _validEmailDup() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            // request内でのキー割り振り
             query = {
               'email': email
             };
@@ -1654,11 +1739,12 @@ function _validEmailDup() {
 
           case 3:
             response = _context.sent;
-            //TODO:重複が合った場合のresponseの内容の確認
+            // TODO:重複が合った場合のresponseの内容の確認
             // 重複が合った場合はtrueを返す処理を書く。
             console.dir(response);
+            return _context.abrupt("return", response);
 
-          case 5:
+          case 6:
           case "end":
             return _context.stop();
         }

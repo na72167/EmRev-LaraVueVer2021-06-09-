@@ -14,6 +14,18 @@ class validController extends Controller
         Log::debug('Emailの重複検索を行います。');
         Log::debug('Requestの内容'.$request['email']);
 
+        $result = User::where('email',$request['email'])->first();
+
+        Log::debug('検索結果'.$result);
+
+        if($result){
+            Log::debug('メールアドレスが一致しました。');
+            return response()->json(true,201);
+        }else if(!$result){
+            Log::debug('メールアドレスが一致しませんでした。');
+            return false;
+        }
+
         // Laravelのクエリビルダーの戻り値を勘違いしていた件について
         // https://qiita.com/HorikawaTokiya/items/679b5d3b1cfe1c3b2f71
 
@@ -23,14 +35,10 @@ class validController extends Controller
         // Laravel Response 大全 2020
         // https://qiita.com/nunulk/items/3e12fc7a40cf002aa983
 
-        // $result = User::where('email',$request['email'])->first();
-
         // DBの接続自体が上手く言っているのか分からないので先にDB接続の方を行う
         // $request->validate([
         //     'email' => 'unique:users',
         // ]);
-
-        Log::debug('テスト'.$request);
 
         // return response()->json($result);
 

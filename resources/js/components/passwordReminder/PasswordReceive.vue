@@ -1,126 +1,137 @@
 <template>
 
-  <section class="passwordRreceive"  v-if="this.mode === 'receive'">
+  <section class="passwordRreceive">
     <div class="passwordRreceive__content">
       <h1 class="passrePasswordReminder__title">Password Reminder</h1>
-      <form method="post" class="form" @submit.prevent="passwordReceive">
-        <p>ご指定のメールアドレスお送りした【パスワード再発行認証】メール内にある「認証キー」をご入力ください。</p>
-        <div class="area-msg">
-        </div>
-        <label class="">
-          Email
-          <input type="text" name="email" value="">
-        </label>
-        <div class="area-msg">
-        </div>
-        <label class="">
-          認証キー
-          <input type="text" name="token" placeholder="受信した認証キーを入力">
-        </label>
-        <label class="">
-          変更後パスワード
-          <input type="text" name="password" placeholder="変更後パスワードを入力">
-        </label>
-        <div class="area-msg">
-        </div>
-        <div class="btn-container">
-          <input type="submit" class="btn btn-mid" name="send" value="再発行する">
-        </div>
-      </form>
+      <form @submit.prevent="passwordReceive">
+          <p>ご指定のメールアドレスお送りした【パスワード再発行認証】メール内にある「認証キー」をご入力ください。</p>
+          <p>＊認証キーの有効時間は10分間となります。</p>
+          <p>＊認証画面から離れた場合再度認証メールを発行して頂きます。</p>
+          <div class="area-msg">
+          </div>
+          <label class="">
+            Email
+            <input type="text" :class="{ errInput: passwordRreceiveErrMsg }" placeholder="Email" v-model="passwordReceiveForm.authEmail">
+          </label>
+          <div class="area-msg">
+          </div>
+          <label class="">
+            認証キー
+            <input type="text" :class="{ errInput: passwordRreceiveErrMsg }" placeholder="受信した認証キーを入力" v-model="passwordReceiveForm.authenticationKey">
+          </label>
+          <label class="">
+            変更後パスワード
+            <input type="text" :class="{ errInput: passwordRreceiveErrMsg }" placeholder="変更後パスワードを入力" v-model="passwordReceiveForm.changedPassword">
+          </label>
+          <button type="submit" class="btn btn-mid">
+            {{ passwordReceiveButton }}
+          </button>
+        </form>
     </div>
   </section>
 
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import Dayjs from "dayjs";
+import axios from "axios";
+import {PASSWORD_REMINDER_STR} from "./utils/passwordReminder-str-mappings"
 
 export default {
-  props: {
-    mode: {
-      type: String,
+  data () {
+    return {
+      // 入力情報を保持
+      passwordReceiveForm: {
+        authEmail: null,
+        authenticationKey: null,
+        changedPassword: null
+      },
+      authdate:{
+        authEmail: null,
+        authKey: null,
+        authKeyLimit: null
+      },
+      passwordReceiveResponseResult: null,
+      passwordReceiveResult: null,
+      passwordRreceiveErrMsg: null,
+      passwordReceiveButton: "再発行する",
     }
   },
-  async passwordReminder(){
-    //Emailのバリデーション
-    if (!this.passwordReminderForm.email) {
-      //空かどうかのバリテーション
-      console.log("(signUp)メールアドレスの入力がありません");
-      this.Validation.passwordReminderEmailErrMsg = 'メールアドレスを入力してください'
+  methods: {
+    async passwordReceive(){
+      //認証周りの情報をCookieから取得
+      this.authdate.authEmail = Cookies.get('auth_email');
+      this.authdate.authKey = Cookies.get('auth_key');
+      this.authdate.authKeyLimit = Cookies.get('auth_key_limit');
+      console.log(this.authdate);
 
-    } else if(!validEmail(this.passwordReminderForm.email)){
-      // メールアドレスの形式確認
-      console.log("(signUp)メールアドレスの形式が正しくありません");
-      this.Validation.passwordReminderEmailErrMsg = 'メールアドレスの形式が正しくありません'
+    if(this.authdate.authKey){
+      console.log("認証キーが確認できました。");
+      if(this.authdate.authKeyLimit < Dayjs()){
+        console.log("認証キー期限内です。");
 
-    } else if(validHalfNumAlp(this.passwordReminderForm.email)){
-      //半角英数字のバリテーション
-      console.log("(signUp)メールアドレスを半角英数で入力してください");
-      this.Validation.passwordReminderEmailErrMsg = '半角英数で入力してください'
+        if(!this.passwordReceiveForm.authEmail === this.authdate.authEmail){
+          // 変更対象のメールアドレスと
+          console.log("(passwordReceive)認証キーを発行したメールアドレスと一致しません");
+          this.passwordReceiveErrMsg = "認証キーを発行したメールアドレスと一致しません"
+          return false
+        }
 
-    } else if(validMaxLen(this.passwordReminderForm.email,SIGNUP_NUM.SIGNUP_EMAIL_MAXLEN)){
-      //最大文字数のバリテーション
-      console.log("(signUp)メールアドレスを20文字以内にしてください");
-      this.Validation.passwordReminderEmailErrMsg = 'メールアドレスは20文字以内にしてください'
-
-    } else if(validMinLen(this.passwordReminderForm.email,SIGNUP_NUM.SIGNUP_EMAIL_MINLEN)){
-      //最小文字数のバリテーション
-      console.log("(signUp)メールアドレスは4文字以上にしてください");
-      this.Validation.passwordReminderEmailErrMsg = 'メールアドレスは4文字以上にしてください'
-    }
-    // else if(await validEmailDup(this.passwordReminderForm.email)){
-    //   //重複確認のバリテーション
-    //   console.log("(signUp)メールアドレスが重複しています");
-    //   this.Validation.passwordReminderEmailErrMsg = "メールアドレスが重複しています"
-    // }
-    else {
-      //バリテーションがOKな場合
-      console.log("(signUp)メールアドレスのバリテーションOKです");
-      this.Validation.passwordReminderEmailErrMsg = ""
-      this.passwordReminderResult.emailResult = true;
-    }
-
-    // バリテーションが通っているかを確認。
-    if(this.passwordReminderResult.emailResult === true){
-      console.log("ユーザー登録用バリテーションOKです。");
         try {
           this.isSubmit = true;
-          this.submitButton = '登録中です';
-          if (this.passwordReminderResult.emailResult === false){
-            console.log("登録内容にエラーがありました。");
-            this.Validation.signUpCommonErrMsg = '登録内容にエラーがありました。'
-            this.isSubmit = false;
-            this.submitButton = "登録";
-            return false;
-          }else if(this.passwordReminderResult.emailResult === true){å
-            // ロード画面実装処理
-            // this.$store.dispatch("app/setLoading");
-            console.log("登録処理に入りました。");
-            this.RegistUser = await axios.post('/api/register',this.passwordReminderForm);
-            console.log('レスポンス内容'.RegistUser);
-            //ユーザー情報管理
-            // Cookieにログイン時刻とIDと権限情報挿入。
-            // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
-            Cookies.set('user_id',this.RegistUser.data.id, {expires: 30});
-            Cookies.set('roll',this.RegistUser.data.roll, {expires: 30});
-            Cookies.set('login_date', Date.now(), {expires: 30});
-            Cookies.set('login_limit',Date.now()+this.sesLimit, {expires: 30});
-            this.$store.dispatch("users/setLoginUserInfo");
-            // マイページへ飛ばすパスを書く。
-            this.$router.push('/mypage')
+          this.submitButton = '再発行中です';
+          // ロード画面実装処理 passwordRreceiveErrMsg
+          // this.$store.dispatch("app/setLoading");
+          console.log("変更処理に入りました。");
+          this.passwordReceiveResponseResult = await axios.post('/api/passwordReceive',this.passwordReceiveForm);
+          console.log(this.passwordReceiveResponseResult);
+
+          if(this.passwordReceiveResponseResult){
+            console.log("認証トークンの発行成功。");
+            // 認証トークン関係は10分間のみ保持の想定
+            Cookies.remove('auth_email');
+            Cookies.remove('auth_key');
+            Cookies.remove('auth_key_limit');
+            // TODO:フラッシュメッセージで「パスワード変更に成功しました。」と表示させる。
+            this.$router.push(`/mypage/${Cookies.get('user_id')}`);
+          }else if(this.passwordReceiveResponseResult === false){
+            console.log("変更に失敗しました。再度認証キーの変更からお願いします。");
+            Cookies.remove('auth_email');
+            Cookies.remove('auth_key');
+            Cookies.remove('auth_key_limit');
+            // TODO:フラッシュメッセージで「変更に失敗しました。再度認証キーの発行からお願いします。」と表示させる。
+            this.$emit("CangePassReminderComponents", PASSWORD_REMINDER_STR.REMINDER_MODE);
           }
         } catch (e) {
           console.log("登録処理中に例外エラーが発生しました。");
-          this.Validation.signUpCommonErrMsg = '接続に失敗しました。'
-          this.passwordReminderResult.emailResult = false;
+          this.signUpCommonErrMsg = '接続に失敗しました。'
         } finally {
           // 必ず実行する処理の記述(try..catch..finally)
           // https://www.javadrive.jp/start/exception/index3.html
           // ローディング画面の終了
           this.isSubmitting = false;
           this.isSubmit = false;
+          this.submitButton = "再発行する";
         }
+
+        }else if(this.authdate.authKeyLimit > Dayjs()){
+          console.log("認証キーの期限が切れています。");
+          // TODO:フラッシュメッセージで「認証キーの期限が切れています。再度発行し直して下さい。」と出力する。
+          // Cookies.remove('auth_email');
+          // Cookies.remove('auth_key');
+          // Cookies.remove('auth_key_limit');
+          // this.$emit("CangePassReminderComponents", PASSWORD_REMINDER_STR.REMINDER_MODE);
+        }
+      } else if (!this.authdate.authKey){
+        // TODO:フラッシュメッセージで「認証キーが存在しません。再度発行し直して下さい。」と出力する。
+        // Cookies.remove('auth_email');
+        // Cookies.remove('auth_key');
+        // Cookies.remove('auth_key_limit');
+        // this.$emit("CangePassReminderComponents", PASSWORD_REMINDER_STR.REMINDER_MODE);
       }
     }
+  }
 }
 </script>
 

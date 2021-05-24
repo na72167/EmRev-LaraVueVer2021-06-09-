@@ -1,4 +1,9 @@
 <template>
+
+    <!-- TODO:認証周りのセキュリティ関係があまりよく分かっていないのでこれを参考に書き変えなどを行ってみる。
+    SPAのログイン認証のベストプラクティスがわからなかったのでわりと網羅的に研究してみた〜JWT or Session どっち？〜
+    https://qiita.com/Hiro-mi/items/18e00060a0f8654f49d6-->
+
     <!-- ログイン関係 -->
     <div class="login js-login-style hidden">
 
@@ -111,20 +116,24 @@ export default {
         console.log("(login)メールアドレスの入力がありません");
         this.Validation.loginEmailErrMsg = "メールアドレスの入力がありません"
 
-      } else if(validEmail(this.loginForm.loginEmail)){
+      } else if(!validEmail(this.loginForm.email)){
         // メールアドレスの形式確認
         console.log("(login)メールアドレスの形式が正しくありません");
+        this.Validation.loginEmailErrMsg = "メールアドレスの形式が正しくありません"
+
+      } else if(validHalfNumAlp(this.loginForm.email)){
+        // 半角英数字のバリテーション
+        console.log("(login)メールアドレスを半角英数で入力してください");
         this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください"
 
-      } else if(!validHalfNumAlp(this.loginForm.loginEmail)){
-      // 半角英数字のバリテーション
-      console.log("(login)メールアドレスを半角英数で入力してください");
-      this.Validation.loginEmailErrMsg = "メールアドレスを半角英数で入力してください"
-
+      } else if(await !validEmailDup(this.loginForm.email)){
+        //メールアドレスが存在するか確認のバリテーション
+        console.log("(login)メールアドレスが登録されていません");
+        this.Validation.loginEmailErrMsg = "メールアドレスが登録されていません"
       }
       //TODO:ここの部分は呼び出し先ファイル関係に問題があるためか、未定義のプロパティ:lengthを呼び出している
       //というエラーが出ている
-      //  else if(validMinLen(this.loginForm.loginEmail,LOGIN_NUM.LOGIN_EMAIL_MAXLEN)){
+      // else if(validMinLen(this.loginForm.loginEmail,LOGIN_NUM.LOGIN_EMAIL_MAXLEN)){
       //   //最大文字数のバリテーション
       //   console.log("(login)メールアドレスを15文字以内にしてください");
       //   this.Validation.loginEmailErrMsg = "メールアドレスは15文字以内にしてください"
@@ -204,7 +213,7 @@ export default {
               this.loginFormResult.passwordResult = false;
               // マイページへ飛ばすパスを書く。
               this.$router.push(`/mypage/${Cookies.get('user_id')}`);
-            }else if(this.LoginUser === false){
+            }else if(!this.LoginUser){
               this.Validation.loginCommonErrMsg = 'メールアドレスまたはパスワードが違います';
               return false;
             }
@@ -214,7 +223,7 @@ export default {
           this.Validation.loginCommonErrMsg = '接続に失敗しました。'
           this.loginFormResult.emailResult = false;
           this.loginFormResult.passwordResult = false;
-        }  finally {
+        } finally {
           // 必ず実行する処理の記述(try..catch..finally)
           // https://www.javadrive.jp/start/exception/index3.html
           // ローディング画面の終了
