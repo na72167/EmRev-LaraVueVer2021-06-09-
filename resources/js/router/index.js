@@ -37,6 +37,19 @@ const routes = [
     name: 'PasswordReminder',
     component: () =>
       import ('../views/PasswordReminder'),
+  },
+  {
+    path: '/ContributorRegistration',
+    name: 'ContributorRegistration',
+    component: () =>
+      import ('../views/ContributorRegistration'),
+  }
+  ,
+  {
+    path: '/ApplyCompany',
+    name: 'ApplyCompany',
+    component: () =>
+      import ('../views/ApplyCompany'),
   }
 ]
 

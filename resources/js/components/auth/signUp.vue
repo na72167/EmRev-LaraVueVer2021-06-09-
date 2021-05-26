@@ -2,6 +2,11 @@
 <!-- 会員登録関係 -->
     <div class="signup js-signup-style">
 
+    <!-- TODO:XSS対策する。
+    Vue.js で XSS を作り込まないために気を付けること
+    https://techblog.securesky-tech.com/entry/2018/08/01/110000
+    -->
+
     <!-- postメソッド・uriに/register持ちのルーティングにアクセス -->
     <form class="signup-formStyle" @submit.prevent="signUp">
 
@@ -156,7 +161,6 @@ export default {
             //重複確認のバリテーション
             console.log("(signUp)メールアドレスが重複しています");
             this.Validation.signUpEmailErrMsg = "メールアドレスが重複しています"
-
           } else {
             //バリテーションがOKな場合
             console.log("(signUp)メールアドレスのバリテーションOKです");
@@ -208,6 +212,7 @@ export default {
               // Cookieにログイン時刻とIDと権限情報挿入。
               // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
               Cookies.set('user_id',this.RegistUser.data.id, {expires: 30,secure: true});
+              Cookies.set('email',this.LoginUser.data.email, {expires: 7});
               Cookies.set('roll',this.RegistUser.data.roll, {expires: 30,secure: true});
               Cookies.set('login_date', Date.now(), {expires: 30,secure: true});
               Cookies.set('login_limit',Date.now()+this.sesLimit, {expires: 30,secure: true});
@@ -221,10 +226,10 @@ export default {
               // マイページへ飛ばすパスを書く。
               this.$router.push(`/mypage/${Cookies.get('user_id')}`)
             } catch (e) {
-                console.log("登録処理中に例外エラーが発生しました。");
-                this.Validation.signUpCommonErrMsg = '接続に失敗しました。'
-                this.signUpFormResult.emailResult = false;
-                this.signUpFormResult.passwordResult = false;
+              console.log("登録処理中に例外エラーが発生しました。");
+              this.Validation.signUpCommonErrMsg = '接続に失敗しました。'
+              this.signUpFormResult.emailResult = false;
+              this.signUpFormResult.passwordResult = false;
             } finally {
               // 必ず実行する処理の記述(try..catch..finally)
               // https://www.javadrive.jp/start/exception/index3.html
