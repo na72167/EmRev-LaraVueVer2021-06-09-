@@ -222,7 +222,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
 
                 if (!(_this.loginFormResult.emailResult === true && _this.loginFormResult.passwordResult === true)) {
-                  _context.next = 70;
+                  _context.next = 71;
                   break;
                 }
 
@@ -244,7 +244,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 38:
                 if (!(_this.loginFormResult.emailResult === true && _this.loginFormResult.passwordResult === true)) {
-                  _context.next = 58;
+                  _context.next = 59;
                   break;
                 }
 
@@ -259,13 +259,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 console.log(_this.LoginUser);
 
                 if (!_this.LoginUser) {
-                  _context.next = 55;
+                  _context.next = 56;
                   break;
                 }
 
                 // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
                 // 挿入したデータは1ヶ月で削除
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('user_id', _this.LoginUser.data.id, {
+                  expires: 7
+                });
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('email', _this.LoginUser.data.email, {
                   expires: 7
                 });
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('roll', _this.LoginUser.data.roll, {
@@ -285,45 +288,45 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
 
-                _context.next = 58;
+                _context.next = 59;
                 break;
 
-              case 55:
+              case 56:
                 if (_this.LoginUser) {
-                  _context.next = 58;
+                  _context.next = 59;
                   break;
                 }
 
                 _this.Validation.loginCommonErrMsg = 'メールアドレスまたはパスワードが違います';
                 return _context.abrupt("return", false);
 
-              case 58:
-                _context.next = 66;
+              case 59:
+                _context.next = 67;
                 break;
 
-              case 60:
-                _context.prev = 60;
+              case 61:
+                _context.prev = 61;
                 _context.t0 = _context["catch"](27);
                 console.log("ログイン処理中に例外的エラーが発生しました。");
                 _this.Validation.loginCommonErrMsg = '接続に失敗しました。';
                 _this.loginFormResult.emailResult = false;
                 _this.loginFormResult.passwordResult = false;
 
-              case 66:
-                _context.prev = 66;
+              case 67:
+                _context.prev = 67;
                 // 必ず実行する処理の記述(try..catch..finally)
                 // https://www.javadrive.jp/start/exception/index3.html
                 // ローディング画面の終了
                 _this.isSubmitting = false;
                 _this.isSubmit = false;
-                return _context.finish(66);
+                return _context.finish(67);
 
-              case 70:
+              case 71:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[27, 60, 66, 70]]);
+        }, _callee, null, [[27, 61, 67, 71]]);
       }))();
     }
   }
@@ -354,6 +357,11 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -597,7 +605,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
                 if (!(_this.signUpFormResult.emailResult === true && _this.signUpFormResult.passwordResult === true)) {
-                  _context.next = 69;
+                  _context.next = 70;
                   break;
                 }
 
@@ -622,6 +630,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   expires: 30,
                   secure: true
                 });
+                js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('email', _this.LoginUser.data.email, {
+                  expires: 7
+                });
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('roll', _this.RegistUser.data.roll, {
                   expires: 30,
                   secure: true
@@ -645,32 +656,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
 
-                _context.next = 65;
+                _context.next = 66;
                 break;
 
-              case 59:
-                _context.prev = 59;
+              case 60:
+                _context.prev = 60;
                 _context.t0 = _context["catch"](38);
                 console.log("登録処理中に例外エラーが発生しました。");
                 _this.Validation.signUpCommonErrMsg = '接続に失敗しました。';
                 _this.signUpFormResult.emailResult = false;
                 _this.signUpFormResult.passwordResult = false;
 
-              case 65:
-                _context.prev = 65;
+              case 66:
+                _context.prev = 66;
                 // 必ず実行する処理の記述(try..catch..finally)
                 // https://www.javadrive.jp/start/exception/index3.html
                 // ローディング画面の終了
                 _this.isSubmitting = false;
                 _this.isSubmit = false;
-                return _context.finish(65);
+                return _context.finish(66);
 
-              case 69:
+              case 70:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[38, 59, 65, 69]]);
+        }, _callee, null, [[38, 60, 66, 70]]);
       }))();
     }
   }

@@ -6,12 +6,16 @@
       <li class="menuAbout__itemWrap-item">お気に入りレビュー一覧</li>
       <li class="menuAbout__itemWrap-item">投稿されたレビュー一覧</li>
       <li class="menuAbout__itemWrap-item">閲覧履歴</li>
-      <li class="menuAbout__itemWrap-item">投稿者登録</li>
+      <router-link to="/ContributorRegistration" class="menuAbout__itemWrap-lineNone">
+        <li class="menuAbout__itemWrap-item" @click="switchMenuState">投稿者登録</li>
+      </router-link>
       <li class="menuAbout__itemWrap-item">登録社員一覧</li>
       <router-link to="/PasswordReminder" class="menuAbout__itemWrap-lineNone">
         <li class="menuAbout__itemWrap-item" @click="switchMenuState">パスワード変更</li>
       </router-link>
-      <li class="menuAbout__itemWrap-item">レビュー会社登録申請</li>
+      <router-link to="/ApplyCompany" class="menuAbout__itemWrap-lineNone">
+        <li class="menuAbout__itemWrap-item" @click="switchMenuState">レビュー会社登録申請</li>
+      </router-link>
       <li class="menuAbout__itemWrap-item">退会する</li>
     </ul>
   </nav>

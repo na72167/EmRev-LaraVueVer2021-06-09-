@@ -1,0 +1,156 @@
+
+=============会社情報申請申請画面=========
+
+会社名  company_name
+
+代表者  representative
+所在地  location
+
+業界  industry
+設立年度  year_of_establishment
+
+上場年  listed_year
+従業員数  number_of_employees
+
+平均年収  average_annual_income
+平均年齢  average_age
+
+会社名
+
+代表者
+所在地
+
+業界
+設立年度
+
+上場年
+従業員数
+
+平均年収
+平均年齢
+
+company_name
+
+representative
+location
+
+industry
+year_of_establishment
+
+listed_year
+number_of_employees
+
+average_annual_income
+average_age
+
+
+COMPANY_NAME
+REPRESENTATIVE
+LOCATION
+INDUSTRY
+YEAR_OF_ESTABLISHMENT
+LISTED_YEAR
+NUMBER_OF_EMPLOYEES
+AVERAGE_ANNUAL_INCOME
+AVERAGE_AGE
+
+
+companyName: null,
+
+email: null,
+password: null,
+passwordConfirmation: null,
+
+representative: null,
+location: null,
+
+industry: null,
+yearOfEstablishment: null,
+
+listedYear: null,
+numberOfEmployees: null,
+
+averageAnnualIncome: null,
+averageAge: null
+
+
+
+会社名  company_name
+
+代表者  representative
+所在地  location
+
+業界  industry
+設立年度  year_of_establishment
+
+上場年  listed_year
+従業員数  number_of_employees
+
+平均年収  average_annual_income
+平均年齢  average_age
+
+companyName: null,
+representative: null,
+location: null,
+
+industry: null,
+yearOfEstablishment: null,
+
+listedYear: null,
+
+numberOfEmployees: null,
+averageAnnualIncome: null,
+averageAge: null
+
+companyNameErrMsg: null,
+representativeErrMsg:null,
+locationErrMsg:null,
+
+industryErrMsg:null,
+yearOfEstablishmentErrMsg:null,
+listedYearErrMsg:null,
+numberOfEmployeesErrMsg:null,
+averageAnnualIncomeErrMsg:null,
+averageAgeErrMsg:null,
+applyCompanyCommonErrMsg: null
+
+会社名のバリテーション
+============================
+
+フォームの共通部分
+============================
+ :class="{ errInput: Validation.}" type="text" placeholder="" v-model=""
+
+ :class="{ errInput: Validation.}" v-model="" type="text" placeholder="入力してください"
+
+ <button type="submit" class="">
+    {{ # }}
+ </button>
+
+
+//未入力チェック
+//最大文字数チェック
+//最小文字数チェック
+//バリテーション部分
+
+//のバリデーション
+if (!this.) {
+    //空かどうかのバリテーション
+    console.log("()");
+    this.Validation.ErrMsg = ''
+    return false
+} else if(!valid(this.)){
+    // 確認
+    console.log("()が正しくありません");
+    this.Validation.ErrMsg = ''
+    return false
+} else {
+    //バリテーションがOKな場合
+    console.log("のバリテーションOKです");
+    //初期化
+    this.Validation.ErrMsg = ""
+    //結果の出力
+    this.Result.Result = true;
+}
+
+============================

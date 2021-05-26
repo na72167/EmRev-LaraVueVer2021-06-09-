@@ -76,8 +76,8 @@ class AuthApiTest extends TestCase
         $response->assertStatus(201);
     }
 
-    //上と同じく
-    public function test_パスワード変更()
+    // TODO:上と同じく
+    public function test_パスワード変更認証キー発行()
     {
         $response = $this->json('POST', route('passwordReminder'), [
             'email' => 'dummy@gmail.com'
@@ -85,4 +85,14 @@ class AuthApiTest extends TestCase
         $response->assertStatus(201);
     }
 
+    // TODO:上と同じく
+    public function test_パスワード変更()
+    {
+        $response = $this->json('POST', route('passwordReceive'), [
+            'email' => 'dummy@gmail.com',
+            // TODO:認証キーのテストデータの発行ができる関数を探す。
+            'auth_key' => '#'
+        ]);
+        $response->assertStatus(201);
+    }
 }

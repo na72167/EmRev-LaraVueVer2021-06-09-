@@ -2130,6 +2130,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4595,9 +4599,23 @@ var render = function() {
           _vm._v("閲覧履歴")
         ]),
         _vm._v(" "),
-        _c("li", { staticClass: "menuAbout__itemWrap-item" }, [
-          _vm._v("投稿者登録")
-        ]),
+        _c(
+          "router-link",
+          {
+            staticClass: "menuAbout__itemWrap-lineNone",
+            attrs: { to: "/ContributorRegistration" }
+          },
+          [
+            _c(
+              "li",
+              {
+                staticClass: "menuAbout__itemWrap-item",
+                on: { click: _vm.switchMenuState }
+              },
+              [_vm._v("投稿者登録")]
+            )
+          ]
+        ),
         _vm._v(" "),
         _c("li", { staticClass: "menuAbout__itemWrap-item" }, [
           _vm._v("登録社員一覧")
@@ -4621,9 +4639,23 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("li", { staticClass: "menuAbout__itemWrap-item" }, [
-          _vm._v("レビュー会社登録申請")
-        ]),
+        _c(
+          "router-link",
+          {
+            staticClass: "menuAbout__itemWrap-lineNone",
+            attrs: { to: "/ApplyCompany" }
+          },
+          [
+            _c(
+              "li",
+              {
+                staticClass: "menuAbout__itemWrap-item",
+                on: { click: _vm.switchMenuState }
+              },
+              [_vm._v("レビュー会社登録申請")]
+            )
+          ]
+        ),
         _vm._v(" "),
         _c("li", { staticClass: "menuAbout__itemWrap-item" }, [
           _vm._v("退会する")
@@ -21788,6 +21820,18 @@ var routes = [{
   name: 'PasswordReminder',
   component: function component() {
     return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ../views/PasswordReminder */ "./resources/js/views/PasswordReminder.vue"));
+  }
+}, {
+  path: '/ContributorRegistration',
+  name: 'ContributorRegistration',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ../views/ContributorRegistration */ "./resources/js/views/ContributorRegistration.vue"));
+  }
+}, {
+  path: '/ApplyCompany',
+  name: 'ApplyCompany',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ../views/ApplyCompany */ "./resources/js/views/ApplyCompany.vue"));
   }
 }]; // VueRouterインスタンスを作成する
 
