@@ -11,9 +11,13 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _utils_validate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/validate */ "./resources/js/components/applyCompany/utils/validate.js");
-/* harmony import */ var _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/applyCompany-mappings */ "./resources/js/components/applyCompany/utils/applyCompany-mappings.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _utils_validate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/validate */ "./resources/js/components/applyCompany/utils/validate.js");
+/* harmony import */ var _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils/applyCompany-mappings */ "./resources/js/components/applyCompany/utils/applyCompany-mappings.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -148,20 +152,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       // 入力情報を保持
       applyCompanyForm: {
-        companyName: null,
+        company_name: null,
         representative: null,
         location: null,
         industry: null,
-        yearOfEstablishment: null,
-        listedYear: null,
-        numberOfEmployees: null,
-        averageAnnualIncome: null,
-        averageAge: null
+        year_of_establishment: null,
+        listed_year: null,
+        number_of_employees: null,
+        average_annual_income: null,
+        average_age: null
       },
       // エラーメッセージを保持
       Validation: {
@@ -193,6 +199,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       },
       //連続で登録処理をさせない用
       isSubmit: false,
+      submitButton: '申請する',
       cancelButton: 'キャンセル',
       applyCompanyButton: '申請する',
       RegistUser: null,
@@ -209,7 +216,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (_this.applyCompanyForm.companyName) {
+                if (_this.applyCompanyForm.company_name) {
                   _context.next = 6;
                   break;
                 }
@@ -220,7 +227,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 6:
-                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validHalfNumAlp"])(_this.applyCompanyForm.companyName)) {
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validHalfNumAlp"])(_this.applyCompanyForm.company_name)) {
                   _context.next = 12;
                   break;
                 }
@@ -231,7 +238,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 12:
-                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validMaxLen"])(_this.applyCompanyForm.companyName, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_3__["APPLYCOMPANY_NUM"].COMPANYNAME_MAXLEN)) {
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validMaxLen"])(_this.applyCompanyForm.company_name, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_5__["APPLYCOMPANY_NUM"].COMPANYNAME_MAXLEN)) {
                   _context.next = 18;
                   break;
                 }
@@ -242,7 +249,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 18:
-                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validMinLen"])(_this.applyCompanyForm.companyName, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_3__["APPLYCOMPANY_NUM"].COMPANYNAME_MINLEN)) {
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validMinLen"])(_this.applyCompanyForm.company_name, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_5__["APPLYCOMPANY_NUM"].COMPANYNAME_MINLEN)) {
                   _context.next = 24;
                   break;
                 }
@@ -272,7 +279,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 33:
-                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validHalfNumAlp"])(_this.applyCompanyForm.representative)) {
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validHalfNumAlp"])(_this.applyCompanyForm.representative)) {
                   _context.next = 39;
                   break;
                 }
@@ -283,7 +290,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 39:
-                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validMaxLen"])(_this.applyCompanyForm.representative, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_3__["APPLYCOMPANY_NUM"].REPRESENTATIVE_MAXLEN)) {
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validMaxLen"])(_this.applyCompanyForm.representative, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_5__["APPLYCOMPANY_NUM"].REPRESENTATIVE_MAXLEN)) {
                   _context.next = 45;
                   break;
                 }
@@ -294,7 +301,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 45:
-                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validMinLen"])(_this.applyCompanyForm.representative, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_3__["APPLYCOMPANY_NUM"].REPRESENTATIVE_MINLEN)) {
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validMinLen"])(_this.applyCompanyForm.representative, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_5__["APPLYCOMPANY_NUM"].REPRESENTATIVE_MINLEN)) {
                   _context.next = 51;
                   break;
                 }
@@ -308,7 +315,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 //バリテーションがOKな場合
                 console.log("(applyCompany)代表者欄のバリテーションOKです"); //初期化
 
-                _this.Validation.representativeErrMsg = "代表者欄のバリテーションOKです"; //結果の出力
+                _this.Validation.representativeErrMsg = ""; //結果の出力
 
                 _this.applyCompanyFormResult.representativeResult = true;
 
@@ -324,7 +331,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 60:
-                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validHalfNumAlp"])(_this.applyCompanyForm.location)) {
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validHalfNumAlp"])(_this.applyCompanyForm.location)) {
                   _context.next = 66;
                   break;
                 }
@@ -335,7 +342,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 66:
-                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validMaxLen"])(_this.applyCompanyForm.location, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_3__["APPLYCOMPANY_NUM"].LOCATION_MAXLEN)) {
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validMaxLen"])(_this.applyCompanyForm.location, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_5__["APPLYCOMPANY_NUM"].LOCATION_MAXLEN)) {
                   _context.next = 72;
                   break;
                 }
@@ -346,7 +353,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 72:
-                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validMinLen"])(_this.applyCompanyForm.location, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_3__["APPLYCOMPANY_NUM"].LOCATION_MINLEN)) {
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validMinLen"])(_this.applyCompanyForm.location, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_5__["APPLYCOMPANY_NUM"].LOCATION_MINLEN)) {
                   _context.next = 78;
                   break;
                 }
@@ -376,7 +383,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 87:
-                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validHalfNumAlp"])(_this.applyCompanyForm.industry)) {
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validHalfNumAlp"])(_this.applyCompanyForm.industry)) {
                   _context.next = 93;
                   break;
                 }
@@ -387,7 +394,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 93:
-                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validMaxLen"])(_this.applyCompanyForm.industry, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_3__["APPLYCOMPANY_NUM"].INDUSTRY_MAXLEN)) {
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validMaxLen"])(_this.applyCompanyForm.industry, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_5__["APPLYCOMPANY_NUM"].INDUSTRY_MAXLEN)) {
                   _context.next = 99;
                   break;
                 }
@@ -398,7 +405,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 99:
-                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validMinLen"])(_this.applyCompanyForm.industry, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_3__["APPLYCOMPANY_NUM"].INDUSTRY_MINLEN)) {
+                if (!Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validMinLen"])(_this.applyCompanyForm.industry, _utils_applyCompany_mappings__WEBPACK_IMPORTED_MODULE_5__["APPLYCOMPANY_NUM"].INDUSTRY_MINLEN)) {
                   _context.next = 105;
                   break;
                 }
@@ -417,7 +424,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.applyCompanyFormResult.industryResult = true;
 
               case 108:
-                if (_this.applyCompanyForm.yearOfEstablishment) {
+                if (_this.applyCompanyForm.year_of_establishment) {
                   _context.next = 114;
                   break;
                 }
@@ -428,7 +435,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 114:
-                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validHalfNumAlp"])(_this.applyCompanyForm.yearOfEstablishment)) {
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validHalfNumAlp"])(_this.applyCompanyForm.year_of_establishment)) {
                   _context.next = 120;
                   break;
                 }
@@ -447,7 +454,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.applyCompanyFormResult.yearOfEstablishmentResult = true;
 
               case 123:
-                if (_this.applyCompanyForm.listedYear) {
+                if (_this.applyCompanyForm.listed_year) {
                   _context.next = 129;
                   break;
                 }
@@ -458,7 +465,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 129:
-                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validHalfNumAlp"])(_this.applyCompanyForm.listedYear)) {
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validHalfNumAlp"])(_this.applyCompanyForm.listed_year)) {
                   _context.next = 135;
                   break;
                 }
@@ -477,7 +484,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.applyCompanyFormResult.listedYearResult = true;
 
               case 138:
-                if (_this.applyCompanyForm.numberOfEmployees) {
+                if (_this.applyCompanyForm.number_of_employees) {
                   _context.next = 144;
                   break;
                 }
@@ -488,7 +495,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 144:
-                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validHalfNumAlp"])(_this.applyCompanyForm.numberOfEmployees)) {
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validHalfNumAlp"])(_this.applyCompanyForm.number_of_employees)) {
                   _context.next = 150;
                   break;
                 }
@@ -507,7 +514,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.applyCompanyFormResult.numberOfEmployeesResult = true;
 
               case 153:
-                if (_this.applyCompanyForm.averageAnnualIncome) {
+                if (_this.applyCompanyForm.average_annual_income) {
                   _context.next = 159;
                   break;
                 }
@@ -518,7 +525,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 159:
-                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validHalfNumAlp"])(_this.applyCompanyForm.averageAnnualIncome)) {
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validHalfNumAlp"])(_this.applyCompanyForm.average_annual_income)) {
                   _context.next = 165;
                   break;
                 }
@@ -537,7 +544,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.applyCompanyFormResult.averageAnnualIncomeResult = true;
 
               case 168:
-                if (_this.applyCompanyForm.averageAge) {
+                if (_this.applyCompanyForm.average_age) {
                   _context.next = 174;
                   break;
                 }
@@ -548,7 +555,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 174:
-                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_2__["validHalfNumAlp"])(_this.applyCompanyForm.averageAge)) {
+                if (Object(_utils_validate__WEBPACK_IMPORTED_MODULE_4__["validHalfNumAlp"])(_this.applyCompanyForm.average_age)) {
                   _context.next = 180;
                   break;
                 }
@@ -581,7 +588,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.Validation = "";
                 console.log("登録処理に入りました。");
                 _context.next = 192;
-                return axios.post('/api/applyCompany', _this.applyCompanyForm);
+                return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/api/applyCompany', _this.applyCompanyForm);
 
               case 192:
                 _this.applyCompanyRegist = _context.sent;
@@ -600,7 +607,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.submitButton = "登録"; // マイページへ飛ばすパスを書く。
                 // TODO:フラッシュメッセージで「会社登録申請をしました。」と表示させる。
 
-                _this.$router.push("/mypage/".concat(Cookies.get('user_id')));
+                _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
 
                 _context.next = 220;
                 break;
@@ -609,7 +616,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.prev = 207;
                 _context.t0 = _context["catch"](185);
                 console.log("登録処理中に例外エラーが発生しました。");
-                _this.Validation.applyCompanyCommonErrMsg = '接続に失敗しました。';
+                _this.Validation.applyCompanyCommonErrMsg = "接続に失敗しました。";
                 _this.applyCompanyFormResult.companyNameResult === false;
                 _this.applyCompanyFormResult.representativeResult === false;
                 _this.applyCompanyFormResult.locationResult === false;
@@ -797,13 +804,13 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.applyCompanyForm.companyName,
-                      expression: "applyCompanyForm.companyName"
+                      value: _vm.applyCompanyForm.company_name,
+                      expression: "applyCompanyForm.company_name"
                     }
                   ],
                   class: { errInput: _vm.Validation.companyNameErrMsg },
                   attrs: { type: "text", placeholder: "入力してください" },
-                  domProps: { value: _vm.applyCompanyForm.companyName },
+                  domProps: { value: _vm.applyCompanyForm.company_name },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
@@ -811,7 +818,7 @@ var render = function() {
                       }
                       _vm.$set(
                         _vm.applyCompanyForm,
-                        "companyName",
+                        "company_name",
                         $event.target.value
                       )
                     }
@@ -949,13 +956,15 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.applyCompanyForm.yearOfEstablishment,
-                      expression: "applyCompanyForm.yearOfEstablishment"
+                      value: _vm.applyCompanyForm.year_of_establishment,
+                      expression: "applyCompanyForm.year_of_establishment"
                     }
                   ],
                   class: { errInput: _vm.Validation.yearOfEstablishmentErrMsg },
                   attrs: { type: "text", placeholder: "入力してください" },
-                  domProps: { value: _vm.applyCompanyForm.yearOfEstablishment },
+                  domProps: {
+                    value: _vm.applyCompanyForm.year_of_establishment
+                  },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
@@ -963,7 +972,7 @@ var render = function() {
                       }
                       _vm.$set(
                         _vm.applyCompanyForm,
-                        "yearOfEstablishment",
+                        "year_of_establishment",
                         $event.target.value
                       )
                     }
@@ -988,13 +997,13 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.applyCompanyForm.listedYear,
-                      expression: "applyCompanyForm.listedYear"
+                      value: _vm.applyCompanyForm.listed_year,
+                      expression: "applyCompanyForm.listed_year"
                     }
                   ],
                   class: { errInput: _vm.Validation.listedYearErrMsg },
                   attrs: { type: "text", placeholder: "入力してください" },
-                  domProps: { value: _vm.applyCompanyForm.listedYear },
+                  domProps: { value: _vm.applyCompanyForm.listed_year },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
@@ -1002,7 +1011,7 @@ var render = function() {
                       }
                       _vm.$set(
                         _vm.applyCompanyForm,
-                        "listedYear",
+                        "listed_year",
                         $event.target.value
                       )
                     }
@@ -1025,13 +1034,13 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.applyCompanyForm.numberOfEmployees,
-                      expression: "applyCompanyForm.numberOfEmployees"
+                      value: _vm.applyCompanyForm.number_of_employees,
+                      expression: "applyCompanyForm.number_of_employees"
                     }
                   ],
                   class: { errInput: _vm.Validation.numberOfEmployeesErrMsg },
                   attrs: { type: "text", placeholder: "入力してください" },
-                  domProps: { value: _vm.applyCompanyForm.numberOfEmployees },
+                  domProps: { value: _vm.applyCompanyForm.number_of_employees },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
@@ -1039,7 +1048,7 @@ var render = function() {
                       }
                       _vm.$set(
                         _vm.applyCompanyForm,
-                        "numberOfEmployees",
+                        "number_of_employees",
                         $event.target.value
                       )
                     }
@@ -1064,13 +1073,15 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.applyCompanyForm.averageAnnualIncome,
-                      expression: "applyCompanyForm.averageAnnualIncome"
+                      value: _vm.applyCompanyForm.average_annual_income,
+                      expression: "applyCompanyForm.average_annual_income"
                     }
                   ],
                   class: { errInput: _vm.Validation.averageAnnualIncomeErrMsg },
                   attrs: { type: "text", placeholder: "入力してください" },
-                  domProps: { value: _vm.applyCompanyForm.averageAnnualIncome },
+                  domProps: {
+                    value: _vm.applyCompanyForm.average_annual_income
+                  },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
@@ -1078,7 +1089,7 @@ var render = function() {
                       }
                       _vm.$set(
                         _vm.applyCompanyForm,
-                        "averageAnnualIncome",
+                        "average_annual_income",
                         $event.target.value
                       )
                     }
@@ -1101,13 +1112,13 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.applyCompanyForm.averageAge,
-                      expression: "applyCompanyForm.averageAge"
+                      value: _vm.applyCompanyForm.average_age,
+                      expression: "applyCompanyForm.average_age"
                     }
                   ],
                   class: { errInput: _vm.Validation.averageAgeErrMsg },
                   attrs: { type: "text", placeholder: "入力してください" },
-                  domProps: { value: _vm.applyCompanyForm.averageAge },
+                  domProps: { value: _vm.applyCompanyForm.average_age },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
@@ -1115,7 +1126,7 @@ var render = function() {
                       }
                       _vm.$set(
                         _vm.applyCompanyForm,
-                        "averageAge",
+                        "average_age",
                         $event.target.value
                       )
                     }
@@ -1147,7 +1158,7 @@ var render = function() {
                 _c("button", { attrs: { type: "submit" } }, [
                   _vm._v(
                     "\n                " +
-                      _vm._s(_vm.applyCompanyButton) +
+                      _vm._s(_vm.submitButton) +
                       "\n            "
                   )
                 ])

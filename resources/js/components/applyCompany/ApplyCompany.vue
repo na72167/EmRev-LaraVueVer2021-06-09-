@@ -15,7 +15,7 @@
 
         <form @submit.prevent="applyCompany">
           <div class="revcrReviewCompanyRegistration__inputComp">会社名
-            <input :class="{ errInput: Validation.companyNameErrMsg}" v-model="applyCompanyForm.companyName" type="text" placeholder="入力してください">
+            <input :class="{ errInput: Validation.companyNameErrMsg}" v-model="applyCompanyForm.company_name" type="text" placeholder="入力してください">
             <div class="revcrReviewCompany-areaMsg">
               <span class="#">
                 <strong>{{ Validation.companyNameErrMsg }}</strong>
@@ -53,7 +53,7 @@
               </div>
             </div>
             <div class="">設立年度
-              <input :class="{ errInput: Validation.yearOfEstablishmentErrMsg}" v-model="applyCompanyForm.yearOfEstablishment" type="text" placeholder="入力してください">
+              <input :class="{ errInput: Validation.yearOfEstablishmentErrMsg}" v-model="applyCompanyForm.year_of_establishment" type="text" placeholder="入力してください">
               <div class="revcrReviewCompany-areaMsg">
                 <span class="#">
                   <strong>{{ Validation.yearOfEstablishmentErrMsg }}</strong>
@@ -64,7 +64,7 @@
 
           <div class="">
             <div class="">上場年
-              <input :class="{ errInput: Validation.listedYearErrMsg}" v-model="applyCompanyForm.listedYear" type="text" placeholder="入力してください">
+              <input :class="{ errInput: Validation.listedYearErrMsg}" v-model="applyCompanyForm.listed_year" type="text" placeholder="入力してください">
               <div class="revcrReviewCompany-areaMsg">
                 <span class="#">
                   <strong>{{ Validation.listedYearErrMsg }}</strong>
@@ -73,7 +73,7 @@
             </div>
 
             <div class="">従業員数
-              <input :class="{ errInput: Validation.numberOfEmployeesErrMsg}" v-model="applyCompanyForm.numberOfEmployees" type="text" placeholder="入力してください">
+              <input :class="{ errInput: Validation.numberOfEmployeesErrMsg}" v-model="applyCompanyForm.number_of_employees" type="text" placeholder="入力してください">
               <div class="revcrReviewCompany-areaMsg">
                 <span class="#">
                   <strong>{{ Validation.numberOfEmployeesErrMsg }}</strong>
@@ -84,7 +84,7 @@
 
           <div class="">
             <div class="">平均年収
-              <input :class="{ errInput: Validation.averageAnnualIncomeErrMsg}" v-model="applyCompanyForm.averageAnnualIncome" type="text" placeholder="入力してください">
+              <input :class="{ errInput: Validation.averageAnnualIncomeErrMsg}" v-model="applyCompanyForm.average_annual_income" type="text" placeholder="入力してください">
               <div class="revcrReviewCompany-areaMsg">
                 <span class="#">
                   <strong>{{ Validation.averageAnnualIncomeErrMs }}</strong>
@@ -93,7 +93,7 @@
             </div>
 
             <div class="">平均年齢
-              <input :class="{ errInput: Validation.averageAgeErrMsg}" v-model="applyCompanyForm.averageAge" type="text" placeholder="入力してください">
+              <input :class="{ errInput: Validation.averageAgeErrMsg}" v-model="applyCompanyForm.average_age" type="text" placeholder="入力してください">
               <div class="revcrReviewCompany-areaMsg">
                 <span class="#">
                   <strong>{{ Validation.averageAgeErrMsg }}</strong>
@@ -110,7 +110,7 @@
             </div>
             <div>
               <button type="submit" class="">
-                  {{ applyCompanyButton }}
+                  {{ submitButton }}
               </button>
             </div>
           </div>
@@ -124,6 +124,8 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import axios from "axios";
 import { mapState } from "vuex";
 import { validHalfNumAlp,validEmail,validEmailDup,validMaxLen,validMinLen } from "./utils/validate"
 import { APPLYCOMPANY_NUM } from "./utils/applyCompany-mappings"
@@ -133,15 +135,15 @@ export default {
     return {
       // 入力情報を保持
       applyCompanyForm: {
-        companyName: null,
+        company_name: null,
         representative: null,
         location: null,
         industry: null,
-        yearOfEstablishment: null,
-        listedYear: null,
-        numberOfEmployees: null,
-        averageAnnualIncome: null,
-        averageAge: null
+        year_of_establishment: null,
+        listed_year: null,
+        number_of_employees: null,
+        average_annual_income: null,
+        average_age: null
       },
       // エラーメッセージを保持
       Validation:{
@@ -173,6 +175,7 @@ export default {
       },
       //連続で登録処理をさせない用
       isSubmit: false,
+      submitButton: '申請する',
       cancelButton: 'キャンセル',
       applyCompanyButton: '申請する',
       RegistUser: null,
@@ -183,22 +186,22 @@ export default {
   methods: {
     async applyCompany(){
       //会社名
-      if (!this.applyCompanyForm.companyName) {
+      if (!this.applyCompanyForm.company_name) {
         //未入力チェック
         console.log("(applyCompany)会社名が未入力です");
         this.Validation.companyNameErrMsg = '会社名が未入力です'
         return false
-      } else if(!validHalfNumAlp(this.applyCompanyForm.companyName)){
+      } else if(!validHalfNumAlp(this.applyCompanyForm.company_name)){
         // 半角英数時チェック
         console.log("(applyCompany)会社名は半角英数字で入力してください");
         this.Validation.companyNameErrMsg = '会社名は半角英数字で入力してください'
         return false
-      } else if(validMaxLen(this.applyCompanyForm.companyName,APPLYCOMPANY_NUM.COMPANYNAME_MAXLEN)){
+      } else if(validMaxLen(this.applyCompanyForm.company_name,APPLYCOMPANY_NUM.COMPANYNAME_MAXLEN)){
         // 最大文字数チェック
         console.log("(applyCompany)会社名は20文字以内にしてください");
         this.Validation.companyNameErrMsg = '会社名は20文字以内にしてください'
         return false
-      } else if(validMinLen(this.applyCompanyForm.companyName,APPLYCOMPANY_NUM.COMPANYNAME_MINLEN)){
+      } else if(validMinLen(this.applyCompanyForm.company_name,APPLYCOMPANY_NUM.COMPANYNAME_MINLEN)){
         // 最小文字数チェック
         console.log("(applyCompany)会社名は最小4文字以内にしてください");
         this.Validation.companyNameErrMsg = '会社名は最小4文字以上にしてください'
@@ -237,7 +240,7 @@ export default {
         //バリテーションがOKな場合
         console.log("(applyCompany)代表者欄のバリテーションOKです");
         //初期化
-        this.Validation.representativeErrMsg = "代表者欄のバリテーションOKです"
+        this.Validation.representativeErrMsg = ""
         //結果の出力
         this.applyCompanyFormResult.representativeResult = true;
       }
@@ -303,12 +306,12 @@ export default {
       }
 
       //設立年度欄
-      if (!this.applyCompanyForm.yearOfEstablishment) {
+      if (!this.applyCompanyForm.year_of_establishment) {
         //未入力チェック
         console.log("(applyCompany)設立年度欄が未入力です");
         this.Validation.yearOfEstablishmentErrMsg = '設立年度欄が未入力です'
         return false
-      } else if(!validHalfNumAlp(this.applyCompanyForm.yearOfEstablishment)){
+      } else if(!validHalfNumAlp(this.applyCompanyForm.year_of_establishment)){
         // 半角英数時チェック
         console.log("(applyCompany)設立年度欄は半角英数字で入力してください");
         this.Validation.yearOfEstablishmentErrMsg = '設立年度欄は半角英数字で入力してください'
@@ -323,12 +326,12 @@ export default {
       }
 
       //上場年
-      if (!this.applyCompanyForm.listedYear) {
+      if (!this.applyCompanyForm.listed_year) {
         //未入力チェック
         console.log("(applyCompany)設立年度欄が未入力です");
         this.Validation.listedYearErrMsg = '設立年度欄が未入力です'
         return false
-      } else if(!validHalfNumAlp(this.applyCompanyForm.listedYear)){
+      } else if(!validHalfNumAlp(this.applyCompanyForm.listed_year)){
         // 半角英数時チェック
         console.log("(applyCompany)設立年度欄は半角英数字で入力してください");
         this.Validation.listedYearErrMsg = '設立年度欄は半角英数字で入力してください'
@@ -343,12 +346,12 @@ export default {
       }
 
       //従業員数欄
-      if (!this.applyCompanyForm.numberOfEmployees) {
+      if (!this.applyCompanyForm.number_of_employees) {
         //未入力チェック
         console.log("(applyCompany)従業員数欄が未入力です");
         this.Validation.numberOfEmployeesErrMsg = '従業員数欄が未入力です'
         return false
-      } else if(!validHalfNumAlp(this.applyCompanyForm.numberOfEmployees)){
+      } else if(!validHalfNumAlp(this.applyCompanyForm.number_of_employees)){
         // 半角英数時チェック
         console.log("(applyCompany)従業員数欄は半角英数字で入力してください");
         this.Validation.numberOfEmployeesErrMsg = '従業員数欄は半角英数字で入力してください'
@@ -363,12 +366,12 @@ export default {
       }
 
       //平均年収
-      if (!this.applyCompanyForm.averageAnnualIncome) {
+      if (!this.applyCompanyForm.average_annual_income) {
         //未入力チェック
         console.log("(applyCompany)平均年収欄が未入力です。");
         this.Validation.averageAnnualIncomeErrMsg = ''
         return false
-      } else if(!validHalfNumAlp(this.applyCompanyForm.averageAnnualIncome)){
+      } else if(!validHalfNumAlp(this.applyCompanyForm.average_annual_income)){
         // 半角英数時チェック
         console.log("(applyCompany)平均年収は半角英数字で入力してください");
         this.Validation.averageAnnualIncomeErrMsg = '平均年収欄が未入力です。'
@@ -383,12 +386,12 @@ export default {
       }
 
       //平均年齢
-      if (!this.applyCompanyForm.averageAge) {
+      if (!this.applyCompanyForm.average_age) {
         //未入力チェック
         console.log("(applyCompany)平均年齢欄が未入力です");
         this.Validation.averageAgeErrMsg = '平均年齢欄が未入力です'
         return false
-      } else if(!validHalfNumAlp(this.applyCompanyForm.averageAge)){
+      } else if(!validHalfNumAlp(this.applyCompanyForm.average_age)){
         // 半角英数時チェック
         console.log("(applyCompany)平均年齢は半角英数字で入力してください");
         this.Validation.averageAgeErrMsg = '平均年齢は半角英数字で入力してください'
@@ -445,7 +448,7 @@ export default {
         } catch (e) {
 
           console.log("登録処理中に例外エラーが発生しました。");
-          this.Validation.applyCompanyCommonErrMsg = '接続に失敗しました。'
+          this.Validation.applyCompanyCommonErrMsg = "接続に失敗しました。";
           this.applyCompanyFormResult.companyNameResult === false;
           this.applyCompanyFormResult.representativeResult === false;
           this.applyCompanyFormResult.locationResult === false;

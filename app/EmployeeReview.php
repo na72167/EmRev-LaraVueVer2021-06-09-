@@ -4,7 +4,7 @@ namespace App\Http\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Employee_review extends Model
+class EmployeeReview extends Model
 {
     protected $fillable = [
         'id', 'employee_id', 'review_company_id', 'joining_route', 'occupation', 'position',
@@ -14,12 +14,14 @@ class Employee_review extends Model
         'general_estimation_title', 'general_estimation', 'username', 'like_count', 'delete_flg', 'created_at', 'updated_at'
     ];
 
+    protected $table = 'EmployeeReviews';
+
     /**
      * リレーション関係 : employee_id -> Company_information.id
      */
     public function Employee_id()
     {
-        return $this->belongsTo('App\Http\Models\Contributor_prof', 'id');
+        return $this->belongsTo('App\Contributor_prof', 'id');
     }
 
     /**
@@ -27,7 +29,7 @@ class Employee_review extends Model
      */
     public function Review_company_id()
     {
-        return $this->belongsTo('App\Http\Models\Company_information', 'id');
+        return $this->belongsTo('App\CompanyInformation', 'id');
     }
 
 }

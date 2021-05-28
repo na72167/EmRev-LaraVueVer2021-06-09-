@@ -26,6 +26,8 @@ class User extends Authenticatable
         'deleted_at' //ソフトデリートフラグ
     ];
 
+    protected $table = 'Users';
+
     /**
      * リレーション関係 : id -> general_profs.user_id
      */

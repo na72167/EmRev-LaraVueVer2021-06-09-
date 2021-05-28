@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Models\Employee_review;
-use App\Http\Models\Company_information;
+use App\CompanyInformation;
 class postReviewController extends Controller
 {
     //レビュー検索用アクション
@@ -20,10 +20,10 @@ class postReviewController extends Controller
         }
 
         //検索フォームから送信された内容をRequestインスタンスから取得・where文内の条件に設定。
-        $EmployeeReview = Company_information::all()->where($request->company_name,$request->representative,$request->location,$request->industry,
+        $EmployeeReview = CompanyInformation::all()->where($request->company_name,$request->representative,$request->location,$request->industry,
         $request->year_of_establishment,$request->listed_year,$request->number_of_employees,$request->average_annual_income,$request->average_age,$request->number_of_reviews);
         //レビュー数のカウント
-        $ReviewCount = Company_information::all()->where($request->company_name,$request->representative,$request->location,$request->industry,
+        $ReviewCount = CompanyInformation::all()->where($request->company_name,$request->representative,$request->location,$request->industry,
         $request->year_of_establishment,$request->listed_year,$request->number_of_employees,$request->average_annual_income,$request->average_age,$request->number_of_reviews)->count();
 
         log::debug('検索結果が存在するか確認します。');
