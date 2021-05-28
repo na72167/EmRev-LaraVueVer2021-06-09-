@@ -181,9 +181,7 @@ export default {
     }
   },
   methods: {
-
     async applyCompany(){
-
       //会社名
       if (!this.applyCompanyForm.companyName) {
         //未入力チェック
@@ -417,15 +415,14 @@ export default {
         console.log("会社登録申請のバリテーションOKです。");
 
         try {
-
           this.isSubmit = true;
           this.submitButton = '登録中です';
           // ロード画面実装処理
           // this.$store.dispatch("app/setLoading");
           this.Validation = "";
           console.log("登録処理に入りました。");
-          // TODO:ここまだ
-          // this.applyCompanyRegist = await axios.post('/api/applyCompany',this.applyCompanyForm);
+
+          this.applyCompanyRegist = await axios.post('/api/applyCompany',this.applyCompanyForm);
           console.log('レスポンス内容'.applyCompanyRegist);
 
           //バリテーション結果の初期化
@@ -446,6 +443,7 @@ export default {
           this.$router.push(`/mypage/${Cookies.get('user_id')}`)
 
         } catch (e) {
+
           console.log("登録処理中に例外エラーが発生しました。");
           this.Validation.applyCompanyCommonErrMsg = '接続に失敗しました。'
           this.applyCompanyFormResult.companyNameResult === false;
@@ -457,15 +455,17 @@ export default {
           this.applyCompanyFormResult.numberOfEmployeesResult === false;
           this.applyCompanyFormResult.averageAnnualIncomeResult === false;
           this.applyCompanyFormResult.averageAgeResult === false;
+
         } finally {
+
           // 必ず実行する処理の記述(try..catch..finally)
           // https://www.javadrive.jp/start/exception/index3.html
           // ローディング画面の終了
           this.isSubmitting = false;
           this.isSubmit = false;
+
         }
       }
-
     }
   }
 }

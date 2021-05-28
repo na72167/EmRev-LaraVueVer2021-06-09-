@@ -50,12 +50,10 @@
               <!-- <input class="login-registerBtn" type="submit" value="ログイン"> -->
               <button class="login-registerBtnField"
                 type="submit"
-                :disabled="isSubmit"
-              >
+                :disabled="isSubmit">
               {{ loginButton }}
               </button>
             </div>
-
         </form>
 
     </div>

@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[5],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[9],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/applyCompany/ApplyCompany.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************************************************!*\
@@ -567,74 +567,62 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.applyCompanyFormResult.averageAgeResult = true;
 
               case 183:
-                if (!(_this.applyCompanyFormResult.companyNameResult === true && _this.applyCompanyFormResult.representativeResult === true && _this.applyCompanyFormResult.locationResult === true && _this.applyCompanyFormResult.industryResult === true && _this.applyCompanyFormResult.yearOfEstablishmentResult === true && _this.applyCompanyFormResult.listedYearResult === true && _this.applyCompanyFormResult.numberOfEmployeesResult === true && _this.applyCompanyFormResult.averageAnnualIncomeResult === true && _this.applyCompanyFormResult.averageAgeResult === true)) {
-                  _context.next = 224;
-                  break;
+                // バリテーションが通っているかを確認。
+                if (_this.applyCompanyFormResult.companyNameResult === true && _this.applyCompanyFormResult.representativeResult === true && _this.applyCompanyFormResult.locationResult === true && _this.applyCompanyFormResult.industryResult === true && _this.applyCompanyFormResult.yearOfEstablishmentResult === true && _this.applyCompanyFormResult.listedYearResult === true && _this.applyCompanyFormResult.numberOfEmployeesResult === true && _this.applyCompanyFormResult.averageAnnualIncomeResult === true && _this.applyCompanyFormResult.averageAgeResult === true) {
+                  console.log("会社登録申請のバリテーションOKです。");
+
+                  try {
+                    _this.isSubmit = true;
+                    _this.submitButton = '登録中です'; // ロード画面実装処理
+                    // this.$store.dispatch("app/setLoading");
+
+                    _this.Validation = "";
+                    console.log("登録処理に入りました。"); // TODO:ここまだ
+                    // this.applyCompanyRegist = await axios.post('/api/applyCompany',this.applyCompanyForm);
+
+                    console.log('レスポンス内容'.applyCompanyRegist); //バリテーション結果の初期化
+
+                    _this.applyCompanyFormResult.companyNameResult === false;
+                    _this.applyCompanyFormResult.representativeResult === false;
+                    _this.applyCompanyFormResult.locationResult === false;
+                    _this.applyCompanyFormResult.industryResult === false;
+                    _this.applyCompanyFormResult.yearOfEstablishmentResult === false;
+                    _this.applyCompanyFormResult.listedYearResult === false;
+                    _this.applyCompanyFormResult.numberOfEmployeesResult === false;
+                    _this.applyCompanyFormResult.averageAnnualIncomeResult === false;
+                    _this.applyCompanyFormResult.averageAgeResult === false; // this.$store.dispatch("users/setLoginUserInfo");
+
+                    _this.submitButton = "登録"; // マイページへ飛ばすパスを書く。
+                    // TODO:フラッシュメッセージで「会社登録申請をしました。」と表示させる。
+
+                    _this.$router.push("/mypage/".concat(Cookies.get('user_id')));
+                  } catch (e) {
+                    console.log("登録処理中に例外エラーが発生しました。");
+                    _this.Validation.applyCompanyCommonErrMsg = '接続に失敗しました。';
+                    _this.applyCompanyFormResult.companyNameResult === false;
+                    _this.applyCompanyFormResult.representativeResult === false;
+                    _this.applyCompanyFormResult.locationResult === false;
+                    _this.applyCompanyFormResult.industryResult === false;
+                    _this.applyCompanyFormResult.yearOfEstablishmentResult === false;
+                    _this.applyCompanyFormResult.listedYearResult === false;
+                    _this.applyCompanyFormResult.numberOfEmployeesResult === false;
+                    _this.applyCompanyFormResult.averageAnnualIncomeResult === false;
+                    _this.applyCompanyFormResult.averageAgeResult === false;
+                  } finally {
+                    // 必ず実行する処理の記述(try..catch..finally)
+                    // https://www.javadrive.jp/start/exception/index3.html
+                    // ローディング画面の終了
+                    _this.isSubmitting = false;
+                    _this.isSubmit = false;
+                  }
                 }
 
-                console.log("会社登録申請のバリテーションOKです。");
-                _context.prev = 185;
-                _this.isSubmit = true;
-                _this.submitButton = '登録中です'; // ロード画面実装処理
-                // this.$store.dispatch("app/setLoading");
-
-                _this.Validation = "";
-                console.log("登録処理に入りました。");
-                _context.next = 192;
-                return axios.post('/api/applyCompany', _this.applyCompanyForm);
-
-              case 192:
-                _this.applyCompanyRegist = _context.sent;
-                console.log('レスポンス内容'.applyCompanyRegist); //バリテーション結果の初期化
-
-                _this.applyCompanyFormResult.companyNameResult === false;
-                _this.applyCompanyFormResult.representativeResult === false;
-                _this.applyCompanyFormResult.locationResult === false;
-                _this.applyCompanyFormResult.industryResult === false;
-                _this.applyCompanyFormResult.yearOfEstablishmentResult === false;
-                _this.applyCompanyFormResult.listedYearResult === false;
-                _this.applyCompanyFormResult.numberOfEmployeesResult === false;
-                _this.applyCompanyFormResult.averageAnnualIncomeResult === false;
-                _this.applyCompanyFormResult.averageAgeResult === false; // this.$store.dispatch("users/setLoginUserInfo");
-
-                _this.submitButton = "登録"; // マイページへ飛ばすパスを書く。
-                // TODO:フラッシュメッセージで「会社登録申請をしました。」と表示させる。
-
-                _this.$router.push("/mypage/".concat(Cookies.get('user_id')));
-
-                _context.next = 220;
-                break;
-
-              case 207:
-                _context.prev = 207;
-                _context.t0 = _context["catch"](185);
-                console.log("登録処理中に例外エラーが発生しました。");
-                _this.Validation.applyCompanyCommonErrMsg = '接続に失敗しました。';
-                _this.applyCompanyFormResult.companyNameResult === false;
-                _this.applyCompanyFormResult.representativeResult === false;
-                _this.applyCompanyFormResult.locationResult === false;
-                _this.applyCompanyFormResult.industryResult === false;
-                _this.applyCompanyFormResult.yearOfEstablishmentResult === false;
-                _this.applyCompanyFormResult.listedYearResult === false;
-                _this.applyCompanyFormResult.numberOfEmployeesResult === false;
-                _this.applyCompanyFormResult.averageAnnualIncomeResult === false;
-                _this.applyCompanyFormResult.averageAgeResult === false;
-
-              case 220:
-                _context.prev = 220;
-                // 必ず実行する処理の記述(try..catch..finally)
-                // https://www.javadrive.jp/start/exception/index3.html
-                // ローディング画面の終了
-                _this.isSubmitting = false;
-                _this.isSubmit = false;
-                return _context.finish(220);
-
-              case 224:
+              case 184:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[185, 207, 220, 224]]);
+        }, _callee);
       }))();
     }
   }

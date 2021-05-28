@@ -7,6 +7,7 @@ import {AUTH_ROUTER_NUM} from "./utils/auth_route_num"
 // ゲスト判定かログイン判定か
 const AuthFilter = () => {
 
+  let isEmail = Cookies.get('email');
   let isPublic = Cookies.get('user_id');
   let isRoll = Cookies.get('roll');
   let isLoginData = Cookies.get('login_date');
@@ -27,11 +28,13 @@ const AuthFilter = () => {
       //TODO:フラッシュメッセージで「ログイン有効期限外です。再度ログインし直して下さい。」と表示。
       //TODO:配列で纏める。https://webrandum.net/js-cookie/
       //userStateの更新
+      Cookies.remove('email');
       Cookies.remove('user_id');
       Cookies.remove('roll');
       Cookies.remove('login_date');
       Cookies.remove('login_limit');
       store.dispatch("users/setLoginUserInfo");
+      router.push('/', () => {});
     }else if(isLoginLimit > Dayjs()){
       console.log('ログイン有効期限内です。');
       console.log(isLoginLimit);
