@@ -2134,9 +2134,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      loginUserId: js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')
+    };
+  },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapState"])({
     aboutMenuState: function aboutMenuState(state) {
       return state.app.aboutMenuState;
@@ -4583,9 +4592,23 @@ var render = function() {
       "ul",
       { staticClass: "menuAbout__itemWrap" },
       [
-        _c("li", { staticClass: "menuAbout__itemWrap-item" }, [
-          _vm._v("マイページ")
-        ]),
+        _c(
+          "router-link",
+          {
+            staticClass: "menuAbout__itemWrap-lineNone",
+            attrs: { to: "/mypage/" + this.loginUserId }
+          },
+          [
+            _c(
+              "li",
+              {
+                staticClass: "menuAbout__itemWrap-item",
+                on: { click: _vm.switchMenuState }
+              },
+              [_vm._v("マイページ")]
+            )
+          ]
+        ),
         _vm._v(" "),
         _c("li", { staticClass: "menuAbout__itemWrap-item" }, [
           _vm._v("お気に入りレビュー一覧")
@@ -21721,6 +21744,7 @@ __webpack_require__.r(__webpack_exports__);
  // ゲスト判定かログイン判定か
 
 var AuthFilter = function AuthFilter() {
+  var isEmail = js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('email');
   var isPublic = js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('user_id');
   var isRoll = js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('roll');
   var isLoginData = js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.get('login_date');
@@ -21740,11 +21764,13 @@ var AuthFilter = function AuthFilter() {
       //TODO:配列で纏める。https://webrandum.net/js-cookie/
       //userStateの更新
 
+      js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.remove('email');
       js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.remove('user_id');
       js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.remove('roll');
       js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.remove('login_date');
       js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.remove('login_limit');
       _store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch("users/setLoginUserInfo");
+      _router__WEBPACK_IMPORTED_MODULE_2__["default"].push('/', function () {});
     } else if (isLoginLimit > dayjs__WEBPACK_IMPORTED_MODULE_1___default()()) {
       console.log('ログイン有効期限内です。');
       console.log(isLoginLimit);
@@ -21780,10 +21806,15 @@ var AuthFilter = function AuthFilter() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _accessControl__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./accessControl */ "./resources/js/router/accessControl.js");
-/* harmony import */ var _accessControl__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_accessControl__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth */ "./resources/js/router/auth.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_roll_mapping__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/roll-mapping */ "./resources/js/router/utils/roll-mapping.js");
+/* harmony import */ var _accessControl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./accessControl */ "./resources/js/router/accessControl.js");
+/* harmony import */ var _accessControl__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_accessControl__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth */ "./resources/js/router/auth.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+
+
 
 
 
@@ -21794,7 +21825,9 @@ __webpack_require__.r(__webpack_exports__);
 // vue-routerチートシート
 // https://qiita.com/morrr/items/873ea25a806167c8d426
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]); // パスとコンポーネントのマッピング
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]); // パスとコンポーネントのマッピング
+// TODO:ルート内で分岐処理を書くのはなんか嫌なので各コンポーネント内で定義してみる。
+// https://qiita.com/SatohJohn/items/cd7067ac64d8e45da4dd
 
 var routes = [{
   // 対象のページが無い時は
@@ -21826,6 +21859,24 @@ var routes = [{
   name: 'ContributorRegistration',
   component: function component() {
     return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ../views/ContributorRegistration */ "./resources/js/views/ContributorRegistration.vue"));
+  },
+  beforeEnter: function beforeEnter(to, from, next) {
+    var loginUserRoll = js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('roll');
+    console.log(loginUserRoll);
+
+    if (loginUserRoll == _utils_roll_mapping__WEBPACK_IMPORTED_MODULE_2__["ROLL_MAPPING"].GENERAL) {
+      //TODO:権限周りの処理、外部ファイルに切り分ける。
+      next();
+    } else if (loginUserRoll === _utils_roll_mapping__WEBPACK_IMPORTED_MODULE_2__["ROLL_MAPPING"].CONTRIBUTOR || loginUserRoll === _utils_roll_mapping__WEBPACK_IMPORTED_MODULE_2__["ROLL_MAPPING"].ADMINISTRATOR) {
+      // TODO:フラッシュメッセージで「すでに投稿者権限持ちです。」と表示させる。
+      console.log('投稿者権限持ちです。');
+      router.push(from.path);
+    } else {
+      // TODO:フラッシュメッセージで「この機能を利用するにはユーザー登録もしくはログインをする必要があります。」
+      // と表示させる。
+      console.log('権限がありません。');
+      router.push('/', function () {});
+    }
   }
 }, {
   path: '/ApplyCompany',
@@ -21833,24 +21884,58 @@ var routes = [{
   component: function component() {
     return __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ../views/ApplyCompany */ "./resources/js/views/ApplyCompany.vue"));
   }
-}]; // VueRouterインスタンスを作成する
+}]; // to内のプロパティ
+// name:
+// fullPath:
+// hash: ""
+// matched: [{…}]
+// meta: {}
+// name: "ContributorRegistration"
+// params: {}
+// path: "/ContributorRegistration"
+// query: {}
+// __proto__: Object
+// VueRouterインスタンスを作成する
+// かゆいところに手が届くvue-routerの機能
+// https://qiita.com/nishinoshake/items/9ce7d6a04ffb82755ae1
 
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]({
+  scrollBehavior: function scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return {
+        x: 0,
+        y: 0
+      };
+    }
+  },
   // TODO:historyModeの対策をする。
   // Vue.jsのhistory mode 404対策について
   // https://qiita.com/go6887/items/dcb7aa86ba6a006d4746
   // mode: 'history', // ★ 追加
   routes: routes
-}); // TODO:$to・$fromでアクセス元、アクセス先を取得後
+});
+router.afterEach(_auth__WEBPACK_IMPORTED_MODULE_4__["AuthFilter"]); // Vue-Routerのナビゲーションガードを使ってみる
+// https://qiita.com/SatohJohn/items/cd7067ac64d8e45da4dd
+// TODO:$to・$fromでアクセス元、アクセス先を取得後
 // それが同一だった場合、読み込み予定のコンポーネントを再レンダリングさせる処理を書く。
 // router.afterEach(AccessControl);
 //【Vue.js】全ての画面で実行したい処理の実装方法
 // https://hafilog.com/aftereach
-
-router.afterEach(_auth__WEBPACK_IMPORTED_MODULE_2__["AuthFilter"]); // 【Vue.js】ナビゲーションガードについて
+// 【Vue.js】ナビゲーションガードについて
 // https://tsudoi.org/weblog/5738/
 // ローディングのアニメーションに使う
 // router.beforeResolve();
+// グローバルビフォーガードについて
+// https://router.vuejs.org/ja/guide/advanced/navigation-guards.html
+// TODO: URLパラメーターをハッシュ化させる。
+// PHP URLパラメーターに使える適当なハッシュ値を生成する
+// https://symfoware.blog.fc2.com/blog-entry-2234.html
+// JavaScriptでURLのパラメータやアンカーを判断して処理を変更する方法
+// https://www.tam-tam.co.jp/tipsnote/javascript/post9911.html
+// 【Vue Router】画面遷移前にデータを取得する
+// https://hi97.hamazo.tv/e8649709.html
 // VueRouterインスタンスをエクスポートする
 // app.jsでインポートするため
 
@@ -21872,6 +21957,25 @@ __webpack_require__.r(__webpack_exports__);
 var AUTH_ROUTER_NUM = {
   LOGON_LIMIT: 7,
   SES_LIMIT: 6048000
+};
+
+/***/ }),
+
+/***/ "./resources/js/router/utils/roll-mapping.js":
+/*!***************************************************!*\
+  !*** ./resources/js/router/utils/roll-mapping.js ***!
+  \***************************************************/
+/*! exports provided: ROLL_MAPPING */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ROLL_MAPPING", function() { return ROLL_MAPPING; });
+// TODO: utilファイルをまとめる。
+var ROLL_MAPPING = {
+  GENERAL: '100',
+  CONTRIBUTOR: '50',
+  ADMINISTRATOR: '1'
 };
 
 /***/ }),

@@ -2,7 +2,11 @@
   <!-- メニューバー -->
   <nav class="menuAbout">
     <ul class="menuAbout__itemWrap">
-      <li class="menuAbout__itemWrap-item">マイページ</li>
+      <!-- 次やること、ここにdata内に用意したloginUserIdを差し込んで個別マイページに飛べる様にする。 -->
+      <!-- 会社情報登録処理もやる。 -->
+      <router-link :to="`/mypage/${this.loginUserId}`" class="menuAbout__itemWrap-lineNone">
+        <li class="menuAbout__itemWrap-item" @click="switchMenuState">マイページ</li>
+      </router-link>
       <li class="menuAbout__itemWrap-item">お気に入りレビュー一覧</li>
       <li class="menuAbout__itemWrap-item">投稿されたレビュー一覧</li>
       <li class="menuAbout__itemWrap-item">閲覧履歴</li>
@@ -26,6 +30,11 @@ import Cookies from "js-cookie";
 import { mapState } from "vuex";
 
 export default {
+  data () {
+    return {
+      loginUserId: Cookies.get('user_id'),
+    }
+  },
   computed: {
     ...mapState({
       aboutMenuState: state => state.app.aboutMenuState

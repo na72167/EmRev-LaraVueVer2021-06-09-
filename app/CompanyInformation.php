@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Models;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Company_information extends Model
+class CompanyInformation extends Model
 {
     protected $fillable = [
         'id', //個別ID
