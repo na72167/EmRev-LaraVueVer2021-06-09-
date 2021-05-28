@@ -16,6 +16,19 @@ class applyCompanyController extends Controller
     {
         Log::debug('会社情報登録処理を行います。');
         Log::debug("リクエスト内容".$request);
+
+        $request->validate([
+            'company_name' => 'required|string|max:20|min:4',
+            'industry' => 'required|string|max:20|min:4',
+            'location' => 'required|string|max:20|min:4',
+            'number_of_employees' => 'required|max:20|min:4',
+            'representative' => 'required|string|max:20|min:4',
+            'year_of_establishment' => 'required|max:20|min:2',
+            'listed_year' => 'required|max:20|min:2',
+            'average_annual_income' => 'required|max:20|min:2',
+            'average_age' => 'required|max:20|min:2',
+        ]);
+
         $CompanyRegistrationResults = CompanyInformation::create([
             'company_name' => $request['company_name'],
             'industry' => $request['industry'],
@@ -31,18 +44,12 @@ class applyCompanyController extends Controller
             'listed_year' => $request['listed_year'],
             'average_annual_income' => $request['average_annual_income'],
             'average_age' => $request['average_age'],
-            'number_of_reviews' => $request['number_of_reviews'],
+            // TODO:のちに実装
+            // 'number_of_reviews' => $request['number_of_reviews'],
         ]);
-        $CompanyRegistrationResults = CompanyInformation::where('email',$request['authEmail'])->first();
-        // Log::debug("検索結果".$UpdatePasswordUser);
 
-        // if($request['authEmail'] === $UpdatePasswordUser->email && $request['authenticationKey'] === $UpdatePasswordUser->emailToken){
-        //     Log::debug("条件が合致しました");
-        //     $UpdateUser = User::where('email',$UpdatePasswordUser->email)->update(['password' => Hash::make($request['changedPassword'])]);
-        //     return response()->json($UpdateUser,201);
-        // }else{
-        //     Log::debug("条件に合致しませんでした");
-        //     return false;
-        // };
+        Log::debug($CompanyRegistrationResults);
+        return response()->json($CompanyRegistrationResults,201);
+
     }
 }

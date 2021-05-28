@@ -2,10 +2,19 @@
 
 namespace App;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
 class CompanyInformation extends Model
 {
+    use Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+
     protected $fillable = [
         'id', //個別ID
         'company_name', //会社名
@@ -26,4 +35,6 @@ class CompanyInformation extends Model
         'created_at', //生成日時
         'updated_at' //最終更新日時
     ];
+
+    protected $table = 'CompanyInformations';
 }
