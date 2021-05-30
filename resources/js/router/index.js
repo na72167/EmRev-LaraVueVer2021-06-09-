@@ -66,7 +66,12 @@ const routes = [
         router.push('/', () => {});
       }
     }
-
+  },
+  {
+    path: '/SelectReviewCompany',
+    name: 'SelectReviewCompany',
+    component: () =>
+      import ('../views/SelectReviewCompany'),
   },
   {
     path: '/ApplyCompany',
