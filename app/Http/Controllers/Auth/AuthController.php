@@ -32,10 +32,10 @@ class AuthController extends Controller
         // $request内に無いname属性の物があると正しく走らない。
         // バリテーションに引っかかった場合はリクエストを送信したページにリダイレクトされる。
 
-		$request->validate([
-            'email' => 'required|string|email|max:20|min:6',
-            'password' => 'required|string|max:20|min:4',
-		]);
+		// $request->validate([
+        //     'email' => 'required|string|email|max:20|min:6',
+        //     'password' => 'required|string|max:20|min:4',
+		// ]);
 
 		$registerUser = User::create([
             'email' => $request['email'],

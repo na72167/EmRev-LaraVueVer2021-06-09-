@@ -10,7 +10,9 @@
         <div v-if="user">
           <nav class="header__nav">
             <li class="header__nav-list" @click="switchMenuState">MENU</li>
-            <li class="header__nav-list"><a href="./reviewRegister-cList.php">REVIEW REGISTRATION</a></li>
+            <router-link to="/SelectReviewCompany" class="menuAbout__itemWrap-lineNone">
+              <li class="header__nav-list">REVIEW POSTING</li>
+            </router-link>
             <li class="header__nav-list" @click="logout">LOGOUT</li>
           </nav>
             <!-- ここの:classはメニュー内容のアニメーション関係のもの -->

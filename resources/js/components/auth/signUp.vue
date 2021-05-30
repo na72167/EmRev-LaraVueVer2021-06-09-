@@ -157,10 +157,12 @@ export default {
             console.log("(signUp)メールアドレスは4文字以上にしてください");
             this.Validation.signUpEmailErrMsg = 'メールアドレスは4文字以上にしてください'
 
-          } else if(await validEmailDup(this.signUpForm.email)){
+            // TODO:ユーザー登録機能この部分が上手くいってないかも
+          } else if(await !validEmailDup(this.signUpForm.email)){
             //重複確認のバリテーション
             console.log("(signUp)メールアドレスが重複しています");
             this.Validation.signUpEmailErrMsg = "メールアドレスが重複しています"
+
           } else {
             //バリテーションがOKな場合
             console.log("(signUp)メールアドレスのバリテーションOKです");
@@ -211,11 +213,11 @@ export default {
               //ユーザー情報管理
               // Cookieにログイン時刻とIDと権限情報挿入。
               // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
-              Cookies.set('user_id',this.RegistUser.data.id, {expires: 30,secure: true});
+              Cookies.set('user_id',this.RegistUser.data.id, {expires: 30});
               Cookies.set('email',this.LoginUser.data.email, {expires: 7});
-              Cookies.set('roll',this.RegistUser.data.roll, {expires: 30,secure: true});
-              Cookies.set('login_date', Date.now(), {expires: 30,secure: true});
-              Cookies.set('login_limit',Date.now()+this.sesLimit, {expires: 30,secure: true});
+              Cookies.set('roll',this.RegistUser.data.roll, {expires: 30});
+              Cookies.set('login_date', Date.now(), {expires: 30});
+              Cookies.set('login_limit',Date.now()+this.sesLimit, {expires: 30});
 
               //バリテーション結果の初期化
               this.signUpForm = "";
@@ -225,9 +227,10 @@ export default {
               this.submitButton = "登録";
               // マイページへ飛ばすパスを書く。
               this.$router.push(`/mypage/${Cookies.get('user_id')}`)
+
             } catch (e) {
               console.log("登録処理中に例外エラーが発生しました。");
-              this.Validation.signUpCommonErrMsg = '接続に失敗しました。'
+              // this.Validation.signUpCommonErrMsg = "接続に失敗しました。";
               this.signUpFormResult.emailResult = false;
               this.signUpFormResult.passwordResult = false;
             } finally {

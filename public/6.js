@@ -84,8 +84,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 // @は基本半角で
 // 外部のjsファイルの読み込みが上手くいかないのでマジックナンバーやメソッドの切り分けは一旦保留。
 // TODO:読み込み元ファイルを一度読み込み先ファイルと同階層に移さないとパスが読み込まれないエラーを解決する。
@@ -549,13 +547,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 //最小文字数のバリテーション
                 console.log("(signUp)メールアドレスは4文字以上にしてください");
-                _this.Validation.signUpEmailErrMsg = 'メールアドレスは4文字以上にしてください';
+                _this.Validation.signUpEmailErrMsg = 'メールアドレスは4文字以上にしてください'; // TODO:ユーザー登録機能この部分が上手くいってないかも
+
                 _context.next = 35;
                 break;
 
               case 25:
                 _context.next = 27;
-                return Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validEmailDup"])(_this.signUpForm.email);
+                return !Object(_utils_validate__WEBPACK_IMPORTED_MODULE_3__["validEmailDup"])(_this.signUpForm.email);
 
               case 27:
                 if (!_context.sent) {
@@ -605,7 +604,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
                 if (!(_this.signUpFormResult.emailResult === true && _this.signUpFormResult.passwordResult === true)) {
-                  _context.next = 70;
+                  _context.next = 69;
                   break;
                 }
 
@@ -627,23 +626,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 // プロパティ内のデータの取得が出来ない時はVueDevToolでデータの階層を確認する。
 
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('user_id', _this.RegistUser.data.id, {
-                  expires: 30,
-                  secure: true
+                  expires: 30
                 });
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('email', _this.LoginUser.data.email, {
                   expires: 7
                 });
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('roll', _this.RegistUser.data.roll, {
-                  expires: 30,
-                  secure: true
+                  expires: 30
                 });
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_date', Date.now(), {
-                  expires: 30,
-                  secure: true
+                  expires: 30
                 });
                 js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.set('login_limit', Date.now() + _this.sesLimit, {
-                  expires: 30,
-                  secure: true
+                  expires: 30
                 }); //バリテーション結果の初期化
 
                 _this.signUpForm = "";
@@ -656,32 +651,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$router.push("/mypage/".concat(js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('user_id')));
 
-                _context.next = 66;
+                _context.next = 65;
                 break;
 
               case 60:
                 _context.prev = 60;
                 _context.t0 = _context["catch"](38);
-                console.log("登録処理中に例外エラーが発生しました。");
-                _this.Validation.signUpCommonErrMsg = '接続に失敗しました。';
+                console.log("登録処理中に例外エラーが発生しました。"); // this.Validation.signUpCommonErrMsg = "接続に失敗しました。";
+
                 _this.signUpFormResult.emailResult = false;
                 _this.signUpFormResult.passwordResult = false;
 
-              case 66:
-                _context.prev = 66;
+              case 65:
+                _context.prev = 65;
                 // 必ず実行する処理の記述(try..catch..finally)
                 // https://www.javadrive.jp/start/exception/index3.html
                 // ローディング画面の終了
                 _this.isSubmitting = false;
                 _this.isSubmit = false;
-                return _context.finish(66);
+                return _context.finish(65);
 
-              case 70:
+              case 69:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[38, 60, 66, 70]]);
+        }, _callee, null, [[38, 60, 65, 69]]);
       }))();
     }
   }

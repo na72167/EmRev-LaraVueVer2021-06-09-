@@ -2060,6 +2060,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  // TODO:エイリアスを設定して楽にimportできるようにする
+  // https://qiita.com/senou/items/d50eb55948f8453dece1
   // TODO:Vue.js: Vue I18nでアプリケーションを多言語に対応させる
   // 動的ルートマッチング.動的セグメント・・・受け取ったパラメータ等に応じて変更される可能性がある区間の事。
   // https://router.vuejs.org/ja/guide/essentials/dynamic-matching.html#%E3%83%8F%E3%82%9A%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC%E5%A4%89%E6%9B%B4%E3%81%AE%E6%A4%9C%E7%9F%A5
@@ -2208,6 +2210,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
 //
 //
 //
@@ -4724,27 +4728,43 @@ var render = function() {
           ? _c(
               "div",
               [
-                _c("nav", { staticClass: "header__nav" }, [
-                  _c(
-                    "li",
-                    {
-                      staticClass: "header__nav-list",
-                      on: { click: _vm.switchMenuState }
-                    },
-                    [_vm._v("MENU")]
-                  ),
-                  _vm._v(" "),
-                  _vm._m(1),
-                  _vm._v(" "),
-                  _c(
-                    "li",
-                    {
-                      staticClass: "header__nav-list",
-                      on: { click: _vm.logout }
-                    },
-                    [_vm._v("LOGOUT")]
-                  )
-                ]),
+                _c(
+                  "nav",
+                  { staticClass: "header__nav" },
+                  [
+                    _c(
+                      "li",
+                      {
+                        staticClass: "header__nav-list",
+                        on: { click: _vm.switchMenuState }
+                      },
+                      [_vm._v("MENU")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "menuAbout__itemWrap-lineNone",
+                        attrs: { to: "/SelectReviewCompany" }
+                      },
+                      [
+                        _c("li", { staticClass: "header__nav-list" }, [
+                          _vm._v("REVIEW POSTING")
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "li",
+                      {
+                        staticClass: "header__nav-list",
+                        on: { click: _vm.logout }
+                      },
+                      [_vm._v("LOGOUT")]
+                    )
+                  ],
+                  1
+                ),
                 _vm._v(" "),
                 _c("AboutMenu", { class: _vm.aboutMenuState })
               ],
@@ -4791,16 +4811,6 @@ var staticRenderFns = [
         )
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "header__nav-list" }, [
-      _c("a", { attrs: { href: "./reviewRegister-cList.php" } }, [
-        _vm._v("REVIEW REGISTRATION")
-      ])
-    ])
   }
 ]
 render._withStripped = true
@@ -21834,7 +21844,7 @@ var routes = [{
   path: '/404',
   name: 'NotFound',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ../views/errors/NotFound */ "./resources/js/views/errors/NotFound.vue"));
+    return __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ../views/errors/NotFound */ "./resources/js/views/errors/NotFound.vue"));
   }
 }, {
   path: '/',
@@ -21858,7 +21868,7 @@ var routes = [{
   path: '/ContributorRegistration',
   name: 'ContributorRegistration',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ../views/ContributorRegistration */ "./resources/js/views/ContributorRegistration.vue"));
+    return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ../views/ContributorRegistration */ "./resources/js/views/ContributorRegistration.vue"));
   },
   beforeEnter: function beforeEnter(to, from, next) {
     var loginUserRoll = js_cookie__WEBPACK_IMPORTED_MODULE_1___default.a.get('roll');
@@ -21879,10 +21889,16 @@ var routes = [{
     }
   }
 }, {
+  path: '/SelectReviewCompany',
+  name: 'SelectReviewCompany',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! ../views/SelectReviewCompany */ "./resources/js/views/SelectReviewCompany.vue"));
+  }
+}, {
   path: '/ApplyCompany',
   name: 'ApplyCompany',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ../views/ApplyCompany */ "./resources/js/views/ApplyCompany.vue"));
+    return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ../views/ApplyCompany */ "./resources/js/views/ApplyCompany.vue"));
   }
 }]; // to内のプロパティ
 // name:
@@ -21995,10 +22011,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _modules_passwordReminder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/passwordReminder */ "./resources/js/store/modules/passwordReminder.js");
-/* harmony import */ var _modules_auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/auth */ "./resources/js/store/modules/auth.js");
-/* harmony import */ var _modules_app__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/app */ "./resources/js/store/modules/app.js");
-/* harmony import */ var _modules_error__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/error */ "./resources/js/store/modules/error.js");
-/* harmony import */ var _modules_users__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/users */ "./resources/js/store/modules/users.js");
+/* harmony import */ var _modules_reviewCompany__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/reviewCompany */ "./resources/js/store/modules/reviewCompany.js");
+/* harmony import */ var _modules_auth__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/auth */ "./resources/js/store/modules/auth.js");
+/* harmony import */ var _modules_app__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/app */ "./resources/js/store/modules/app.js");
+/* harmony import */ var _modules_error__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/error */ "./resources/js/store/modules/error.js");
+/* harmony import */ var _modules_users__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/users */ "./resources/js/store/modules/users.js");
+
 
 
 
@@ -22041,10 +22059,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(js_cookie__WEBPACK_IMPORTED_MODUL
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
     passwordReminder: _modules_passwordReminder__WEBPACK_IMPORTED_MODULE_3__["default"],
-    auth: _modules_auth__WEBPACK_IMPORTED_MODULE_4__["default"],
-    app: _modules_app__WEBPACK_IMPORTED_MODULE_5__["default"],
-    error: _modules_error__WEBPACK_IMPORTED_MODULE_6__["default"],
-    users: _modules_users__WEBPACK_IMPORTED_MODULE_7__["default"]
+    reviewCompany: _modules_reviewCompany__WEBPACK_IMPORTED_MODULE_4__["default"],
+    auth: _modules_auth__WEBPACK_IMPORTED_MODULE_5__["default"],
+    app: _modules_app__WEBPACK_IMPORTED_MODULE_6__["default"],
+    error: _modules_error__WEBPACK_IMPORTED_MODULE_7__["default"],
+    users: _modules_users__WEBPACK_IMPORTED_MODULE_8__["default"]
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (store);
@@ -22249,6 +22268,53 @@ var mutations = {
 var actions = {
   setReceiveMode: function setReceiveMode(context) {
     context.commit('SET_RECEIVE_MODE', 'receive');
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  mutations: mutations,
+  actions: actions
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/reviewCompany.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/store/modules/reviewCompany.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_ResponseState_mappings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/ResponseState-mappings */ "./resources/js/store/utils/ResponseState-mappings.js");
+//ユーザー登録やログイン関係など
+
+
+
+var state = {
+  companySearchState: "",
+  //検索時参照するステート
+  searchQueries: ""
+};
+var getters = {};
+var mutations = {
+  //検索用のプロパティを初期化
+  CLEAR_SEARCH_QUERIES: function CLEAR_SEARCH_QUERIES(state) {
+    state.searchQueries = "";
+  }
+};
+var actions = {
+  // 検索時に入れた文字列の初期化
+  clearSearchQueries: function clearSearchQueries(_ref, queries) {
+    var commit = _ref.commit;
+    commit('CLEAR_SEARCH_QUERIES');
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({

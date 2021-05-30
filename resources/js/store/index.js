@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Cookies from "js-cookie";
 import passwordReminder from './modules/passwordReminder';
+import reviewCompany from './modules/reviewCompany';
 import auth from './modules/auth';
 import app from './modules/app';
 import error from './modules/error';
@@ -47,6 +48,7 @@ Vue.use(Cookies)
 const store = new Vuex.Store({
   modules: {
     passwordReminder,
+    reviewCompany,
     auth,
     app,
     error,

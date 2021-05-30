@@ -10,12 +10,9 @@ import Intro from '../components/intro/Intro'
 import ApplyCompany from '../components/applyCompany/ApplyCompany'
 export default {
   components: {
-      Intro,
-      ApplyCompany
+    Intro,
+    ApplyCompany
   }
 }
 </script>
 
-<style lang="scss" scope>
-
-</style>
